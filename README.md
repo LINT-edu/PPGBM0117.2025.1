@@ -1,4 +1,4 @@
-# **Ementa -  Transcriptomics (scRNA-seq)**
+# **Ementa - Transcriptomics (scRNA-seq)**
 
 ## **Informações Gerais**
 
@@ -13,7 +13,7 @@
 
 ## **Ementa**
 
-A disciplina de **Single-Cell Transcriptomics** tem como objetivo apresentar os fundamentos teóricos e práticos da análise de transcriptômica de célula única (scRNA-seq), com ênfase em **análise de células T e descoberta de antígenos tumorais**. Serão abordados desde o processamento inicial dos dados até análises avançadas, com foco na aplicação prática e desenvolvimento de projetos individuais e em grupo. A disciplina será inteiramente baseada no **Seurat**, e o pré-processamento será realizado exclusivamente com **Cell Ranger**.
+A disciplina de **Single-Cell Transcriptomics** tem como objetivo apresentar os fundamentos teóricos e práticos da análise de transcriptômica de célula única (scRNA-seq), com ênfase na **análise de células T e descoberta de antígenos tumorais**. Serão abordados desde o processamento inicial dos dados até análises avançadas, com foco na aplicação prática e desenvolvimento de projetos individuais e em grupo. A disciplina será inteiramente baseada no **Seurat**, e o pré-processamento será realizado exclusivamente com **Cell Ranger**.
 
 ## **Objetivos**
 
@@ -24,6 +24,17 @@ A disciplina de **Single-Cell Transcriptomics** tem como objetivo apresentar os 
 5. Integrar múltiplos datasets e diferentes modalidades de dados (scRNA-seq, scATAC-seq, scTCR-seq).
 6. Inferir trajetórias celulares e estudar interações célula-célula.
 7. Definir e desenvolver um projeto prático aplicando as metodologias aprendidas desde o início da disciplina, com ênfase em **células T e priorização de antígenos tumorais**.
+
+## **Projeto da Disciplina**
+
+O projeto será desenvolvido em grupos de até **três integrantes** e deverá abranger todas as etapas da análise de scRNA-seq, com foco em células T e descoberta de antígenos tumorais. O produto final do projeto deverá contemplar:
+
+- **Scripts bem documentados em R**, seguindo boas práticas de codificação e reprodutibilidade.
+- **Relatório científico** no formato acadêmico, incluindo metodologia detalhada, resultados e discussão.
+- **Figuras e visualizações** geradas a partir das análises, destacando os principais achados.
+- **Apresentação final** do workflow e resultados obtidos, explicando cada etapa e principais insights.
+
+Cada integrante do grupo deverá assumir uma função específica e ser responsável por apresentar os itens no final da disciplina. O progresso do projeto será acompanhado ao longo das semanas, e cada integrante deverá demonstrar individualmente suas contribuições durante a execução do trabalho.
 
 ## **Conteúdo Programático**
 
@@ -105,9 +116,7 @@ A disciplina de **Single-Cell Transcriptomics** tem como objetivo apresentar os 
 - Luecken, M.D., & Theis, F.J. (2019). Current best practices in single-cell RNA-seq analysis: a tutorial. *Molecular Systems Biology*.
 - Stuart, T., et al. (2019). Comprehensive Integration of Single-Cell Data. *Cell*.
 - Butler, A., et al. (2018). Integrating single-cell transcriptomic data across different conditions, technologies, and species. *Nature Biotechnology*.
-- Singer, M., et al. (2016). A Distinct Gene Module for Dysfunction Uncoupled from Activation in Tumor-Infiltrating T Cells. *Cell*.
-- Zheng, C., et al. (2021). Landscape of Infiltrating T Cells in Tumor Microenvironment. *Cell Reports*.
 
 ## **Contato**
 
-- Email do professor(a): [andrefonseca@ufpa.br](mailto\:andrefonseca@ufpa.br)
+- Email do professor(a): [andrefonseca@ufpa.br](mailto:andrefonseca@ufpa.br)
