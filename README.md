@@ -52,7 +52,7 @@ Cada integrante do grupo deverá assumir uma função específica e ser respons�
 ### **Semana 2 - Controle de Qualidade, Filtragem e Ambient RNA**
 
 - Métricas de qualidade: porcentagem de genes mitocondriais, número de UMI’s, etc.
-- Identificação e remoção de **doublets** (Scrublet, DoubletFinder).
+- Identificação e remoção de **doublets** (scDblFinder).
 - Normalização e escalonamento de dados.
 - Introdução ao conceito de **ambient RNA** e estratégias de mitigação.
 - Aula prática: Uso de **Seurat (R)** para QC e filtragem.
@@ -79,8 +79,8 @@ Cada integrante do grupo deverá assumir uma função específica e ser respons�
 
 ### **Semana 5 - Inferência de Trajetórias e Interações Célula-Célula**
 
-- Modelagem de pseudotempo: **Monocle**.
-- Análise de interações célula-célula: **CellChat, NicheNet**.
+- Modelagem de pseudotempo: **Monocle2**.
+- Análise de interações célula-célula: **LIANA**.
 - Inferência da ativação e exaustão de células T ao longo do pseudotempo.
 - Aula prática: Inferência de trajetórias e comunicação celular.
 - Acompanhamento dos projetos: modelagem de diferenciação de células T.
@@ -102,7 +102,7 @@ Cada integrante do grupo deverá assumir uma função específica e ser respons�
 ## **Recursos e Ferramentas**
 
 - Linguagem: **R**.
-- Pacotes: **Seurat, Monocle, Harmony, CellChat, NicheNet**.
+- Pacotes: **Seurat, scDblFinder, Monocle2, Harmony e LIANA**.
 - Infraestrutura computacional: Google Colab, HPC ou AWS.
 
 ## **Avaliação**
