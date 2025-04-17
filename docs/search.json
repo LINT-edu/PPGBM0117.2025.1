@@ -1,0 +1,58 @@
+[
+  {
+    "objectID": "material/semana1/01_data_collection.html",
+    "href": "material/semana1/01_data_collection.html",
+    "title": "01 - Coleta de dados",
+    "section": "",
+    "text": "O avanço das tecnologias de sequenciamento em célula única permitiu uma revolução na compreensão da biologia celular em diversos contextos fisiológicos e patológicos. Entretanto, o acesso a dados de alta qualidade e bem anotados ainda é um desafio para pesquisadores iniciantes ou que não possuem estrutura para gerar seus próprios datasets.\nA Chan Zuckerberg Initiative (CZI), por meio da plataforma CellxGene, disponibiliza milhares de amostras de transcriptoma de célula única de estudos de alta relevância, anotados, integrados e prontos para reuso. Essa plataforma se tornou uma referência mundial para pesquisadores que buscam:\n\ndados de referência para estudos comparativos,\nreanálise com métodos próprios,\ntreinamento de modelos de aprendizado de máquina,\nintegração com dados internos."
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#motivação",
+    "href": "material/semana1/01_data_collection.html#motivação",
+    "title": "01 - Coleta de dados",
+    "section": "",
+    "text": "O avanço das tecnologias de sequenciamento em célula única permitiu uma revolução na compreensão da biologia celular em diversos contextos fisiológicos e patológicos. Entretanto, o acesso a dados de alta qualidade e bem anotados ainda é um desafio para pesquisadores iniciantes ou que não possuem estrutura para gerar seus próprios datasets.\nA Chan Zuckerberg Initiative (CZI), por meio da plataforma CellxGene, disponibiliza milhares de amostras de transcriptoma de célula única de estudos de alta relevância, anotados, integrados e prontos para reuso. Essa plataforma se tornou uma referência mundial para pesquisadores que buscam:\n\ndados de referência para estudos comparativos,\nreanálise com métodos próprios,\ntreinamento de modelos de aprendizado de máquina,\nintegração com dados internos."
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#o-que-é-o-cellxgene-czi-cellxgene-explorer",
+    "href": "material/semana1/01_data_collection.html#o-que-é-o-cellxgene-czi-cellxgene-explorer",
+    "title": "01 - Coleta de dados",
+    "section": "🧬 O que é o CellxGene (CZI CellxGene Explorer)?",
+    "text": "🧬 O que é o CellxGene (CZI CellxGene Explorer)?\nCellxGene Explorer é uma plataforma interativa mantida pela Chan Zuckerberg Initiative (CZI), que permite explorar, visualizar e baixar dados de transcriptômica de célula única (scRNA-seq) e outros tipos de dados ómicos. Ela é parte do projeto CZ CELLxGENE Discover, cujo objetivo é democratizar o acesso a dados de alta qualidade e facilitar sua reutilização em pesquisas biomédicas.\nRecursos principais incluem:\n\nVisualizações UMAP interativas\nAnotações por tipo celular\nFiltros por condição clínica, órgão, espécie, etc.\nDownload facilitado dos dados brutos e processados (anndata, Seurat, CSV)"
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#tipos-de-dados-disponíveis",
+    "href": "material/semana1/01_data_collection.html#tipos-de-dados-disponíveis",
+    "title": "01 - Coleta de dados",
+    "section": "🧪 Tipos de Dados Disponíveis",
+    "text": "🧪 Tipos de Dados Disponíveis\nAté o momento, o CellxGene armazena mais de 100 milhões de células, derivadas de estudos envolvendo:\n\nCâncer (mama, pulmão, próstata, cólon etc.)\nCOVID-19\nDoenças autoimunes (Lúpus, Artrite Reumatoide)\nDoenças infecciosas (tuberculose, HIV)\nDoenças neurodegenerativas (Alzheimer, Parkinson)\nTecido saudável humano e de modelos animais\nDados do Human Cell Atlas (HCA)\n\nO volume de dados disponíveis pode chegar a centenas de gigabytes, portanto é importante considerar isso ao baixar conjuntos maiores."
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#navegando-na-plataforma-cellxgene",
+    "href": "material/semana1/01_data_collection.html#navegando-na-plataforma-cellxgene",
+    "title": "01 - Coleta de dados",
+    "section": "🧭 1. Navegando na Plataforma CellxGene",
+    "text": "🧭 1. Navegando na Plataforma CellxGene\nPara começar a explorar dados no CellxGene, siga os passos abaixo:\n\n▶️ Acessando a plataforma:\n\nAcesse: https://cellxgene.cziscience.com/\nEm seguida clique na aba Collections.\nUse a barra de busca ou os filtros laterais (organismo, órgão, condição, etc.) para encontrar o estudo de interesse.\nClique sobre o nome do dataset desejado — isso abrirá a interface do CellxGene Explorer.\n\n\n📌 Essa é a interface interativa principal, onde ocorrem todas as análises visuais descritas a seguir.\n\n\n\n\n🔍 2. Explore os datasets disponíveis\nVocê pode utilizar o campo de busca ou aplicar filtros laterais:\n\nOrganismo: Humano, Camundongo, etc.\nTecido: Pulmão, Sangue, Cérebro, etc.\nDoença: Câncer, COVID-19, etc.\nProjeto ou Estudo (ex: HCA, Tabula Sapiens)\n\n\n💡 Dica: Cada entrada no catálogo mostra algumas estatisticas descritivas sobre o dado, por exemplo, o número de células e a tipo de tecnologia utilizada."
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#explorando-dataset-de-interesse",
+    "href": "material/semana1/01_data_collection.html#explorando-dataset-de-interesse",
+    "title": "01 - Coleta de dados",
+    "section": "🔬 3. Explorando dataset de interesse",
+    "text": "🔬 3. Explorando dataset de interesse\nAntes de baixar os dados, vale a pena usar os recursos de exploração interativa da plataforma para decidir se aquele conjunto é útil para seus objetivos. Abaixo estão perguntas chave para cada uma das ferramentas disponíveis:\n\n\n🔍 3.1. Explore\n(Proximo ao botão de Download → “Explore”)\n\nQual a composição celular do dataset?\n→ Visualize a proporção de tipos celulares no gráfico UMAP e no painel lateral (“Cell types”).\nQuantas amostras e doadores estão incluídos no estudo?\n→ Acesse os metadados no painel lateral (“sample ID”, “donor ID”) ou use os filtros.\nO dataset contém metadados úteis como idade, sexo ou estágio da doença?\n→ Observe a barra lateral com as opções de filtros apresentados no dataset.\nComo a distribuição celular varia entre condições clínicas?\n→ Aplique filtros por condição (disease, treatment, etc.) e observe mudanças no UMAP.\n\n\n\n\n🧬 3.2. Gene Expression\n(Menu superior → “Gene Expression”)\n\nMeu gene de interesse está presente no dataset?\n→ Use o campo de busca “Gene Expression” para inserir o símbolo do gene.\nQuais tipos celulares expressam esse gene?\n→ Veja o padrão de expressão do gene no UMAP colorido por intensidade.\nA expressão do gene varia entre amostras ou condições?\n→ Aplique filtros por sample, disease, etc., e observe mudanças de expressão.\nO gene é específico de um tipo celular?\n→ Verifique se há expressão restrita a um cluster/tipo celular.\nDois genes são coexpressos?\n→ Observe o padrão de co-expressão a partir do bubble plot\n\n\n\n\n🧭 3.3. Cell Guide\n(Menu superior → “Cell Guide”)\n\nQuais os marcadores canonicos do meu tipo celular de interesse?\n→ Acesse a página do tipo celular e consulte a opcao “Marker genes”.\nHa diferencas entre marcadores deduzidos computacionalmente e os canonicos?\n→ Observe a aba “Computational” na tabela de Marker genes.\nQual o significado das colunas Effect size, Specificity, Mean Expression e % of Cells?\n→ Investigue a documentação da tabela nos icones de ajuda “?”.\n\n\n\n\n📊 3.4. Differential Expression\n(Menu superior → “Differential Expression”)\n\nQuais genes estão diferencialmente expressos entre dois tipos celulares?\n→ Selecione dois tipos celulares em um mesmo dataset e compare.\nHá genes diferencialmente expressos entre condições clínicas?\n→ Aplique filtros por condição e selecione grupos para comparação.\nExiste genes diferencialmente expressos no mesmo tipo celular entre datasets?\n→ Compare um tipo celular entre datasets diferentes através da ferramenta."
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#sugestão-de-uso-integrado",
+    "href": "material/semana1/01_data_collection.html#sugestão-de-uso-integrado",
+    "title": "01 - Coleta de dados",
+    "section": "🧪 4. Sugestão de Uso Integrado",
+    "text": "🧪 4. Sugestão de Uso Integrado\nUm fluxo de exploração poderia seguir:\n\nUse o Explore para entender a estrutura geral do dataset.\n\nConsulte Gene Expression para validar ou investigar genes relevantes.\n\nVisite o Cell Guide para contextualizar biologicamente os tipos celulares.\n\nUse o Differential Expression para gerar hipóteses ou identificar genes marcadores.\n\n\n\n📦 5. Baixar os dados\nApós explorar e decidir se o conjunto de dados é relevante, podemos baixá-lo. Na etapa de seleção do dataset, clique no botão “Download dataset” (localizado na mesma tela em que entramos o botão Explorer).\nVocê poderá baixar diferentes versões dos dados, quando disponíveis:\n\n.h5ad: formato AnnData, amplamente utilizado com Scanpy (Python)\n.csv: tabelas de contagem e metadados em formato tabular\n.rds: formato Seurat, útil para integração com pacotes do ecossistema R.\nArquivos complementares (README, metadados, referências)\n\n\n⚠️ Atenção ao tamanho dos arquivos: um dataset completo pode ter de 500 MB a mais de 20 GB, dependendo do número de células e da profundidade de sequenciamento.\n\n\nℹ️ Observação: Nem todos os datasets estão disponíveis em todos os formatos. Por exemplo, alguns estudos fornecem apenas .h5ad, enquanto outros incluem .rds ou .csv.\nIsso não é um impeditivo, pois é possível realizar conversões entre formatos usando bibliotecas como: - zellkonverter ou sceasy (para converter .h5ad ⇄ .rds) - anndata2ri para interoperabilidade entre R e Python\n\nExemplo de conversão de .h5ad para .rds no R:\n\n🔄 Exemplo: Convertendo .h5ad para .rds com sceasy\n# Instale os pacotes necessários, se ainda não tiver:\n# install.packages(\"remotes\")\n# remotes::install_github(\"cellgeni/sceasy\")\n# remotes::install_github(\"dynverse/reticulate\")\n\nlibrary(sceasy)\nlibrary(reticulate)\n\n# Se necessário, especifique o caminho para seu ambiente Python com anndata instalado:\n# use_python(\"/caminho/para/seu/python\", required = TRUE)\n\n# Converta o arquivo .h5ad para um objeto SingleCellExperiment (.rds)\nsceasy::convertFormat(\n  input = \"dataset.h5ad\",\n  from = \"anndata\",\n  to = \"seurat\",\n  outFile = \"dataset.rds\"\n)\n\n💡 Nota: Para que a conversão funcione corretamente, você precisa de um ambiente Python com o pacote anndata instalado. Qualquer problema faremos em sala.\n\nA instalação do anndata via R pode ser feita através do comando:\nreticulate::py_install(\"anndata\")"
+  },
+  {
+    "objectID": "material/semana1/01_data_collection.html#comentários-finais",
+    "href": "material/semana1/01_data_collection.html#comentários-finais",
+    "title": "01 - Coleta de dados",
+    "section": "📌 6. Comentários Finais",
+    "text": "📌 6. Comentários Finais\n\nO CellxGene é atualizado frequentemente com novos estudos revisados por pares e dados brutos provenientes de colaborações com o Human Cell Atlas, Azimuth, e outras iniciativas.\n\nÉ uma excelente fonte para benchmarking de métodos, descoberta de biomarcadores e validação cruzada.\n\nAo usar os dados, consulte a aba de metadata para verificar as permissões de reuso e a citação correta do estudo."
+  }
+]
