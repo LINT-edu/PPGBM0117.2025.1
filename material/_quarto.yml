@@ -1,0 +1,23 @@
+project:
+  type: website
+  render:
+    - semana1/01_data_collection.qmd
+
+website:
+  title: "Single-cell RNA-Seq"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+
+

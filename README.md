@@ -1,12 +1,12 @@
-# **Ementa - Transcriptomics (scRNA-seq)**
+# **Ementa - Transcriptômica - Introdução à análise de célula única (scRNA-seq)**
 
 ## **Informações Gerais**
 
-- **Nome da disciplina:** Transcriptomics (scRNA-seq)
+- **Nome da disciplina:** Transcriptômica - Introdução à análise de célula única (scRNA-seq)
 - **Carga horária:** 45 horas
 - **Duração:** 6 semanas
 - **Dias e horários:** Terça e Quinta (4h/dia)
-- **Início e término:** 09 de Abril - 16 de Maio
+- **Início e término:** 15 de Abril - 22 de Maio
 - **Modalidade:** Presencial
 - **Nível:** Pós-graduação
 - **Instrutor:** Andre Fonseca
