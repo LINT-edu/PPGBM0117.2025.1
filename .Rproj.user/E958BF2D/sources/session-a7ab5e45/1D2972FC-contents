@@ -1,22 +1,27 @@
 project:
   type: website
-  render:
-    - material/semana1/01_data_collection.qmd
   output-dir: docs
 
 website:
-  title: "Single-cell RNA-Seq"
+  title: "Curso de Análise Single-Cell"
+  site-url: https://lint-edu.github.io/PPGBM0117.2025.1
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Início"
+        file: index.qmd
+      - text: "Sobre"
+        file: about.qmd
+      - text: "Semana 1"
+        menu:
+          - text: "Coleta de Dados"
+            file: material/semana1/01_data_collection.qmd
+  page-footer:
+    center: "Feito com ❤️ usando [Quarto](https://quarto.org)"
 
 format:
   html:
     theme:
       - cosmo
-      - brand
     css: styles.css
     toc: true
 
