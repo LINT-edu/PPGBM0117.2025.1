@@ -46,7 +46,6 @@ O arquivo CSV segue uma estrutura com cabeçalho padronizado e colunas obrigató
 [Data]
 Lane,Sample_ID,Sample_Name,Index
 1,Sample001,Sample001,SI-GA-A1
-1,Sample002,Sample002,SI-GA-B2
 ```
 
 - A seção `[Data]` delimita o início da tabela.
@@ -62,22 +61,10 @@ Após a execução do `cellranger mkfastq`, os arquivos FASTQ seguem uma conven�
 ```txt
 bcl2fastq_output
 |-- HFLC5BBXX
-    |-- SI-GA-A1_1
-    |   |-- SI-GA-A1_1_S1_L001_I1_001.fastq.gz
-    |   |-- SI-GA-A1_1_S1_L001_R1_001.fastq.gz
-    |   |-- SI-GA-A1_1_S1_L001_R2_001.fastq.gz
-    |-- SI-GA-A1_2
-    |   |-- SI-GA-A1_2_S2_L001_I1_001.fastq.gz
-    |   |-- SI-GA-A1_2_S2_L001_R1_001.fastq.gz
-    |   |-- SI-GA-A1_2_S2_L001_R2_001.fastq.gz
-    |-- SI-GA-A1_3
-    |   |-- SI-GA-A1_3_S3_L001_I1_001.fastq.gz
-    |   |-- SI-GA-A1_3_S3_L001_R1_001.fastq.gz
-    |   |-- SI-GA-A1_3_S3_L001_R2_001.fastq.gz
-    |-- SI-GA-A1_4
-    |   |-- SI-GA-A1_4_S4_L001_I1_001.fastq.gz
-    |   |-- SI-GA-A1_4_S4_L001_R1_001.fastq.gz
-    |   |-- SI-GA-A1_4_S4_L001_R2_001.fastq.gz
+    |-- Sample001
+    |   |-- Sample001_S1_L001_I1_001.fastq.gz
+    |   |-- Sample001_S1_L001_R1_001.fastq.gz
+    |   |-- Sample001_S1_L001_R2_001.fastq.gz
 |-- Reports
 |-- Stats
 |-- Undetermined_S0_L001_I1_001.fastq.gz
@@ -93,13 +80,13 @@ Além disso, a nomenclatura do arquivo é composta por diferentes campos. Veja a
 
 Esse nome é composto por blocos separados por sublinhados (`_`), com os seguintes significados:
 
-- **SI-GA-A1_1**: nome da amostra, herdado do campo `Sample_Name` do Sample Sheet.
+- **Sample001**: nome da amostra, herdado do campo `Sample_Name` do Sample Sheet.
 - **S1**: identificador da amostra atribuído automaticamente pelo `bcl2fastq`.
 - **L001**: número da lane (neste caso, lane 1).
 - **R1**: tipo da leitura:
-  - `R1` = Read 1 (transcrito)
-  - `R2` = Read 2 (UMI)
-  - `I1` = Index Read 1 (barcode)
+  - `R1` = Read 1 (Cell barcode + UMI)
+  - `R2` = Read 2 (cDNA)
+  - `I1` = Index Read 1 (Sample index)
 - **001**: número do set de leitura (geralmente fixo como 001).
 
 ## 2. Construção do Genoma de Referência

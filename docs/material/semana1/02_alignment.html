@@ -235,8 +235,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>O arquivo CSV segue uma estrutura com cabeçalho padronizado e colunas obrigatórias como <code>Sample_ID</code>, <code>Sample_Name</code>, <code>Index</code>, <code>Lane</code>, entre outras. Um exemplo simplificado:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[Data]</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Lane,Sample_ID,Sample_Name,Index</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>1,Sample001,Sample001,SI-GA-A1</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>1,Sample002,Sample002,SI-GA-B2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>1,Sample001,Sample001,SI-GA-A1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <ul>
 <li>A seção <code>[Data]</code> delimita o início da tabela.</li>
 <li><code>Lane</code> representa o número da linha de fluxo onde a amostra foi carregada.</li>
@@ -249,39 +248,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Após a execução do <code>cellranger mkfastq</code>, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bcl2fastq_output</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>|-- HFLC5BBXX</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    |-- SI-GA-A1_1</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_1_S1_L001_I1_001.fastq.gz</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_1_S1_L001_R1_001.fastq.gz</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_1_S1_L001_R2_001.fastq.gz</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    |-- SI-GA-A1_2</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_2_S2_L001_I1_001.fastq.gz</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_2_S2_L001_R1_001.fastq.gz</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_2_S2_L001_R2_001.fastq.gz</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    |-- SI-GA-A1_3</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_3_S3_L001_I1_001.fastq.gz</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_3_S3_L001_R1_001.fastq.gz</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_3_S3_L001_R2_001.fastq.gz</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    |-- SI-GA-A1_4</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_4_S4_L001_I1_001.fastq.gz</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_4_S4_L001_R1_001.fastq.gz</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    |   |-- SI-GA-A1_4_S4_L001_R2_001.fastq.gz</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>|-- Reports</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>|-- Stats</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_I1_001.fastq.gz</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_R1_001.fastq.gz</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_R2_001.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    |-- Sample001</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    |   |-- Sample001_S1_L001_I1_001.fastq.gz</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    |   |-- Sample001_S1_L001_R1_001.fastq.gz</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    |   |-- Sample001_S1_L001_R2_001.fastq.gz</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>|-- Reports</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>|-- Stats</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_I1_001.fastq.gz</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_R1_001.fastq.gz</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>|-- Undetermined_S0_L001_R2_001.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Além disso, a nomenclatura do arquivo é composta por diferentes campos. Veja abaixo:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>[Sample Name]_S1_L00[Lane Number]_[Read Type]_001.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Esse nome é composto por blocos separados por sublinhados (<code>_</code>), com os seguintes significados:</p>
 <ul>
-<li><strong>SI-GA-A1_1</strong>: nome da amostra, herdado do campo <code>Sample_Name</code> do Sample Sheet.</li>
+<li><strong>Sample001</strong>: nome da amostra, herdado do campo <code>Sample_Name</code> do Sample Sheet.</li>
 <li><strong>S1</strong>: identificador da amostra atribuído automaticamente pelo <code>bcl2fastq</code>.</li>
 <li><strong>L001</strong>: número da lane (neste caso, lane 1).</li>
 <li><strong>R1</strong>: tipo da leitura:
 <ul>
-<li><code>R1</code> = Read 1 (transcrito)</li>
-<li><code>R2</code> = Read 2 (UMI)</li>
-<li><code>I1</code> = Index Read 1 (barcode)</li>
+<li><code>R1</code> = Read 1 (Cell barcode + UMI)</li>
+<li><code>R2</code> = Read 2 (cDNA)</li>
+<li><code>I1</code> = Index Read 1 (Sample index)</li>
 </ul></li>
 <li><strong>001</strong>: número do set de leitura (geralmente fixo como 001).</li>
 </ul>
@@ -876,127 +863,114 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="in">[Data]</span></span>
 <span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="in">Lane,Sample_ID,Sample_Name,Index</span></span>
 <span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="in">1,Sample001,Sample001,SI-GA-A1</span></span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="in">1,Sample002,Sample002,SI-GA-B2</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A seção <span class="in">`[Data]`</span> delimita o início da tabela.</span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Lane`</span> representa o número da linha de fluxo onde a amostra foi carregada.</span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Index`</span> refere-se ao barcode utilizado para identificar a amostra.</span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>Para mais detalhes, consulte a <span class="co">[</span><span class="ot">documentação da Illumina</span><span class="co">](https://support.illumina.com)</span>. deve seguir o padrão Illumina, especificando amostras, lanes e barcodes.</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Saída: arquivos FASTQ organizados por amostra.</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.2. Sobre o padrão 10x Genomics</span></span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>Após a execução do <span class="in">`cellranger mkfastq`</span>, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="in">```txt</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="in">bcl2fastq_output</span></span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="in">|-- HFLC5BBXX</span></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="in">    |-- SI-GA-A1_1</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_1_S1_L001_I1_001.fastq.gz</span></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_1_S1_L001_R1_001.fastq.gz</span></span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_1_S1_L001_R2_001.fastq.gz</span></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="in">    |-- SI-GA-A1_2</span></span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_2_S2_L001_I1_001.fastq.gz</span></span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_2_S2_L001_R1_001.fastq.gz</span></span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_2_S2_L001_R2_001.fastq.gz</span></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="in">    |-- SI-GA-A1_3</span></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_3_S3_L001_I1_001.fastq.gz</span></span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_3_S3_L001_R1_001.fastq.gz</span></span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_3_S3_L001_R2_001.fastq.gz</span></span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="in">    |-- SI-GA-A1_4</span></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_4_S4_L001_I1_001.fastq.gz</span></span>
-<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_4_S4_L001_R1_001.fastq.gz</span></span>
-<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- SI-GA-A1_4_S4_L001_R2_001.fastq.gz</span></span>
-<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Reports</span></span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Stats</span></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_I1_001.fastq.gz</span></span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_R1_001.fastq.gz</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_R2_001.fastq.gz</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>Além disso, a nomenclatura do arquivo é composta por diferentes campos. Veja abaixo:</span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="in">```txt</span></span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a><span class="in">[Sample Name]_S1_L00[Lane Number]_[Read Type]_001.fastq.gz</span></span>
-<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A seção <span class="in">`[Data]`</span> delimita o início da tabela.</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Lane`</span> representa o número da linha de fluxo onde a amostra foi carregada.</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`Index`</span> refere-se ao barcode utilizado para identificar a amostra.</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>Para mais detalhes, consulte a <span class="co">[</span><span class="ot">documentação da Illumina</span><span class="co">](https://support.illumina.com)</span>. deve seguir o padrão Illumina, especificando amostras, lanes e barcodes.</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Saída: arquivos FASTQ organizados por amostra.</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="fu">### 1.2. Sobre o padrão 10x Genomics</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>Após a execução do <span class="in">`cellranger mkfastq`</span>, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a><span class="in">```txt</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="in">bcl2fastq_output</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="in">|-- HFLC5BBXX</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="in">    |-- Sample001</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- Sample001_S1_L001_I1_001.fastq.gz</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- Sample001_S1_L001_R1_001.fastq.gz</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="in">    |   |-- Sample001_S1_L001_R2_001.fastq.gz</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Reports</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Stats</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_I1_001.fastq.gz</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_R1_001.fastq.gz</span></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="in">|-- Undetermined_S0_L001_R2_001.fastq.gz</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>Além disso, a nomenclatura do arquivo é composta por diferentes campos. Veja abaixo:</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="in">```txt</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="in">[Sample Name]_S1_L00[Lane Number]_[Read Type]_001.fastq.gz</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>Esse nome é composto por blocos separados por sublinhados (<span class="in">`_`</span>), com os seguintes significados:</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sample001**: nome da amostra, herdado do campo <span class="in">`Sample_Name`</span> do Sample Sheet.</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**S1**: identificador da amostra atribuído automaticamente pelo <span class="in">`bcl2fastq`</span>.</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**L001**: número da lane (neste caso, lane 1).</span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R1**: tipo da leitura:</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`R1`</span> = Read 1 (Cell barcode + UMI)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`R2`</span> = Read 2 (cDNA)</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`I1`</span> = Index Read 1 (Sample index)</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**001**: número do set de leitura (geralmente fixo como 001).</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Construção do Genoma de Referência</span></span>
 <span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>Esse nome é composto por blocos separados por sublinhados (<span class="in">`_`</span>), com os seguintes significados:</span>
-<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**SI-GA-A1_1**: nome da amostra, herdado do campo <span class="in">`Sample_Name`</span> do Sample Sheet.</span>
-<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**S1**: identificador da amostra atribuído automaticamente pelo <span class="in">`bcl2fastq`</span>.</span>
-<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**L001**: número da lane (neste caso, lane 1).</span>
-<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R1**: tipo da leitura:</span>
-<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`R1`</span> = Read 1 (transcrito)</span>
-<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`R2`</span> = Read 2 (UMI)</span>
-<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span><span class="in">`I1`</span> = Index Read 1 (barcode)</span>
-<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**001**: número do set de leitura (geralmente fixo como 001).</span>
-<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2. Construção do Genoma de Referência</span></span>
-<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> mkref <span class="dt">\</span></span>
-<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">--genome</span><span class="op">=</span>GRCh38_custom <span class="dt">\</span></span>
-<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">--fasta</span><span class="op">=</span>genome.fa <span class="dt">\</span></span>
-<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">--genes</span><span class="op">=</span>genes.gtf</span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> mkref <span class="dt">\</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">--genome</span><span class="op">=</span>GRCh38_custom <span class="dt">\</span></span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">--fasta</span><span class="op">=</span>genome.fa <span class="dt">\</span></span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  <span class="at">--genes</span><span class="op">=</span>genes.gtf</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Entrada: arquivos <span class="in">`FASTA`</span> com a sequência do genoma e <span class="in">`GTF`</span> com as anotações de genes.</span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Saída: diretório contendo a referência indexada para uso posterior.</span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Processamento com `cellranger count`</span></span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> count <span class="dt">\</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>  <span class="at">--id</span><span class="op">=</span>Sample001 <span class="dt">\</span></span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>  <span class="at">--transcriptome</span><span class="op">=</span>/refs/GRCh38_custom <span class="dt">\</span></span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>  <span class="at">--fastqs</span><span class="op">=</span>/mnt/fastqs <span class="dt">\</span></span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sample</span><span class="op">=</span>Sample001</span>
 <span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Entrada: arquivos <span class="in">`FASTA`</span> com a sequência do genoma e <span class="in">`GTF`</span> com as anotações de genes.</span>
-<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Saída: diretório contendo a referência indexada para uso posterior.</span>
-<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3. Processamento com `cellranger count`</span></span>
-<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a><span class="ex">cellranger</span> count <span class="dt">\</span></span>
-<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">--id</span><span class="op">=</span>Sample001 <span class="dt">\</span></span>
-<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">--transcriptome</span><span class="op">=</span>/refs/GRCh38_custom <span class="dt">\</span></span>
-<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>  <span class="at">--fastqs</span><span class="op">=</span>/mnt/fastqs <span class="dt">\</span></span>
-<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>  <span class="at">--sample</span><span class="op">=</span>Sample001</span>
-<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>Esta etapa realiza:</span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Alinhamento com STAR.</span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Identificação de células por barcodes únicos.</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Quantificação gênica por UMI.</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Geração das matrizes de contagem e do relatório de qualidade (<span class="in">`web_summary.html`</span>).</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Interpretação do Relatório</span></span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>O Cell Ranger gera um relatório interativo (<span class="in">`web_summary.html`</span>) com gráficos e tabelas que ajudam a avaliar a qualidade do sequenciamento e da captura celular.</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>Principais métricas e suas interpretações:</span>
 <span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a>Esta etapa realiza:</span>
-<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Alinhamento com STAR.</span>
-<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Identificação de células por barcodes únicos.</span>
-<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Quantificação gênica por UMI.</span>
-<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Geração das matrizes de contagem e do relatório de qualidade (<span class="in">`web_summary.html`</span>).</span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Estimated Number of Cells**: número estimado de células únicas com base na distribuição de UMIs.</span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reads Mapped to Genome**: porcentagem de reads que alinharam ao genoma de referência (ideal &gt; 80%).</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sequencing Saturation**: medida de redundância dos reads (ideal &gt; 40%); valores baixos sugerem que mais sequenciamento pode ser necessário.</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fraction Reads in Cells**: fração de reads atribuídas a barcodes válidos (ideal &gt; 70%).</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Valid Barcodes**: porcentagem de barcodes reconhecidos como válidos (ideal &gt; 90%).</span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Median Genes per Cell**: número mediano de genes detectados por célula; depende do tipo celular e qualidade da amostra.</span>
 <span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4. Interpretação do Relatório</span></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questionamentos</span></span>
 <span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a>O Cell Ranger gera um relatório interativo (<span class="in">`web_summary.html`</span>) com gráficos e tabelas que ajudam a avaliar a qualidade do sequenciamento e da captura celular.</span>
-<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a>Principais métricas e suas interpretações:</span>
-<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Estimated Number of Cells**: número estimado de células únicas com base na distribuição de UMIs.</span>
-<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Reads Mapped to Genome**: porcentagem de reads que alinharam ao genoma de referência (ideal &gt; 80%).</span>
-<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Sequencing Saturation**: medida de redundância dos reads (ideal &gt; 40%); valores baixos sugerem que mais sequenciamento pode ser necessário.</span>
-<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Fraction Reads in Cells**: fração de reads atribuídas a barcodes válidos (ideal &gt; 70%).</span>
-<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Valid Barcodes**: porcentagem de barcodes reconhecidos como válidos (ideal &gt; 90%).</span>
-<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Median Genes per Cell**: número mediano de genes detectados por célula; depende do tipo celular e qualidade da amostra.</span>
-<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questionamentos</span></span>
-<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>O número de células detectadas está de acordo com a expectativa para o protocolo de captura utilizado?</span>
-<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Há evidência de RNA ambiente ou células estressadas (baixa fração de reads em células)?</span>
-<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A saturação sugere que o sequenciamento foi suficiente ou deveria ser mais profundo?</span>
-<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A distribuição dos genes por célula está coerente com o tipo de tecido ou condição estudada?</span>
-<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Os barcodes inválidos estão ocorrendo em excesso, indicando problemas na biblioteca?</span>
-<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comentários Finais</span></span>
-<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>Este tutorial demonstrou o uso do Cell Ranger para:</span>
-<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Processar dados brutos (BCL) até a geração das matrizes de contagem por célula.</span>
-<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Avaliar a qualidade dos dados utilizando o relatório interativo fornecido pelo próprio pipeline.</span>
-<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Refletir criticamente sobre os resultados, visando decisões informadas para análises downstream.</span>
-<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-163"><a href="#cb7-163" aria-hidden="true" tabindex="-1"></a>A compreensão dessa etapa é essencial para garantir que análises como clustering, inferência de trajetórias e anotação celular sejam conduzidas com dados confiáveis e bem interpretados.</span>
-<span id="cb7-164"><a href="#cb7-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="fu">## Recursos adicionais</span></span>
-<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Documentação oficial</span><span class="co">](https://support.10xgenomics.com/single-cell-gene-expression)</span></span>
-<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Tutorial de QC no Seurat</span><span class="co">](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html)</span></span>
-<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">STAR aligner</span><span class="co">](https://github.com/alexdobin/STAR)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>O número de células detectadas está de acordo com a expectativa para o protocolo de captura utilizado?</span>
+<span id="cb7-137"><a href="#cb7-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Há evidência de RNA ambiente ou células estressadas (baixa fração de reads em células)?</span>
+<span id="cb7-138"><a href="#cb7-138" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A saturação sugere que o sequenciamento foi suficiente ou deveria ser mais profundo?</span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A distribuição dos genes por célula está coerente com o tipo de tecido ou condição estudada?</span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Os barcodes inválidos estão ocorrendo em excesso, indicando problemas na biblioteca?</span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## Comentários Finais</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>Este tutorial demonstrou o uso do Cell Ranger para:</span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Processar dados brutos (BCL) até a geração das matrizes de contagem por célula.</span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Avaliar a qualidade dos dados utilizando o relatório interativo fornecido pelo próprio pipeline.</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Refletir criticamente sobre os resultados, visando decisões informadas para análises downstream.</span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>A compreensão dessa etapa é essencial para garantir que análises como clustering, inferência de trajetórias e anotação celular sejam conduzidas com dados confiáveis e bem interpretados.</span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a><span class="fu">## Recursos adicionais</span></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Documentação oficial</span><span class="co">](https://support.10xgenomics.com/single-cell-gene-expression)</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Tutorial de QC no Seurat</span><span class="co">](https://satijalab.org/seurat/articles/pbmc3k_tutorial.html)</span></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">STAR aligner</span><span class="co">](https://github.com/alexdobin/STAR)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
