@@ -4,15 +4,13 @@ format: html
 page-layout: full
 ---
 
-# 📘 Curso: Introdução à análise de célula única (scRNA-seq)
+# Curso: Introdução à análise de célula única (scRNA-seq)
 
 Este site reúne tutoriais e materiais práticos do curso de análise transcriptômica em célula única (scRNA-seq). Ao longo de 6 semanas, abordaremos conceitos teóricos, ferramentas computacionais e estudos de caso aplicados, com foco em boas práticas e aplicações generalizadas.
 
----
+## Conteúdo Programático
 
-## 🧭 Conteúdo Programático
-
-### 🧩 Semana 1 — Introdução, História, Desenho Experimental e Definição do Projeto
+### Semana 1 — Introdução, História, Desenho Experimental e Definição do Projeto
 
 - Evolução da transcriptômica: de bulk RNA-seq a single-cell RNA-seq.
 - Aplicações e impacto da tecnologia single-cell em diversos contextos biológicos.
@@ -23,7 +21,7 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 - Pré-processamento de dados: do sequenciamento à matriz de contagem.
 - **Aula prática**: Uso do **Cell Ranger**.
 
-### 🧪 Semana 2 — Controle de Qualidade, Filtragem e Ambient RNA
+### Semana 2 — Controle de Qualidade, Filtragem e Ambient RNA
 
 - Métricas de qualidade: porcentagem de genes mitocondriais, número de UMI’s, etc.
 - Identificação e remoção de **doublets** (`scDblFinder`).
@@ -32,7 +30,7 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 - **Aula prática**: Uso de **Seurat (R)** para QC e filtragem.
 - Acompanhamento dos projetos: avaliação da qualidade e primeiros filtros.
 
-### 🧠 Semana 3 — Análise Exploratória, Clusterização e Identificação de Células Malignas
+### Semana 3 — Análise Exploratória, Clusterização e Identificação de Células Malignas
 
 - Redução de dimensionalidade: PCA, t-SNE, UMAP.
 - Clusterização celular: KNN, Leiden, Louvain.
@@ -42,7 +40,7 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 - **Aula prática**: Implementação no Seurat.
 - Acompanhamento dos projetos: anotação e clusterização.
 
-### 🔬 Semana 4 — Análises Diferenciais e Integração de Dados
+### Semana 4 — Análises Diferenciais e Integração de Dados
 
 - Métodos de análise diferencial de expressão.
 - Integração de múltiplos datasets com **SCTransform, Harmony**.
@@ -51,7 +49,7 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 - **Aula prática**: Análise diferencial e integração no Seurat.
 - Acompanhamento dos projetos: interpretação de diferenças entre condições.
 
-### 🔄 Semana 5 — Inferência de Trajetórias e Interações Célula-Célula
+### Semana 5 — Inferência de Trajetórias e Interações Célula-Célula
 
 - Modelagem de pseudotempo com **Monocle2**.
 - Análise de interações célula-célula com **LIANA**.
@@ -59,47 +57,39 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 - **Aula prática**: Trajetórias e comunicação celular.
 - Acompanhamento dos projetos: modelagem de diferenciação ou ativação celular.
 
-### 🎓 Semana 6 — Projeto Aplicado
+### Semana 6 — Projeto Aplicado
 
 - Aplicação das análises aprendidas a dados reais.
 - Interpretação de resultados e geração de figuras.
 - Integração dos resultados obtidos ao longo do curso.
 - **Apresentação e discussão dos projetos finais.**
 
----
-
-## 📚 Metodologia
+## Metodologia
 
 - Aulas expositivas com exemplos reais.
 - Práticas semanais com análise de dados reais.
 - Desenvolvimento progressivo de um projeto prático.
 
----
-
-## 🧰 Ferramentas e Recursos
+## Ferramentas e Recursos
 
 - **Linguagem:** R  
 - **Principais pacotes:** `Seurat`, `scDblFinder`, `Monocle2`, `Harmony`, `LIANA`  
 - **Infraestrutura:** Google Colab, HPC ou AWS (a critério do aluno/grupo)
 
----
-
-## 🧪 Avaliação
+## Avaliação
 
 - ✅ Participação e exercícios práticos — **20%**  
 - 📄 Relatórios semanais — **30%**  
 - 📊 Projeto final — **50%**
 
----
 
-## 📖 Bibliografia Recomendada
+## Bibliografia Recomendada
 
 - Luecken, M.D. & Theis, F.J. (2019). *Current best practices in single-cell RNA-seq analysis: a tutorial*. **Molecular Systems Biology**
 - Stuart, T. et al. (2019). *Comprehensive Integration of Single-Cell Data*. **Cell**
 - Butler, A. et al. (2018). *Integrating single-cell transcriptomic data across different conditions, technologies, and species*. **Nature Biotechnology**
 
----
 
-## 📩 Contato
+## Contato
 
-Professor: [andrefonseca@ufpa.br](mailto:andrefonseca@ufpa.br)
+Professor: 📩 [andrefonseca@ufpa.br](mailto:andrefonseca@ufpa.br)

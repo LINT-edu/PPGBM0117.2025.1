@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/946158009.svg)](https://doi.org/10.5281/zenodo.15252945)
+
 # **Ementa - Transcriptômica - Introdução à análise de célula única (scRNA-seq)**
 
 ## **Informações Gerais**
@@ -119,4 +121,4 @@ Cada integrante do grupo deverá assumir uma função específica e ser respons�
 
 ## **Contato**
 
-- Email do professor(a): [andrefonseca@ufpa.br](mailto:andrefonseca@ufpa.br)
+📫 Contato: [andrefonseca@ufpa.br](mailto:andrefonseca@ufpa.br)

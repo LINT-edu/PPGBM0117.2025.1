@@ -15,6 +15,8 @@ website:
         menu:
           - text: "Coleta de Dados"
             file: material/semana1/01_data_collection.qmd
+          - text: "Alinhamento"
+            file: material/semana1/02_alignment.qmd
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"
 
@@ -24,6 +26,6 @@ format:
       - cosmo
     css: styles.css
     toc: true
-
-
-
+    toc-depth: 3
+    code-fold: true
+    code-tools: true

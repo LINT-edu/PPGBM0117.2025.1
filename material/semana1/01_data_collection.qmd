@@ -1,11 +1,16 @@
 ---
 title: "01 - Coleta de dados"
 author: "Andre Fonseca"
-format: html
+format:
+    html:
+      toc: true
+      toc-depth: 3
+      code-fold: true
+      code-tools: true
 editor: visual
 ---
 
-## 🧠 Motivação
+## Motivação
 
 O avanço das tecnologias de sequenciamento em célula única permitiu uma revolução na compreensão da biologia celular em diversos contextos fisiológicos e patológicos. Entretanto, o acesso a dados de alta qualidade e bem anotados ainda é um desafio para pesquisadores iniciantes ou que não possuem estrutura para gerar seus próprios datasets.
 
@@ -16,7 +21,7 @@ A Chan Zuckerberg Initiative (CZI), por meio da plataforma **CellxGene**, dispon
 -   treinamento de modelos de aprendizado de máquina,
 -   integração com dados internos.
 
-## 🧬 O que é o CellxGene (CZI CellxGene Explorer)?
+## O que é o CellxGene (CZI CellxGene Explorer)?
 
 **CellxGene Explorer** é uma plataforma interativa mantida pela **Chan Zuckerberg Initiative (CZI)**, que permite **explorar, visualizar e baixar** dados de transcriptômica de célula única (scRNA-seq) e outros tipos de dados ómicos. Ela é parte do projeto **CZ CELLxGENE Discover**, cujo objetivo é democratizar o acesso a dados de alta qualidade e facilitar sua reutilização em pesquisas biomédicas.
 
@@ -27,7 +32,7 @@ Recursos principais incluem:
 -   Filtros por condição clínica, órgão, espécie, etc.
 -   Download facilitado dos dados brutos e processados (anndata, Seurat, CSV)
 
-## 🧪 Tipos de Dados Disponíveis
+## Tipos de Dados Disponíveis
 
 Até o momento, o CellxGene armazena mais de **100 milhões de células**, derivadas de estudos envolvendo:
 
@@ -41,24 +46,20 @@ Até o momento, o CellxGene armazena mais de **100 milhões de células**, deriv
 
 O volume de dados disponíveis pode chegar a **centenas de gigabytes**, portanto é importante considerar isso ao baixar conjuntos maiores.
 
-------------------------------------------------------------------------
-
-## 🧭 1. Navegando na Plataforma CellxGene
+## 1. Navegando na Plataforma CellxGene
 
 Para começar a explorar dados no CellxGene, siga os passos abaixo:
 
-### ▶️ Acessando a plataforma:
+### Acessando a plataforma:
 
 1.  Acesse: [**https://cellxgene.cziscience.com/**](https://cellxgene.cziscience.com/)
 2.  Em seguida clique na aba **Collections**.
 3.  Use a barra de busca ou os filtros laterais (organismo, órgão, condição, etc.) para encontrar o estudo de interesse.
 4.  Clique sobre o **nome do dataset** desejado — isso abrirá a interface do **CellxGene Explorer**.
 
-> 📌 Essa é a interface interativa principal, onde ocorrem todas as análises visuais descritas a seguir.
+> 📌 Nota: Essa é a interface interativa principal, onde ocorrem todas as análises visuais descritas a seguir.
 
-------------------------------------------------------------------------
-
-### 🔍 2. Explore os datasets disponíveis
+## 2. Explore os datasets disponíveis
 
 Você pode utilizar o campo de busca ou aplicar filtros laterais:
 
@@ -69,15 +70,12 @@ Você pode utilizar o campo de busca ou aplicar filtros laterais:
 
 > 💡 Dica: Cada entrada no catálogo mostra algumas estatisticas descritivas sobre o dado, por exemplo, o número de células e a tipo de tecnologia utilizada.
 
-------------------------------------------------------------------------
-
-## 🔬 3. Explorando dataset de interesse
+## 3. Explorando dataset de interesse
 
 Antes de baixar os dados, vale a pena usar os recursos de **exploração interativa** da plataforma para decidir se aquele conjunto é útil para seus objetivos. Abaixo estão perguntas chave para cada uma das ferramentas disponíveis:
 
-------------------------------------------------------------------------
 
-### 🔍 3.1. **Explore**
+### 3.1. **Explore**
 
 *(Proximo ao botão de Download → “Explore”)*
 
@@ -95,7 +93,7 @@ Antes de baixar os dados, vale a pena usar os recursos de **exploração interat
 
 ------------------------------------------------------------------------
 
-### 🧬 3.2. **Gene Expression**
+### 3.2. **Gene Expression**
 
 *(Menu superior → “Gene Expression”)*
 
@@ -116,7 +114,7 @@ Antes de baixar os dados, vale a pena usar os recursos de **exploração interat
 
 ------------------------------------------------------------------------
 
-### 🧭 3.3. **Cell Guide**
+### 3.3. **Cell Guide**
 
 *(Menu superior → “Cell Guide”)*
 
@@ -134,7 +132,7 @@ Antes de baixar os dados, vale a pena usar os recursos de **exploração interat
 
 ------------------------------------------------------------------------
 
-### 📊 3.4. **Differential Expression**
+### 3.4. **Differential Expression**
 
 *(Menu superior → “Differential Expression”)*
 
@@ -150,9 +148,7 @@ Antes de baixar os dados, vale a pena usar os recursos de **exploração interat
 
     → Compare um tipo celular entre datasets diferentes através da ferramenta.
 
-------------------------------------------------------------------------
-
-## 🧪 4. Sugestão de Uso Integrado
+## 4. Sugestão de Uso Integrado
 
 Um fluxo de exploração poderia seguir:
 
@@ -161,9 +157,7 @@ Um fluxo de exploração poderia seguir:
 3.  Visite o **Cell Guide** para contextualizar biologicamente os tipos celulares.\
 4.  Use o **Differential Expression** para gerar hipóteses ou identificar genes marcadores.
 
-------------------------------------------------------------------------
-
-### 📦 5. Baixar os dados
+## 5. Baixar os dados
 
 Após explorar e decidir se o conjunto de dados é relevante, podemos baixá-lo. Na etapa de seleção do dataset, clique no botão **"Download dataset"** (localizado na mesma tela em que entramos o botão Explorer).
 
@@ -181,7 +175,7 @@ Você poderá baixar diferentes versões dos dados, quando disponíveis:
 
 Exemplo de conversão de `.h5ad` para `.rds` no R:
 
-#### 🔄 Exemplo: Convertendo `.h5ad` para `.rds` com `sceasy`
+#### Exemplo: Convertendo `.h5ad` para `.rds` com `sceasy`
 
 ``` r
 # Instale os pacotes necessários, se ainda não tiver:
@@ -204,7 +198,7 @@ sceasy::convertFormat(
 )
 ```
 
-> 💡 **Nota:** Para que a conversão funcione corretamente, você precisa de um ambiente Python com o pacote `anndata` instalado. **Qualquer problema faremos em sala**.
+> 📌 **Nota:** Para que a conversão funcione corretamente, você precisa de um ambiente Python com o pacote `anndata` instalado. **Qualquer problema faremos em sala**.
 
 A instalação do `anndata` via R pode ser feita através do comando:
 
@@ -212,7 +206,7 @@ A instalação do `anndata` via R pode ser feita através do comando:
 reticulate::py_install("anndata")
 ```
 
-## 📌 6. Comentários Finais
+## 6. Comentários Finais
 
 -   O CellxGene é atualizado frequentemente com novos estudos revisados por pares e dados brutos provenientes de colaborações com o **Human Cell Atlas**, **Azimuth**, e outras iniciativas.\
 -   É uma excelente fonte para **benchmarking** de métodos, descoberta de biomarcadores e validação cruzada.\

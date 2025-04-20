@@ -1,9 +1,9 @@
 ---
-title: "Sobre a Disciplina"
+title: "Sobre a material"
 format: html
 ---
 
-# ℹ️ Sobre a Disciplina
+# A Disciplina
 
 Esta disciplina oferece uma introdução prática e conceitual à análise de dados de transcriptômica de célula única (single-cell RNA-seq), com foco em ferramentas computacionais modernas e aplicações em contextos biológicos diversos.
 
@@ -11,9 +11,8 @@ Ao longo do curso, os alunos terão contato com os principais pacotes da linguag
 
 O curso é estruturado em encontros teóricos e práticos, com foco na construção progressiva de um projeto aplicado com dados reais.
 
----
 
-# 👨‍🏫 Sobre o Professor
+# O Professor
 
 **André Fonseca** é professor visitante na Universidade Federal do Pará (UFPA) e atua na interface entre bioinformática, biologia molecular e ciência de dados.
 
