@@ -1,5 +1,5 @@
 ---
-title: "Alinhamento com Cell Ranger"
+title: "02 - Alinhamento com Cell Ranger"
 format:
   html:
     toc: true
@@ -16,9 +16,9 @@ Este tutorial resolve um problema comum: como transformar dados brutos do sequen
 
 ## Contextualização
 
-O **Cell Ranger** é o pipeline oficial da 10x Genomics para processar dados de scRNA-seq. Ele é composto por uma série de ferramentas coordenadas por um framework interno chamado **Martian**, que gerencia etapas paralelas e arquivos intermediários. O Cell Ranger executa diversas etapas, incluindo demultiplexação, alinhamento, deduplicação de UMIs, quantificação gênica e geração de relatórios de qualidade.
+O **Cell Ranger** é o pipeline oficial da 10x Genomics para processar dados de scRNA-seq. Ele é composto por uma série de ferramentas coordenadas por um framework interno chamado **Martian**, que gerencia etapas paralelas e arquivos intermediários. O Cell Ranger executa diversas etapas, incluindo demultiplexação, alinhamento, deduplicação de UMIs, quantificação gênica e geração de relatórios de qualidade. Para instalar o Cell Ranger, por favor, acesso esse [link](https://www.10xgenomics.com/support/software/cell-ranger/7.2/tutorials/cr-tutorial-in). 
 
-> 📌 Nota: Durante a etapa de alinhamento, o Cell Ranger utiliza o **STAR (Spliced Transcripts Alignment to a Reference)** como seu motor principal para mapear os reads de RNA ao genoma de referência. O STAR é um dos alinhadores mais rápidos e sensíveis para dados de RNA-seq, sendo particularmente adequado para capturar splicing e isoformas em organismos eucariotos.
+> 📌 Nota: Durante a etapa de alinhamento, o Cell Ranger utiliza o **STAR (Spliced Transcripts Alignment to a Reference)** como seu motor principal para mapear os reads de RNA ao genoma de referência. O STAR é um dos alinhadores mais rápidos e sensíveis para dados de RNA-seq, sendo particularmente adequado para capturar splicing e isoformas em organismos eucariotos. Caso tenha interesse em entender mais sobre o algoritmo, veja o [link](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/1.0/map/cr-counter)
 
 ## Ferramentas utilizadas
 
@@ -49,11 +49,12 @@ Lane,Sample_ID,Sample_Name,Index
 ```
 
 - A seção `[Data]` delimita o início da tabela.
-- `Lane` representa o número da linha de fluxo onde a amostra foi carregada.
-- `Index` refere-se ao barcode utilizado para identificar a amostra.
+- `Lane` Número da lane do flowcell (geralmente 1, mas pode ser múltiplas).
+- `Sample_ID` Identificador interno para a amostra (aparece nos diretórios).
+- `Sample_Name`Nome descritivo da amostra, que aparece no nome dos arquivos FASTQ.
+- `Index` Sequência ou nome do índice (barcode) usado para essa amostra.
 
-Para mais detalhes, consulte a [documentação da Illumina](https://support.illumina.com). deve seguir o padrão Illumina, especificando amostras, lanes e barcodes.
-- Saída: arquivos FASTQ organizados por amostra.
+Para mais detalhes, consulte a [documentação da Illumina](https://support.illumina.com/). 
 
 ### 1.2. Sobre o padrão 10x Genomics
 Após a execução do `cellranger mkfastq`, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:

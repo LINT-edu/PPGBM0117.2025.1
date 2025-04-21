@@ -128,14 +128,14 @@
   {
     "objectID": "material/semana1/02_alignment.html",
     "href": "material/semana1/02_alignment.html",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "",
     "text": "Ao realizar um experimento de transcriptômica de célula única com a tecnologia 10x Genomics, o sequenciador fornece arquivos no formato BCL. No entanto, o pesquisador precisa de uma matriz de contagem por célula para realizar análises downstream como clustering, anotação e detecção de tipos celulares.\nEste tutorial resolve um problema comum: como transformar dados brutos do sequenciador em uma matriz de expressão confiável, e como interpretar o relatório de qualidade do pipeline."
   },
   {
     "objectID": "material/semana1/02_alignment.html#ferramentas-utilizadas",
     "href": "material/semana1/02_alignment.html#ferramentas-utilizadas",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "Ferramentas utilizadas",
     "text": "Ferramentas utilizadas\nAs etapas do pipeline e suas respectivas funções são:\n\ncellranger mkfastq: converte arquivos BCL em arquivos FASTQ por amostra.\ncellranger mkref: constrói um genoma de referência com anotações para alinhamento.\ncellranger count: alinha os reads (com STAR), deduplica UMIs, gera matrizes de expressão e relatório final de qualidade."
   },
@@ -149,23 +149,23 @@
   {
     "objectID": "material/semana1/02_alignment.html#motivação",
     "href": "material/semana1/02_alignment.html#motivação",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "",
     "text": "Ao realizar um experimento de transcriptômica de célula única com a tecnologia 10x Genomics, o sequenciador fornece arquivos no formato BCL. No entanto, o pesquisador precisa de uma matriz de contagem por célula para realizar análises downstream como clustering, anotação e detecção de tipos celulares.\nEste tutorial resolve um problema comum: como transformar dados brutos do sequenciador em uma matriz de expressão confiável, e como interpretar o relatório de qualidade do pipeline."
   },
   {
     "objectID": "material/semana1/02_alignment.html#contextualização",
     "href": "material/semana1/02_alignment.html#contextualização",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "Contextualização",
-    "text": "Contextualização\nO Cell Ranger é o pipeline oficial da 10x Genomics para processar dados de scRNA-seq. Ele é composto por uma série de ferramentas coordenadas por um framework interno chamado Martian, que gerencia etapas paralelas e arquivos intermediários. O Cell Ranger executa diversas etapas, incluindo demultiplexação, alinhamento, deduplicação de UMIs, quantificação gênica e geração de relatórios de qualidade.\n\n📌 Nota: Durante a etapa de alinhamento, o Cell Ranger utiliza o STAR (Spliced Transcripts Alignment to a Reference) como seu motor principal para mapear os reads de RNA ao genoma de referência. O STAR é um dos alinhadores mais rápidos e sensíveis para dados de RNA-seq, sendo particularmente adequado para capturar splicing e isoformas em organismos eucariotos."
+    "text": "Contextualização\nO Cell Ranger é o pipeline oficial da 10x Genomics para processar dados de scRNA-seq. Ele é composto por uma série de ferramentas coordenadas por um framework interno chamado Martian, que gerencia etapas paralelas e arquivos intermediários. O Cell Ranger executa diversas etapas, incluindo demultiplexação, alinhamento, deduplicação de UMIs, quantificação gênica e geração de relatórios de qualidade. Para instalar o Cell Ranger, por favor, acesso esse link.\n\n📌 Nota: Durante a etapa de alinhamento, o Cell Ranger utiliza o STAR (Spliced Transcripts Alignment to a Reference) como seu motor principal para mapear os reads de RNA ao genoma de referência. O STAR é um dos alinhadores mais rápidos e sensíveis para dados de RNA-seq, sendo particularmente adequado para capturar splicing e isoformas em organismos eucariotos. Caso tenha interesse em entender mais sobre o algoritmo, veja o link"
   },
   {
     "objectID": "material/semana1/02_alignment.html#conversão-de-bcl-para-fastq",
     "href": "material/semana1/02_alignment.html#conversão-de-bcl-para-fastq",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "1. Conversão de BCL para FASTQ",
-    "text": "1. Conversão de BCL para FASTQ\ncellranger mkfastq \\\n  --id=Sample001 \\\n  --run=/mnt/bcl_run_folder \\\n  --csv=sample_sheet.csv\n\nO arquivo sample_sheet.csv deve seguir o padrão Illumina, especificando amostras, lanes e barcodes.\n\n\n1.1. Sobre o padrão Illumina\nO arquivo CSV segue uma estrutura com cabeçalho padronizado e colunas obrigatórias como Sample_ID, Sample_Name, Index, Lane, entre outras. Um exemplo simplificado:\n[Data]\nLane,Sample_ID,Sample_Name,Index\n1,Sample001,Sample001,SI-GA-A1\n\nA seção [Data] delimita o início da tabela.\nLane representa o número da linha de fluxo onde a amostra foi carregada.\nIndex refere-se ao barcode utilizado para identificar a amostra.\n\nPara mais detalhes, consulte a documentação da Illumina. deve seguir o padrão Illumina, especificando amostras, lanes e barcodes. - Saída: arquivos FASTQ organizados por amostra.\n\n\n1.2. Sobre o padrão 10x Genomics\nApós a execução do cellranger mkfastq, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:\nbcl2fastq_output\n|-- HFLC5BBXX\n    |-- Sample001\n    |   |-- Sample001_S1_L001_I1_001.fastq.gz\n    |   |-- Sample001_S1_L001_R1_001.fastq.gz\n    |   |-- Sample001_S1_L001_R2_001.fastq.gz\n|-- Reports\n|-- Stats\n|-- Undetermined_S0_L001_I1_001.fastq.gz\n|-- Undetermined_S0_L001_R1_001.fastq.gz\n|-- Undetermined_S0_L001_R2_001.fastq.gz\nAlém disso, a nomenclatura do arquivo é composta por diferentes campos. Veja abaixo:\n[Sample Name]_S1_L00[Lane Number]_[Read Type]_001.fastq.gz\nEsse nome é composto por blocos separados por sublinhados (_), com os seguintes significados:\n\nSample001: nome da amostra, herdado do campo Sample_Name do Sample Sheet.\nS1: identificador da amostra atribuído automaticamente pelo bcl2fastq.\nL001: número da lane (neste caso, lane 1).\nR1: tipo da leitura:\n\nR1 = Read 1 (Cell barcode + UMI)\nR2 = Read 2 (cDNA)\nI1 = Index Read 1 (Sample index)\n\n001: número do set de leitura (geralmente fixo como 001)."
+    "text": "1. Conversão de BCL para FASTQ\ncellranger mkfastq \\\n  --id=Sample001 \\\n  --run=/mnt/bcl_run_folder \\\n  --csv=sample_sheet.csv\n\nO arquivo sample_sheet.csv deve seguir o padrão Illumina, especificando amostras, lanes e barcodes.\n\n\n1.1. Sobre o padrão Illumina\nO arquivo CSV segue uma estrutura com cabeçalho padronizado e colunas obrigatórias como Sample_ID, Sample_Name, Index, Lane, entre outras. Um exemplo simplificado:\n[Data]\nLane,Sample_ID,Sample_Name,Index\n1,Sample001,Sample001,SI-GA-A1\n\nA seção [Data] delimita o início da tabela.\nLane Número da lane do flowcell (geralmente 1, mas pode ser múltiplas).\nSample_ID Identificador interno para a amostra (aparece nos diretórios).\nSample_NameNome descritivo da amostra, que aparece no nome dos arquivos FASTQ.\nIndex Sequência ou nome do índice (barcode) usado para essa amostra.\n\nPara mais detalhes, consulte a documentação da Illumina.\n\n\n1.2. Sobre o padrão 10x Genomics\nApós a execução do cellranger mkfastq, os arquivos FASTQ seguem uma convenção específica da 10x Genomics. Para cada amostra, são gerados arquivos separados por tipo de leitura:\nbcl2fastq_output\n|-- HFLC5BBXX\n    |-- Sample001\n    |   |-- Sample001_S1_L001_I1_001.fastq.gz\n    |   |-- Sample001_S1_L001_R1_001.fastq.gz\n    |   |-- Sample001_S1_L001_R2_001.fastq.gz\n|-- Reports\n|-- Stats\n|-- Undetermined_S0_L001_I1_001.fastq.gz\n|-- Undetermined_S0_L001_R1_001.fastq.gz\n|-- Undetermined_S0_L001_R2_001.fastq.gz\nAlém disso, a nomenclatura do arquivo é composta por diferentes campos. Veja abaixo:\n[Sample Name]_S1_L00[Lane Number]_[Read Type]_001.fastq.gz\nEsse nome é composto por blocos separados por sublinhados (_), com os seguintes significados:\n\nSample001: nome da amostra, herdado do campo Sample_Name do Sample Sheet.\nS1: identificador da amostra atribuído automaticamente pelo bcl2fastq.\nL001: número da lane (neste caso, lane 1).\nR1: tipo da leitura:\n\nR1 = Read 1 (Cell barcode + UMI)\nR2 = Read 2 (cDNA)\nI1 = Index Read 1 (Sample index)\n\n001: número do set de leitura (geralmente fixo como 001)."
   },
   {
     "objectID": "material/semana1/02_alignment.html#relação-com-o-star",
@@ -219,14 +219,14 @@
   {
     "objectID": "material/semana1/02_alignment.html#questionamentos",
     "href": "material/semana1/02_alignment.html#questionamentos",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "Questionamentos",
     "text": "Questionamentos\n\nO número de células detectadas está de acordo com a expectativa para o protocolo de captura utilizado?\nHá evidência de RNA ambiente ou células estressadas (baixa fração de reads em células)?\nA saturação sugere que o sequenciamento foi suficiente ou deveria ser mais profundo?\nA distribuição dos genes por célula está coerente com o tipo de tecido ou condição estudada?\nOs barcodes inválidos estão ocorrendo em excesso, indicando problemas na biblioteca?"
   },
   {
     "objectID": "material/semana1/02_alignment.html#comentários-finais",
     "href": "material/semana1/02_alignment.html#comentários-finais",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "Comentários Finais",
     "text": "Comentários Finais\nEste tutorial demonstrou o uso do Cell Ranger para:\n\nProcessar dados brutos (BCL) até a geração das matrizes de contagem por célula.\nAvaliar a qualidade dos dados utilizando o relatório interativo fornecido pelo próprio pipeline.\nRefletir criticamente sobre os resultados, visando decisões informadas para análises downstream.\n\nA compreensão dessa etapa é essencial para garantir que análises como clustering, inferência de trajetórias e anotação celular sejam conduzidas com dados confiáveis e bem interpretados."
   },
@@ -247,28 +247,28 @@
   {
     "objectID": "material/semana1/02_alignment.html#construção-do-genoma-de-referência",
     "href": "material/semana1/02_alignment.html#construção-do-genoma-de-referência",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "2. Construção do Genoma de Referência",
     "text": "2. Construção do Genoma de Referência\ncellranger mkref \\\n  --genome=GRCh38_custom \\\n  --fasta=genome.fa \\\n  --genes=genes.gtf\n\nEntrada: arquivos FASTA com a sequência do genoma e GTF com as anotações de genes.\nSaída: diretório contendo a referência indexada para uso posterior."
   },
   {
     "objectID": "material/semana1/02_alignment.html#processamento-com-cellranger-count",
     "href": "material/semana1/02_alignment.html#processamento-com-cellranger-count",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "3. Processamento com cellranger count",
     "text": "3. Processamento com cellranger count\ncellranger count \\\n  --id=Sample001 \\\n  --transcriptome=/refs/GRCh38_custom \\\n  --fastqs=/mnt/fastqs \\\n  --sample=Sample001\nEsta etapa realiza:\n\nAlinhamento com STAR.\nIdentificação de células por barcodes únicos.\nQuantificação gênica por UMI.\nGeração das matrizes de contagem e do relatório de qualidade (web_summary.html)."
   },
   {
     "objectID": "material/semana1/02_alignment.html#interpretação-do-relatório",
     "href": "material/semana1/02_alignment.html#interpretação-do-relatório",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "4. Interpretação do Relatório",
     "text": "4. Interpretação do Relatório\nO Cell Ranger gera um relatório interativo (web_summary.html) com gráficos e tabelas que ajudam a avaliar a qualidade do sequenciamento e da captura celular.\nPrincipais métricas e suas interpretações:\n\nEstimated Number of Cells: número estimado de células únicas com base na distribuição de UMIs.\nReads Mapped to Genome: porcentagem de reads que alinharam ao genoma de referência (ideal &gt; 80%).\nSequencing Saturation: medida de redundância dos reads (ideal &gt; 40%); valores baixos sugerem que mais sequenciamento pode ser necessário.\nFraction Reads in Cells: fração de reads atribuídas a barcodes válidos (ideal &gt; 70%).\nValid Barcodes: porcentagem de barcodes reconhecidos como válidos (ideal &gt; 90%).\nMedian Genes per Cell: número mediano de genes detectados por célula; depende do tipo celular e qualidade da amostra."
   },
   {
     "objectID": "material/semana1/02_alignment.html#recursos-adicionais",
     "href": "material/semana1/02_alignment.html#recursos-adicionais",
-    "title": "Alinhamento com Cell Ranger",
+    "title": "02 - Alinhamento com Cell Ranger",
     "section": "Recursos adicionais",
     "text": "Recursos adicionais\n\nDocumentação oficial\nTutorial de QC no Seurat\nSTAR aligner"
   }
