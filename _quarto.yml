@@ -6,6 +6,7 @@ website:
   title: "Curso de Análise Single-Cell"
   site-url: https://lint-edu.github.io/PPGBM0117.2025.1
   navbar:
+    search: true
     left:
       - text: "Início"
         file: index.qmd
@@ -17,15 +18,22 @@ website:
             file: material/semana1/01_data_collection.qmd
           - text: "Alinhamento"
             file: material/semana1/02_alignment.qmd
+      - text: "Semana 2"
+        menu:
+          - text: "Qualidade de controle"
+            file: material/semana2/03_quality_control.qmd
+
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"
 
 format:
   html:
+    lightbox: true
     theme:
       - cosmo
     css: styles.css
     toc: true
     toc-depth: 3
-    code-fold: true
-    code-tools: true
+    code-fold: false
+    code-tools: false
+  

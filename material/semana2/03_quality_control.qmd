@@ -1,0 +1,489 @@
+---
+title: "03 - Controle de qualidade"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute: 
+  cache: true
+---
+
+## Motivação
+
+Antes de realizar qualquer análise exploratória ou inferência estatística com dados de RNA-seq de célula única (scRNA-seq), é essencial garantir que os dados sejam de **alta qualidade**. Diferentemente do RNA-seq convencional (bulk), dados de scRNA-seq são altamente suscetíveis a **ruído técnico** e **artefatos experimentais**, como células mortas, dupletos e contaminação por RNA ambiente.
+
+## Contextualização
+
+Dados de RNA-seq de célula única (scRNA-seq) são poderosos para investigar a heterogeneidade celular, mas exigem um rigoroso controle de qualidade devido à presença de ruídos técnicos, células danificadas, dupletos e contaminação por RNA ambiente.
+
+Neste tutorial, utilizamos um conjunto de ferramentas complementares:
+
+-   **`Seurat`** para pré-processamento, cálculo de métricas de qualidade e filtragem de células;
+-   **`SoupX`** para identificar e corrigir contaminação por RNA ambiente (ambient RNA);
+-   **`scDblFinder`** para detectar e remover dupletos.
+
+A aplicação combinada desses pacotes permite construir um conjunto de células de alta qualidade, garantindo que análises posteriores — como clusterização e anotação de tipos celulares — sejam mais robustas e confiáveis.
+
+```{r}
+#| warning: false
+
+library(Seurat)
+library(scDblFinder)
+library(dplyr)
+library(here)
+library(patchwork)
+
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+```
+
+## O que é Seurat?
+
+Seurat é um pacote R desenvolvido para controle de qualidade, análise e exploração de dados de RNA-sequenciamento de células individuais. Seurat visa permitir que os usuários identifiquem e interpretem fontes de heterogeneidade a partir de medições transcriptômicas de células individuais e integrem diversos tipos de dados de células individuais. Para mais detalhes acesse [aqui](https://satijalab.org/seurat/).
+
+```{r}
+
+breast_data <- Read10X(
+  data.dir = here::here("data/filtered_feature_bc_matrix/"))
+
+```
+
+```{r}
+
+seurat_object <- CreateSeuratObject(
+  counts = breast_data, project = "Breast_7k")
+
+```
+
+## Estrutura do Objeto `Seurat`
+
+Para visualizar a estrutura do objeto recem construidos, podemos utilizar o comando:
+
+```{r}
+#| eval: false
+
+# Exibe de forma compacta a estrutura interna de um objeto R
+str(seurat_object)
+
+```
+
+| Slot | Tipo de Objeto | Descrição |
+|----------------------------|--------------------------|------------------|
+| `assays` | Lista de `Assay` | Armazena dados de expressão para diferentes modalidades (e.g., RNA, ATAC). Cada `Assay` contém camadas como `counts`, `data` e `scale.data`. |
+| `meta.data` | `data.frame` | Metadados por célula, como `nFeature_RNA`, `nCount_RNA`, `percent.mt`, entre outros. |
+| `active.assay` | `character` | Nome do `Assay` ativo, utilizado por funções padrão como `NormalizeData()`. |
+| `active.ident` | `factor` | Identidade celular ativa, geralmente usada para clusterização e visualizações. |
+| `reductions` | Lista de `DimReduc` | Armazena resultados de reduções dimensionais, como PCA, UMAP e t-SNE. |
+| `graphs` | Lista de `Graph` | Contém grafos de vizinhança utilizados em algoritmos de clusterização, como `FindNeighbors()`. |
+| `neighbors` | Lista | Armazena informações sobre vizinhos mais próximos calculados, úteis para métodos como UMAP. |
+| `images` | Lista de `SpatialImage` | Armazena dados de imagens espaciais, como os provenientes de experimentos Visium. |
+| `project.name` | `character` | Nome do projeto associado ao objeto `Seurat`. |
+| `misc` | Lista | Informações diversas e adicionais que não se encaixam nos outros slots. |
+| `version` | `package_version` | Versão do pacote `Seurat` utilizada para criar o objeto. |
+| `commands` | Lista de `SeuratCommand` | Histórico de comandos aplicados ao objeto, incluindo parâmetros e timestamps. |
+| `tools` | Lista | Resultados de análises adicionais geradas por outras ferramentas, preenchido por desenvolvedores usando `Tool<-`. |
+
+::: {.callout-note collapse="false"}
+A estrutura do objeto `Seurat` pode **sofrer pequenas alterações entre versões do pacote**, especialmente em relação à organização interna dos slots, nomenclatura e slots adicionais utilizados por novos métodos.
+
+Este tutorial foi desenvolvido com a versão **Seurat 5.2.1**, na qual os principais componentes do objeto — como `assays`, `meta.data`, `reductions`, `graphs` e `commands` — mantêm compatibilidade com versões anteriores, mas apresentam melhorias de desempenho e integração com múltiplas modalidades.
+:::
+
+## Descrevendo o metadata
+
+```{r}
+
+View(seurat_object@meta.data)
+
+```
+
+::: {.callout-note collapse="false"}
+-   **Número total de moleculas unicas (`nCount_RNA`)**\
+-   **Número de genes detectados (`nFeature_RNA`)**\
+:::
+
+## Avaliacao da qualidade das celulas
+
+### Calculando percentagem relacionada a genes de interesse
+
+```{r}
+
+# Genes mitocondriais (nomes iniciam com "MT-")
+seurat_object[["percent.mt"]] <- PercentageFeatureSet(
+  seurat_object, pattern = "^MT-")
+
+# Genes ribossômicos (nomes iniciam com "RPS" ou "RPL")
+seurat_object[["percent.ribo"]] <- PercentageFeatureSet(
+  seurat_object, pattern = "^RP[SL]")
+
+```
+
+```{r}
+
+# Genes de hemoglobina - remover HBP explicitamente
+hb_genes <- grep("^HB", rownames(seurat_object), value = TRUE)
+hb_genes <- hb_genes[!grepl("^HBP", hb_genes)]
+
+seurat_object[["percent.hb"]] <- PercentageFeatureSet(
+  seurat_object, features = hb_genes)
+
+```
+
+::: {.callout-note collapse="false"}
+Essas porcentagens ajudam a:
+
+-   **Filtrar células de baixa qualidade** (ex: alto `percent.mt`);
+-   **Identificar artefatos ou contaminações** (ex: glóbulos vermelhos via `percent.hb`);
+-   **Detectar viés técnico** ou diferenças biológicas significativas (ex: via `percent.ribo`).
+
+Essas métricas são frequentemente visualizadas via `VlnPlot()` ou correlacionadas com `nCount_RNA` para detectar padrões suspeitos.
+:::
+
+### Salvando estatistica pre-filtragem
+
+```{r}
+
+pre_qc_stats <- data.frame(
+  number_of_cells = ncol(seurat_object),
+  mean_counts_per_cell = mean(seurat_object$nCount_RNA),
+  median_counts_per_cell = median(seurat_object$nCount_RNA),
+  mean_features_per_cell = mean(seurat_object$nFeature_RNA),
+  median_features_per_cell = median(seurat_object$nFeature_RNA)
+)
+
+```
+
+### Visualizando atributos de interesse
+
+```{r}
+#| label: fig-quality-metrics
+#| column: screen-inset-shaded
+#| fig-align: center
+#| warning: false
+
+p1 <- VlnPlot(seurat_object, 
+        features = c("nCount_RNA", "nFeature_RNA"), ncol = 3)
+
+p2 <- VlnPlot(seurat_object, 
+        features = c("percent.mt", "percent.ribo", "percent.hb"), ncol = 3)
+
+p1
+p2
+
+```
+
+### Correlacionando metricas
+
+```{r}
+#| label: fig-quality-correlation
+#| column: screen-inset-shaded
+#| layout-nrow: 1
+
+plot1 <- FeatureScatter(seurat_object, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot2 <- FeatureScatter(seurat_object, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+
+plot1
+plot2
+
+```
+
+::: {.callout-note collapse="false"}
+1.  **`nCount_RNA` vs. `nFeature_RNA`**\
+    Uma **correlação positiva forte** é esperada: quanto maior o número total de transcritos, maior tende a ser o número de genes detectados.\
+    → Uma correlação **anormalmente fraca** pode indicar problemas técnicos ou presença de dupletos.
+
+2.  **`nCount_RNA` vs. `percent.mt`**\
+    Geralmente apresentam uma **correlação negativa**. Células com um número total maior de moléculas de RNA (alto nCount_RNA) são tipicamente associadas a uma porcentagem menor de leituras mitocondriais (menor percent.mt), indicando melhor qualidade celular e menos contaminação.
+    → Uma **alta percentagem mitocondrial com poucos counts** pode ser um sinal de apoptose ou lise celular.
+:::
+
+### Identificando `thresholds` a partir percentagem dos alvos
+
+Esta função permite identificar **células com valores extremos** para uma métrica contínua, como `nFeature_RNA` ou `percent.mt`, utilizando um critério estatístico baseado em:
+
+> **mediana ± (n × MAD)**
+
+Essa abordagem é **mais robusta que o desvio padrão**, pois é menos sensível a valores extremos.  
+O argumento `nmads` controla a sensibilidade da filtragem (3 é o valor comumente utilizado).
+
+Essa função é útil para **detectar e remover artefatos experimentais** ou células anômalas de forma personalizada.
+
+```{r}
+
+is_outlier <- function(seurat_object, metric, nmads = 3, verbose = TRUE) {
+  # Extrai os valores da métrica desejada
+  values <- seurat_object@meta.data[[metric]]
+
+  # Calcula mediana e desvio absoluto da mediana (MAD)
+  med <- median(values, na.rm = TRUE)
+  mad_val <- mad(values, center = med, constant = 1, na.rm = TRUE)
+
+  # Define os thresholds inferior e superior
+  lower <- med - nmads * mad_val
+  upper <- med + nmads * mad_val
+
+  # Imprime os limites, se verbose = TRUE
+  if (verbose) {
+    message(glue::glue("Outliers para '{metric}' definidos como valores fora do intervalo:"))
+    message(glue::glue("  Inferior: {round(lower, 2)}"))
+    message(glue::glue("  Superior: {round(upper, 2)}"))
+  }
+
+  # Identifica outliers
+  outlier <- (values < lower) | (values > upper)
+  return(outlier)
+}
+
+```
+
+```{r}
+
+seurat_object$mt_outlier <- is_outlier(
+  seurat_object, metric = "percent.mt", nmads = 3)
+
+table(seurat_object$mt_outlier)
+
+```
+
+## Identificando doublets
+
+**Dupletos (doublets)** ocorrem quando duas células distintas são capturadas dentro da mesma gotícula durante a etapa de microencapsulamento (como no 10x Genomics). Como resultado, seus perfis transcriptômicos são combinados e registrados como uma única célula.
+
+### Por que isso é um problema?
+
+- Dupletos podem **formar clusters artificiais** ou **preencher espaços entre populações reais**, confundindo a interpretação biológica.
+- Em análises downstream, como **clusterização**, **diferenciação de tipos celulares** e **descoberta de trajetórias**, os dupletos introduzem **ruído**.
+
+Ferramentas como **`scDblFinder`**, **`Scrublet`** e **`DoubletFinder`** utilizam estratégias estatísticas e simulações para identificar prováveis dupletos com base na similaridade de perfis de expressão e distribuição de vizinhos.
+
+```{r}
+#| warning: false
+
+# Converta o objeto Seurat para SingleCellExperiment
+sce <- as.SingleCellExperiment(seurat_object)
+
+# Executa a identificação de dupletos
+sce <- scDblFinder(sce)
+
+# Adiciona o resultado de volta ao objeto Seurat
+seurat_object$scDblFinder.class <- sce$scDblFinder.class
+seurat_object$doublet_score <- sce$scDblFinder.score
+
+# Visualiza a proporção de dupletos identificados
+table(seurat_object$scDblFinder.class)
+
+```
+
+## Filtrando celulas de baixa qualidade
+
+```{r}
+
+# Criando copia do objeto pre-filtragem
+pre_seurat_object <- seurat_object
+
+# Filtro com thresholds definidos manualmente
+seurat_object <- subset(
+  seurat_object,
+  subset = nFeature_RNA > 200 &
+           nFeature_RNA < 6000 &
+           percent.mt < 10 &
+           scDblFinder.class == "singlet"
+)
+
+```
+
+### Salvando estatistica pos-filtragem
+
+```{r}
+
+# Estatísticas após o QC
+post_qc_stats <- data.frame(
+  number_of_cells = ncol(seurat_object),
+  mean_counts_per_cell = mean(seurat_object$nCount_RNA),
+  median_counts_per_cell = median(seurat_object$nCount_RNA),
+  mean_features_per_cell = mean(seurat_object$nFeature_RNA),
+  median_features_per_cell = median(seurat_object$nFeature_RNA)
+)
+
+```
+
+### Combinando as metricas
+
+```{r}
+
+# Unindo as tabelas
+qc_summary <- rbind(
+  cbind(Etapa = "Antes do QC", pre_qc_stats),
+  cbind(Etapa = "Depois do QC", post_qc_stats)
+)
+
+```
+
+## Comparando antes e depois
+
+```{r}
+#| column: screen-inset-shaded
+#| layout-nrow: 1
+
+DT::datatable(qc_summary)
+
+```
+
+## Normalizando - Protocolo padrao
+
+```{r}
+#| warning: false
+
+seurat_object <- NormalizeData(
+  seurat_object, normalization.method = "LogNormalize", scale.factor = 10000)
+
+```
+
+::: {.callout-note collapse="false"}
+A normalização é uma etapa fundamental no pré-processamento de dados de RNA-seq de célula única. Ela tem como objetivo **corrigir variações na profundidade de sequenciamento entre células**
+
+Métodos disponíveis no argumento `normalization.method`:
+
+-   "LogNormalize": método padrão, baseado em normalização por profundidade e log-transformação;
+-   "CLR" (Centered Log-Ratio): útil para dados de proteínas ou marcadores em CITE-seq;
+-   "RC" (Relative Counts): contagens relativas sem transformação logarítmica;
+-   "SCT": normalização baseada em modelos estatísticos via SCTransform() (mais avançado, recomendado para integração de dados).
+:::
+
+### Encontrando genes com alta variabilidade
+
+```{r}
+#| label: fig-highly-variable-genes
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+seurat_object <- FindVariableFeatures(
+  seurat_object, selection.method = "vst", nfeatures = 2000)
+
+# Identify the 10 most highly variable genes
+top10 <- head(VariableFeatures(seurat_object), 10)
+
+# plot variable features with and without labels
+plot1 <- VariableFeaturePlot(seurat_object)
+plot2 <- LabelPoints(plot = plot1, points = top10, repel = TRUE)
+
+plot2
+
+```
+
+::: {.callout-note collapse="false"}
+O código abaixo identifica os **genes com maior variabilidade de expressão** entre as células, que são mais informativos para análises downstream como **PCA, clusterização e UMAP**.
+
+-   `selection.method`: O método **vst** eh baseado em transformação de variância estabilizada (log-linear), ideal para scRNA-seq;
+-   `nfeatures`: quantidade de genes a serem mantidos como "altamente variáveis".
+:::
+
+### Ajustando escala dos dados
+
+```{r}
+#| warning: false
+
+seurat_object <- ScaleData(seurat_object)
+
+```
+
+::: {.callout-note collapse="false"}
+A função `ScaleData()` realiza a **padronização dos dados de expressão gênica**, centralizando os valores (subtraindo a média) e escalando pela variância (dividindo pelo desvio padrão) para cada gene.
+
+Essa etapa é essencial para técnicas como **PCA e clustering**, pois garante que todos os genes contribuam igualmente, independentemente da magnitude de sua expressão.
+:::
+
+## Normalizando - SCTransform
+
+Já o **`SCTransform()`** substitui essas três etapas com um único comando baseado em um **modelo estatístico de regressão negativa binomial**, que:
+
+- Normaliza os dados levando em conta a variância técnica estimada;
+- Identifica genes variáveis de forma mais robusta;
+- Corrige efeitos indesejados (como % de genes mitocondriais ou batch effect) diretamente no modelo;
+- Retorna dados já escalados e prontos para PCA.
+
+```{r}
+#| warning: false
+
+seurat_object <- SCTransform(
+  seurat_object, vars.to.regress = "percent.mt", verbose = FALSE)
+
+```
+
+::: {.callout-note collapse="false"}
+O argumento `vars.to.regress` permite **remover o efeito de variáveis indesejadas** — como porcentagem de transcritos mitocondriais (`percent.mt`), ciclo celular ou batch — durante a modelagem estatística realizada pelo `SCTransform()`. Para mais detalhes, por favor acesso o [link](https://satijalab.org/seurat/articles/sctransform_vignette)
+:::
+
+## Reducao da dimensionalidade
+
+Dados de scRNA-seq possuem **altíssima dimensionalidade**, com milhares de genes medidos por célula. Trabalhar diretamente com todas essas dimensões é:
+
+- **Computacionalmente ineficiente**;
+- **Propenso a ruído** (a maioria dos genes não é informativa para variação biológica relevante);
+- **Inadequado para visualização** e interpretação humana.
+
+A redução de dimensionalidade, como **PCA (análise de componentes principais)** ou **UMAP (projeção para espaço não linear)**, nos permite **resumir os dados em eixos principais de variação**, destacando padrões estruturais — como **grupos celulares, trajetórias ou batch effects** — enquanto minimizamos a influência de ruídos técnicos.
+
+Essa etapa é essencial para **visualização**, **clusterização** e **modelagem de trajetórias** em análises de transcriptômica de célula única.
+
+```{r}
+#| warning: false
+
+seurat_object <- RunPCA(
+  seurat_object, assay = "RNA", reduction.name = "STD_PCA", features = VariableFeatures(object = seurat_object))
+
+```
+
+::: {.callout-note collapse="false"}
+
+O argumento `reduction.name` permite **nomear explicitamente o resultado da redução de dimensionalidade**, neste caso, da análise de componentes principais (PCA). Por padrão, o Seurat armazena o PCA no slot `"pca"`, mas ao especificar:
+
+:::
+
+```{r}
+#| label: fig-pc-loadings
+#| column: screen-inset-shaded
+#| fig-align: center
+
+# Examine and visualize PCA results a few different ways
+VizDimLoadings(seurat_object, dims = 1:2, reduction = "STD_PCA")
+
+```
+
+## Produzindo as projecoes com UMAP
+
+O **UMAP (Uniform Manifold Approximation and Projection)** é uma técnica de redução de dimensionalidade **não linear** amplamente utilizada para **visualizar dados de scRNA-seq**.
+
+Ele projeta células de um espaço de milhares de genes para **2D ou 3D**, preservando **estruturas locais e globais** dos dados. Isso facilita a identificação visual de **subpopulações celulares, transições fenotípicas** e possíveis **trajetórias biológicas**, sendo especialmente útil após PCA.
+
+```{r}
+#| warning: false
+
+seurat_object <- RunUMAP(
+  seurat_object, reduction = "STD_PCA", umap.method = "umap-learn", reduction.name = "STD_UMAP", dims = 1:20, verbose = FALSE)
+
+```
+
+::: {.callout-note collapse="false"}
+
+O parâmetro `umap.method = "umap-learn"` especifica que o Seurat deve usar a **implementação original do UMAP em Python**, fornecida pelo pacote [`umap-learn`](https://github.com/lmcinnes/umap).
+
+Essa versão tende a produzir **projeções mais estáveis e refinadas** do que a implementação padrão em R, especialmente em datasets grandes ou com estrutura complexa.
+Para funcionar, é necessário ter o Python instalado com o pacote `umap-learn` disponível via `reticulate`.
+
+:::
+
+```{r}
+#| label: fig-umap-plot
+#| column: screen-inset-shaded
+#| fig-align: center
+
+DimPlot(seurat_object, reduction = "STD_UMAP")
+
+```
+
