@@ -4,13 +4,13 @@
 .Rproj.user
 
 # Quarto cache (gerado por knitr ou Jupyter)
-*/_cache/
-*/.ipynb_checkpoints/
-*/__pycache__/
+**/*_cache/
+**/.ipynb_checkpoints/
+**/__pycache__/
 
 # Quarto output intermediário (quando usando render em pastas separadas)
-*/_files/
-*/_extensions/
+**/*_files/
+**/_extensions/
 
 # Dados do tutorial
 data/
