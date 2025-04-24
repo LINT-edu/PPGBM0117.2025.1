@@ -1,7 +1,8 @@
 
 # Arquivos de preview do Quarto
-/.quarto/
-.Rproj.user
+*.quarto/
+*.Rproj.user
+*.RData
 
 # Quarto cache (gerado por knitr ou Jupyter)
 **/*_cache/
@@ -9,8 +10,10 @@
 **/__pycache__/
 
 # Quarto output intermediário (quando usando render em pastas separadas)
-**/*_files/
-**/_extensions/
+material/*_files/
+**/*_extensions/
 
 # Dados do tutorial
 data/
+
+/.quarto/
