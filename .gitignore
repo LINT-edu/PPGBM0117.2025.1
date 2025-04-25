@@ -10,10 +10,11 @@
 **/__pycache__/
 
 # Quarto output intermediário (quando usando render em pastas separadas)
-material/*_files/
+material/**/figure-html/
 **/*_extensions/
 
 # Dados do tutorial
 data/
 
 /.quarto/
+.Rproj.user

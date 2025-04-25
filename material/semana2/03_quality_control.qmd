@@ -20,7 +20,7 @@ Neste tutorial, utilizamos um conjunto de ferramentas complementares:
 
 -   **`Seurat`** para pré-processamento, cálculo de métricas de qualidade e filtragem de células;
 -   **`SoupX`** para identificar e corrigir contaminação por RNA ambiente (ambient RNA);
--   **`scDblFinder`** para detectar e remover dupletos.
+-   **`scDblFinder`** para detectar e remover dupletos (*doublets*).
 
 A aplicação combinada desses pacotes permite construir um conjunto de células de alta qualidade, garantindo que análises posteriores — como clusterização e anotação de tipos celulares — sejam mais robustas e confiáveis.
 
@@ -60,7 +60,7 @@ seurat_object <- CreateSeuratObject(
 
 ## Estrutura do Objeto `Seurat`
 
-Para visualizar a estrutura do objeto recem construidos, podemos utilizar o comando:
+Para visualizar a estrutura do objeto recém-construídos, podemos utilizar o comando:
 
 ```{r}
 #| eval: false
@@ -105,7 +105,7 @@ View(seurat_object@meta.data)
 -   **Número de genes detectados (`nFeature_RNA`)**\
 :::
 
-## Avaliacao da qualidade das celulas
+## Avaliação da qualidade das células
 
 ### Calculando percentagem relacionada a genes de interesse
 
@@ -142,7 +142,7 @@ Essas porcentagens ajudam a:
 Essas métricas são frequentemente visualizadas via `VlnPlot()` ou correlacionadas com `nCount_RNA` para detectar padrões suspeitos.
 :::
 
-### Salvando estatistica pre-filtragem
+### Salvando estatísticas pré-filtragem
 
 ```{r}
 
@@ -156,7 +156,7 @@ pre_qc_stats <- data.frame(
 
 ```
 
-### Visualizando atributos de interesse
+### Visualizando métricas de interesse
 
 ```{r}
 #| label: fig-quality-metrics
@@ -175,7 +175,7 @@ p2
 
 ```
 
-### Correlacionando metricas
+### Correlacionando métricas
 
 ```{r}
 #| label: fig-quality-correlation
@@ -200,7 +200,7 @@ plot2
     → Uma **alta percentagem mitocondrial com poucos counts** pode ser um sinal de apoptose ou lise celular.
 :::
 
-### Identificando `thresholds` a partir percentagem dos alvos
+### Identificando limiares de corte
 
 Esta função permite identificar **células com valores extremos** para uma métrica contínua, como `nFeature_RNA` ou `percent.mt`, utilizando um critério estatístico baseado em:
 
@@ -209,7 +209,7 @@ Esta função permite identificar **células com valores extremos** para uma mé
 Essa abordagem é **mais robusta que o desvio padrão**, pois é menos sensível a valores extremos.  
 O argumento `nmads` controla a sensibilidade da filtragem (3 é o valor comumente utilizado).
 
-Essa função é útil para **detectar e remover artefatos experimentais** ou células anômalas de forma personalizada.
+Esta função é útil para **detectar e remover artefatos experimentais** ou células anômalas de forma personalizada.
 
 ```{r}
 
@@ -248,7 +248,7 @@ table(seurat_object$mt_outlier)
 
 ```
 
-## Identificando doublets
+## Identificando dupletos
 
 **Dupletos (doublets)** ocorrem quando duas células distintas são capturadas dentro da mesma gotícula durante a etapa de microencapsulamento (como no 10x Genomics). Como resultado, seus perfis transcriptômicos são combinados e registrados como uma única célula.
 
@@ -277,7 +277,7 @@ table(seurat_object$scDblFinder.class)
 
 ```
 
-## Filtrando celulas de baixa qualidade
+## Filtrando células de baixa qualidade
 
 ```{r}
 
@@ -295,7 +295,7 @@ seurat_object <- subset(
 
 ```
 
-### Salvando estatistica pos-filtragem
+### Salvando estatística pós-filtragem
 
 ```{r}
 
@@ -310,7 +310,7 @@ post_qc_stats <- data.frame(
 
 ```
 
-### Combinando as metricas
+### Combinando as estatísticas pré e pós-filtragem
 
 ```{r}
 
@@ -332,7 +332,7 @@ DT::datatable(qc_summary)
 
 ```
 
-## Normalizando - Protocolo padrao
+## Normalização — Protocolo padrão
 
 ```{r}
 #| warning: false
@@ -343,7 +343,7 @@ seurat_object <- NormalizeData(
 ```
 
 ::: {.callout-note collapse="false"}
-A normalização é uma etapa fundamental no pré-processamento de dados de RNA-seq de célula única. Ela tem como objetivo **corrigir variações na profundidade de sequenciamento entre células**
+A normalização é uma etapa fundamental no pré-processamento de dados de célula única. Ela tem como objetivo **corrigir variações na profundidade de sequenciamento entre células**
 
 Métodos disponíveis no argumento `normalization.method`:
 
@@ -379,7 +379,7 @@ plot2
 ::: {.callout-note collapse="false"}
 O código abaixo identifica os **genes com maior variabilidade de expressão** entre as células, que são mais informativos para análises downstream como **PCA, clusterização e UMAP**.
 
--   `selection.method`: O método **vst** eh baseado em transformação de variância estabilizada (log-linear), ideal para scRNA-seq;
+-   `selection.method`: O método **vst** é baseado em transformação de variância estabilizada (log-linear), ideal para scRNA-seq;
 -   `nfeatures`: quantidade de genes a serem mantidos como "altamente variáveis".
 :::
 
@@ -398,7 +398,7 @@ A função `ScaleData()` realiza a **padronização dos dados de expressão gên
 Essa etapa é essencial para técnicas como **PCA e clustering**, pois garante que todos os genes contribuam igualmente, independentemente da magnitude de sua expressão.
 :::
 
-## Normalizando - SCTransform
+## Normalização - SCTransform
 
 Já o **`SCTransform()`** substitui essas três etapas com um único comando baseado em um **modelo estatístico de regressão negativa binomial**, que:
 
@@ -419,7 +419,7 @@ seurat_object <- SCTransform(
 O argumento `vars.to.regress` permite **remover o efeito de variáveis indesejadas** — como porcentagem de transcritos mitocondriais (`percent.mt`), ciclo celular ou batch — durante a modelagem estatística realizada pelo `SCTransform()`. Para mais detalhes, por favor acesso o [link](https://satijalab.org/seurat/articles/sctransform_vignette)
 :::
 
-## Reducao da dimensionalidade
+## Redução de dimensionalidade
 
 Dados de scRNA-seq possuem **altíssima dimensionalidade**, com milhares de genes medidos por célula. Trabalhar diretamente com todas essas dimensões é:
 
@@ -455,7 +455,7 @@ VizDimLoadings(seurat_object, dims = 1:2, reduction = "STD_PCA")
 
 ```
 
-## Produzindo as projecoes com UMAP
+## Projeção com UMAP
 
 O **UMAP (Uniform Manifold Approximation and Projection)** é uma técnica de redução de dimensionalidade **não linear** amplamente utilizada para **visualizar dados de scRNA-seq**.
 

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>03 - Controle de qualidade – Curso de Análise Single-Cell</title>
+<title>03 - Controle de qualidade – Treinamento em single-cell</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Curso de Análise Single-Cell</span>
+    <span class="navbar-title">Treinamento em single-cell</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -165,7 +165,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-2">    
         <li>
     <a class="dropdown-item" href="../../material/semana2/03_quality_control.html">
- <span class="dropdown-text">Qualidade de controle</span></a>
+ <span class="dropdown-text">Controle de qualidade</span></a>
   </li>  
     </ul>
   </li>
@@ -190,32 +190,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#o-que-é-seurat" id="toc-o-que-é-seurat" class="nav-link" data-scroll-target="#o-que-é-seurat">O que é Seurat?</a></li>
   <li><a href="#estrutura-do-objeto-seurat" id="toc-estrutura-do-objeto-seurat" class="nav-link" data-scroll-target="#estrutura-do-objeto-seurat">Estrutura do Objeto <code>Seurat</code></a></li>
   <li><a href="#descrevendo-o-metadata" id="toc-descrevendo-o-metadata" class="nav-link" data-scroll-target="#descrevendo-o-metadata">Descrevendo o metadata</a></li>
-  <li><a href="#avaliacao-da-qualidade-das-celulas" id="toc-avaliacao-da-qualidade-das-celulas" class="nav-link" data-scroll-target="#avaliacao-da-qualidade-das-celulas">Avaliacao da qualidade das celulas</a>
+  <li><a href="#avaliação-da-qualidade-das-células" id="toc-avaliação-da-qualidade-das-células" class="nav-link" data-scroll-target="#avaliação-da-qualidade-das-células">Avaliação da qualidade das células</a>
   <ul class="collapse">
   <li><a href="#calculando-percentagem-relacionada-a-genes-de-interesse" id="toc-calculando-percentagem-relacionada-a-genes-de-interesse" class="nav-link" data-scroll-target="#calculando-percentagem-relacionada-a-genes-de-interesse">Calculando percentagem relacionada a genes de interesse</a></li>
-  <li><a href="#salvando-estatistica-pre-filtragem" id="toc-salvando-estatistica-pre-filtragem" class="nav-link" data-scroll-target="#salvando-estatistica-pre-filtragem">Salvando estatistica pre-filtragem</a></li>
-  <li><a href="#visualizando-atributos-de-interesse" id="toc-visualizando-atributos-de-interesse" class="nav-link" data-scroll-target="#visualizando-atributos-de-interesse">Visualizando atributos de interesse</a></li>
-  <li><a href="#correlacionando-metricas" id="toc-correlacionando-metricas" class="nav-link" data-scroll-target="#correlacionando-metricas">Correlacionando metricas</a></li>
-  <li><a href="#identificando-thresholds-a-partir-percentagem-dos-alvos" id="toc-identificando-thresholds-a-partir-percentagem-dos-alvos" class="nav-link" data-scroll-target="#identificando-thresholds-a-partir-percentagem-dos-alvos">Identificando <code>thresholds</code> a partir percentagem dos alvos</a></li>
+  <li><a href="#salvando-estatísticas-pré-filtragem" id="toc-salvando-estatísticas-pré-filtragem" class="nav-link" data-scroll-target="#salvando-estatísticas-pré-filtragem">Salvando estatísticas pré-filtragem</a></li>
+  <li><a href="#visualizando-métricas-de-interesse" id="toc-visualizando-métricas-de-interesse" class="nav-link" data-scroll-target="#visualizando-métricas-de-interesse">Visualizando métricas de interesse</a></li>
+  <li><a href="#correlacionando-métricas" id="toc-correlacionando-métricas" class="nav-link" data-scroll-target="#correlacionando-métricas">Correlacionando métricas</a></li>
+  <li><a href="#identificando-limiares-de-corte" id="toc-identificando-limiares-de-corte" class="nav-link" data-scroll-target="#identificando-limiares-de-corte">Identificando limiares de corte</a></li>
   </ul></li>
-  <li><a href="#identificando-doublets" id="toc-identificando-doublets" class="nav-link" data-scroll-target="#identificando-doublets">Identificando doublets</a>
+  <li><a href="#identificando-dupletos" id="toc-identificando-dupletos" class="nav-link" data-scroll-target="#identificando-dupletos">Identificando dupletos</a>
   <ul class="collapse">
   <li><a href="#por-que-isso-é-um-problema" id="toc-por-que-isso-é-um-problema" class="nav-link" data-scroll-target="#por-que-isso-é-um-problema">Por que isso é um problema?</a></li>
   </ul></li>
-  <li><a href="#filtrando-celulas-de-baixa-qualidade" id="toc-filtrando-celulas-de-baixa-qualidade" class="nav-link" data-scroll-target="#filtrando-celulas-de-baixa-qualidade">Filtrando celulas de baixa qualidade</a>
+  <li><a href="#filtrando-células-de-baixa-qualidade" id="toc-filtrando-células-de-baixa-qualidade" class="nav-link" data-scroll-target="#filtrando-células-de-baixa-qualidade">Filtrando células de baixa qualidade</a>
   <ul class="collapse">
-  <li><a href="#salvando-estatistica-pos-filtragem" id="toc-salvando-estatistica-pos-filtragem" class="nav-link" data-scroll-target="#salvando-estatistica-pos-filtragem">Salvando estatistica pos-filtragem</a></li>
-  <li><a href="#combinando-as-metricas" id="toc-combinando-as-metricas" class="nav-link" data-scroll-target="#combinando-as-metricas">Combinando as metricas</a></li>
+  <li><a href="#salvando-estatística-pós-filtragem" id="toc-salvando-estatística-pós-filtragem" class="nav-link" data-scroll-target="#salvando-estatística-pós-filtragem">Salvando estatística pós-filtragem</a></li>
+  <li><a href="#combinando-as-estatísticas-pré-e-pós-filtragem" id="toc-combinando-as-estatísticas-pré-e-pós-filtragem" class="nav-link" data-scroll-target="#combinando-as-estatísticas-pré-e-pós-filtragem">Combinando as estatísticas pré e pós-filtragem</a></li>
   </ul></li>
   <li><a href="#comparando-antes-e-depois" id="toc-comparando-antes-e-depois" class="nav-link" data-scroll-target="#comparando-antes-e-depois">Comparando antes e depois</a></li>
-  <li><a href="#normalizando---protocolo-padrao" id="toc-normalizando---protocolo-padrao" class="nav-link" data-scroll-target="#normalizando---protocolo-padrao">Normalizando - Protocolo padrao</a>
+  <li><a href="#normalização-protocolo-padrão" id="toc-normalização-protocolo-padrão" class="nav-link" data-scroll-target="#normalização-protocolo-padrão">Normalização — Protocolo padrão</a>
   <ul class="collapse">
   <li><a href="#encontrando-genes-com-alta-variabilidade" id="toc-encontrando-genes-com-alta-variabilidade" class="nav-link" data-scroll-target="#encontrando-genes-com-alta-variabilidade">Encontrando genes com alta variabilidade</a></li>
   <li><a href="#ajustando-escala-dos-dados" id="toc-ajustando-escala-dos-dados" class="nav-link" data-scroll-target="#ajustando-escala-dos-dados">Ajustando escala dos dados</a></li>
   </ul></li>
-  <li><a href="#normalizando---sctransform" id="toc-normalizando---sctransform" class="nav-link" data-scroll-target="#normalizando---sctransform">Normalizando - SCTransform</a></li>
-  <li><a href="#reducao-da-dimensionalidade" id="toc-reducao-da-dimensionalidade" class="nav-link" data-scroll-target="#reducao-da-dimensionalidade">Reducao da dimensionalidade</a></li>
-  <li><a href="#produzindo-as-projecoes-com-umap" id="toc-produzindo-as-projecoes-com-umap" class="nav-link" data-scroll-target="#produzindo-as-projecoes-com-umap">Produzindo as projecoes com UMAP</a></li>
+  <li><a href="#normalização---sctransform" id="toc-normalização---sctransform" class="nav-link" data-scroll-target="#normalização---sctransform">Normalização - SCTransform</a></li>
+  <li><a href="#redução-de-dimensionalidade" id="toc-redução-de-dimensionalidade" class="nav-link" data-scroll-target="#redução-de-dimensionalidade">Redução de dimensionalidade</a></li>
+  <li><a href="#projeção-com-umap" id="toc-projeção-com-umap" class="nav-link" data-scroll-target="#projeção-com-umap">Projeção com UMAP</a></li>
   </ul>
 </nav>
     </div>
@@ -252,7 +252,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><strong><code>Seurat</code></strong> para pré-processamento, cálculo de métricas de qualidade e filtragem de células;</li>
 <li><strong><code>SoupX</code></strong> para identificar e corrigir contaminação por RNA ambiente (ambient RNA);</li>
-<li><strong><code>scDblFinder</code></strong> para detectar e remover dupletos.</li>
+<li><strong><code>scDblFinder</code></strong> para detectar e remover dupletos (<em>doublets</em>).</li>
 </ul>
 <p>A aplicação combinada desses pacotes permite construir um conjunto de células de alta qualidade, garantindo que análises posteriores — como clusterização e anotação de tipos celulares — sejam mais robustas e confiáveis.</p>
 <div class="cell">
@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="estrutura-do-objeto-seurat" class="level2">
 <h2 class="anchored" data-anchor-id="estrutura-do-objeto-seurat">Estrutura do Objeto <code>Seurat</code></h2>
-<p>Para visualizar a estrutura do objeto recem construidos, podemos utilizar o comando:</p>
+<p>Para visualizar a estrutura do objeto recém-construídos, podemos utilizar o comando:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exibe de forma compacta a estrutura interna de um objeto R</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(seurat_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -413,8 +413,8 @@ Note
 </div>
 </div>
 </section>
-<section id="avaliacao-da-qualidade-das-celulas" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="avaliacao-da-qualidade-das-celulas">Avaliacao da qualidade das celulas</h2>
+<section id="avaliação-da-qualidade-das-células" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="avaliação-da-qualidade-das-células">Avaliação da qualidade das células</h2>
 <section id="calculando-percentagem-relacionada-a-genes-de-interesse" class="level3">
 <h3 class="anchored" data-anchor-id="calculando-percentagem-relacionada-a-genes-de-interesse">Calculando percentagem relacionada a genes de interesse</h3>
 <div class="cell">
@@ -457,8 +457,8 @@ Note
 </div>
 </div>
 </section>
-<section id="salvando-estatistica-pre-filtragem" class="level3">
-<h3 class="anchored" data-anchor-id="salvando-estatistica-pre-filtragem">Salvando estatistica pre-filtragem</h3>
+<section id="salvando-estatísticas-pré-filtragem" class="level3">
+<h3 class="anchored" data-anchor-id="salvando-estatísticas-pré-filtragem">Salvando estatísticas pré-filtragem</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pre_qc_stats <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">number_of_cells =</span> <span class="fu">ncol</span>(seurat_object),</span>
@@ -469,8 +469,8 @@ Note
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="visualizando-atributos-de-interesse" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="visualizando-atributos-de-interesse">Visualizando atributos de interesse</h3>
+<section id="visualizando-métricas-de-interesse" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="visualizando-métricas-de-interesse">Visualizando métricas de interesse</h3>
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">VlnPlot</span>(seurat_object, </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"nCount_RNA"</span>, <span class="st">"nFeature_RNA"</span>), <span class="at">ncol =</span> <span class="dv">3</span>)</span>
@@ -481,7 +481,7 @@ Note
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>p1</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-quality-metrics-1" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-quality-metrics-1" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-quality-metrics-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="03_quality_control_files/figure-html/fig-quality-metrics-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="03_quality_control_files/figure-html/fig-quality-metrics-1.png" id="fig-quality-metrics-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -493,7 +493,7 @@ Figure&nbsp;1
 </div>
 </div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-quality-metrics-2" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-quality-metrics-2" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-quality-metrics-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="03_quality_control_files/figure-html/fig-quality-metrics-2.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="03_quality_control_files/figure-html/fig-quality-metrics-2.png" id="fig-quality-metrics-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -506,8 +506,8 @@ Figure&nbsp;2
 </div>
 </div>
 </section>
-<section id="correlacionando-metricas" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="correlacionando-metricas">Correlacionando metricas</h3>
+<section id="correlacionando-métricas" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="correlacionando-métricas">Correlacionando métricas</h3>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seurat_object, <span class="at">feature1 =</span> <span class="st">"nCount_RNA"</span>, <span class="at">feature2 =</span> <span class="st">"percent.mt"</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">FeatureScatter</span>(seurat_object, <span class="at">feature1 =</span> <span class="st">"nCount_RNA"</span>, <span class="at">feature2 =</span> <span class="st">"nFeature_RNA"</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -564,15 +564,15 @@ Geralmente apresentam uma <strong>correlação negativa</strong>. Células com u
 </div>
 </div>
 </section>
-<section id="identificando-thresholds-a-partir-percentagem-dos-alvos" class="level3">
-<h3 class="anchored" data-anchor-id="identificando-thresholds-a-partir-percentagem-dos-alvos">Identificando <code>thresholds</code> a partir percentagem dos alvos</h3>
+<section id="identificando-limiares-de-corte" class="level3">
+<h3 class="anchored" data-anchor-id="identificando-limiares-de-corte">Identificando limiares de corte</h3>
 <p>Esta função permite identificar <strong>células com valores extremos</strong> para uma métrica contínua, como <code>nFeature_RNA</code> ou <code>percent.mt</code>, utilizando um critério estatístico baseado em:</p>
 <blockquote class="blockquote">
 <p><strong>mediana ± (n × MAD)</strong></p>
 </blockquote>
 <p>Essa abordagem é <strong>mais robusta que o desvio padrão</strong>, pois é menos sensível a valores extremos.<br>
 O argumento <code>nmads</code> controla a sensibilidade da filtragem (3 é o valor comumente utilizado).</p>
-<p>Essa função é útil para <strong>detectar e remover artefatos experimentais</strong> ou células anômalas de forma personalizada.</p>
+<p>Esta função é útil para <strong>detectar e remover artefatos experimentais</strong> ou células anômalas de forma personalizada.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>is_outlier <span class="ot">&lt;-</span> <span class="cf">function</span>(seurat_object, metric, <span class="at">nmads =</span> <span class="dv">3</span>, <span class="at">verbose =</span> <span class="cn">TRUE</span>) {</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extrai os valores da métrica desejada</span></span>
@@ -619,8 +619,8 @@ FALSE  TRUE
 </div>
 </section>
 </section>
-<section id="identificando-doublets" class="level2">
-<h2 class="anchored" data-anchor-id="identificando-doublets">Identificando doublets</h2>
+<section id="identificando-dupletos" class="level2">
+<h2 class="anchored" data-anchor-id="identificando-dupletos">Identificando dupletos</h2>
 <p><strong>Dupletos (doublets)</strong> ocorrem quando duas células distintas são capturadas dentro da mesma gotícula durante a etapa de microencapsulamento (como no 10x Genomics). Como resultado, seus perfis transcriptômicos são combinados e registrados como uma única célula.</p>
 <section id="por-que-isso-é-um-problema" class="level3">
 <h3 class="anchored" data-anchor-id="por-que-isso-é-um-problema">Por que isso é um problema?</h3>
@@ -650,8 +650,8 @@ singlet doublet
 </div>
 </section>
 </section>
-<section id="filtrando-celulas-de-baixa-qualidade" class="level2">
-<h2 class="anchored" data-anchor-id="filtrando-celulas-de-baixa-qualidade">Filtrando celulas de baixa qualidade</h2>
+<section id="filtrando-células-de-baixa-qualidade" class="level2">
+<h2 class="anchored" data-anchor-id="filtrando-células-de-baixa-qualidade">Filtrando células de baixa qualidade</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando copia do objeto pre-filtragem</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>pre_seurat_object <span class="ot">&lt;-</span> seurat_object</span>
@@ -665,8 +665,8 @@ singlet doublet
 <span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>           scDblFinder.class <span class="sc">==</span> <span class="st">"singlet"</span></span>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="salvando-estatistica-pos-filtragem" class="level3">
-<h3 class="anchored" data-anchor-id="salvando-estatistica-pos-filtragem">Salvando estatistica pos-filtragem</h3>
+<section id="salvando-estatística-pós-filtragem" class="level3">
+<h3 class="anchored" data-anchor-id="salvando-estatística-pós-filtragem">Salvando estatística pós-filtragem</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Estatísticas após o QC</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>post_qc_stats <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
@@ -678,8 +678,8 @@ singlet doublet
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="combinando-as-metricas" class="level3">
-<h3 class="anchored" data-anchor-id="combinando-as-metricas">Combinando as metricas</h3>
+<section id="combinando-as-estatísticas-pré-e-pós-filtragem" class="level3">
+<h3 class="anchored" data-anchor-id="combinando-as-estatísticas-pré-e-pós-filtragem">Combinando as estatísticas pré e pós-filtragem</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Unindo as tabelas</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>qc_summary <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
@@ -701,8 +701,8 @@ singlet doublet
 </div>
 </div>
 </section>
-<section id="normalizando---protocolo-padrao" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="normalizando---protocolo-padrao">Normalizando - Protocolo padrao</h2>
+<section id="normalização-protocolo-padrão" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="normalização-protocolo-padrão">Normalização — Protocolo padrão</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  seurat_object, <span class="at">normalization.method =</span> <span class="st">"LogNormalize"</span>, <span class="at">scale.factor =</span> <span class="dv">10000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -719,7 +719,7 @@ Note
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>A normalização é uma etapa fundamental no pré-processamento de dados de RNA-seq de célula única. Ela tem como objetivo <strong>corrigir variações na profundidade de sequenciamento entre células</strong></p>
+<p>A normalização é uma etapa fundamental no pré-processamento de dados de célula única. Ela tem como objetivo <strong>corrigir variações na profundidade de sequenciamento entre células</strong></p>
 <p>Métodos disponíveis no argumento <code>normalization.method</code>:</p>
 <ul>
 <li>“LogNormalize”: método padrão, baseado em normalização por profundidade e log-transformação;</li>
@@ -746,7 +746,7 @@ Note
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-highly-variable-genes" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-highly-variable-genes" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-highly-variable-genes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="03_quality_control_files/figure-html/fig-highly-variable-genes-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="03_quality_control_files/figure-html/fig-highly-variable-genes-1.png" id="fig-highly-variable-genes" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -773,7 +773,7 @@ Note
 <div class="callout-body-container callout-body">
 <p>O código abaixo identifica os <strong>genes com maior variabilidade de expressão</strong> entre as células, que são mais informativos para análises downstream como <strong>PCA, clusterização e UMAP</strong>.</p>
 <ul>
-<li><code>selection.method</code>: O método <strong>vst</strong> eh baseado em transformação de variância estabilizada (log-linear), ideal para scRNA-seq;</li>
+<li><code>selection.method</code>: O método <strong>vst</strong> é baseado em transformação de variância estabilizada (log-linear), ideal para scRNA-seq;</li>
 <li><code>nfeatures</code>: quantidade de genes a serem mantidos como “altamente variáveis”.</li>
 </ul>
 </div>
@@ -804,8 +804,8 @@ Note
 </div>
 </section>
 </section>
-<section id="normalizando---sctransform" class="level2">
-<h2 class="anchored" data-anchor-id="normalizando---sctransform">Normalizando - SCTransform</h2>
+<section id="normalização---sctransform" class="level2">
+<h2 class="anchored" data-anchor-id="normalização---sctransform">Normalização - SCTransform</h2>
 <p>Já o <strong><code>SCTransform()</code></strong> substitui essas três etapas com um único comando baseado em um <strong>modelo estatístico de regressão negativa binomial</strong>, que:</p>
 <ul>
 <li>Normaliza os dados levando em conta a variância técnica estimada;</li>
@@ -834,8 +834,8 @@ Note
 </div>
 </div>
 </section>
-<section id="reducao-da-dimensionalidade" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="reducao-da-dimensionalidade">Reducao da dimensionalidade</h2>
+<section id="redução-de-dimensionalidade" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="redução-de-dimensionalidade">Redução de dimensionalidade</h2>
 <p>Dados de scRNA-seq possuem <strong>altíssima dimensionalidade</strong>, com milhares de genes medidos por célula. Trabalhar diretamente com todas essas dimensões é:</p>
 <ul>
 <li><strong>Computacionalmente ineficiente</strong>;</li>
@@ -868,7 +868,7 @@ Note
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine and visualize PCA results a few different ways</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">VizDimLoadings</span>(seurat_object, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">reduction =</span> <span class="st">"STD_PCA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-pc-loadings" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-pc-loadings" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-pc-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="03_quality_control_files/figure-html/fig-pc-loadings-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="03_quality_control_files/figure-html/fig-pc-loadings-1.png" id="fig-pc-loadings" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -881,8 +881,8 @@ Figure&nbsp;6
 </div>
 </div>
 </section>
-<section id="produzindo-as-projecoes-com-umap" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="produzindo-as-projecoes-com-umap">Produzindo as projecoes com UMAP</h2>
+<section id="projeção-com-umap" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="projeção-com-umap">Projeção com UMAP</h2>
 <p>O <strong>UMAP (Uniform Manifold Approximation and Projection)</strong> é uma técnica de redução de dimensionalidade <strong>não linear</strong> amplamente utilizada para <strong>visualizar dados de scRNA-seq</strong>.</p>
 <p>Ele projeta células de um espaço de milhares de genes para <strong>2D ou 3D</strong>, preservando <strong>estruturas locais e globais</strong> dos dados. Isso facilita a identificação visual de <strong>subpopulações celulares, transições fenotípicas</strong> e possíveis <strong>trajetórias biológicas</strong>, sendo especialmente útil após PCA.</p>
 <div class="cell">
@@ -909,7 +909,7 @@ Note
 <div class="cell page-columns page-full" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">reduction =</span> <span class="st">"STD_UMAP"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-umap-plot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-umap-plot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="03_quality_control_files/figure-html/fig-umap-plot-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: "><img src="03_quality_control_files/figure-html/fig-umap-plot-1.png" id="fig-umap-plot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
