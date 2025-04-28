@@ -213,7 +213,7 @@ seurat_object <- RunUMAP(seurat_object, dims = 1:20)
 #| layout-nrow: 1
 #| warning: false
 
-# Por padrao
+# Por padrao apenas os clusters da ultima resolucao sao apresentados
 DimPlot(seurat_object, reduction = "umap", label = TRUE)
 
 ```
@@ -226,14 +226,21 @@ DimPlot(seurat_object, reduction = "umap", label = TRUE)
 
 ```{r}
 
-cluster_markers <- FindAllMarkers(seurat_object)
+# O parametro `max.cells.per.ident` foi acrescentado para otimizar o tempo computacional. Remove-o para analises reais.
+cluster_markers <- FindAllMarkers(seurat_object, max.cells.per.ident = 1000)
 
 ```
 ### Inspecionando DEGs
 
 ```{r}
 
-DT::datatable(cluster_markers)
+# Removendo resultados nao significativos
+cluster_markers_top <- cluster_markers %>%
+  filter(p_val_adj <= 0.01) %>%
+  group_by(cluster) %>%
+  top_n(20, avg_log2FC)
+
+DT::datatable(cluster_markers_topx)
 
 ```
 
