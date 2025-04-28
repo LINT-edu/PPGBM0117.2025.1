@@ -473,8 +473,7 @@ seurat_object <- RunUMAP(
 
 O parâmetro `umap.method = "umap-learn"` especifica que o Seurat deve usar a **implementação original do UMAP em Python**, fornecida pelo pacote [`umap-learn`](https://github.com/lmcinnes/umap).
 
-Essa versão tende a produzir **projeções mais estáveis e refinadas** do que a implementação padrão em R, especialmente em datasets grandes ou com estrutura complexa.
-Para funcionar, é necessário ter o Python instalado com o pacote `umap-learn` disponível via `reticulate`.
+Essa versão tende a produzir **projeções mais estáveis e refinadas** do que a implementação padrão em R, especialmente em datasets grandes ou com estrutura complexa. Para funcionar, é necessário ter o Python instalado com o pacote `umap-learn` disponível via `reticulate`.
 
 :::
 

@@ -467,5 +467,159 @@
     "title": "03 - Controle de qualidade",
     "section": "Filtrando células de baixa qualidade",
     "text": "Filtrando células de baixa qualidade\n\n# Criando copia do objeto pre-filtragem\npre_seurat_object &lt;- seurat_object\n\n# Filtro com thresholds definidos manualmente\nseurat_object &lt;- subset(\n  seurat_object,\n  subset = nFeature_RNA &gt; 200 &\n           nFeature_RNA &lt; 6000 &\n           percent.mt &lt; 10 &\n           scDblFinder.class == \"singlet\"\n)\n\n\nSalvando estatística pós-filtragem\n\n# Estatísticas após o QC\npost_qc_stats &lt;- data.frame(\n  number_of_cells = ncol(seurat_object),\n  mean_counts_per_cell = mean(seurat_object$nCount_RNA),\n  median_counts_per_cell = median(seurat_object$nCount_RNA),\n  mean_features_per_cell = mean(seurat_object$nFeature_RNA),\n  median_features_per_cell = median(seurat_object$nFeature_RNA)\n)\n\n\n\nCombinando as estatísticas pré e pós-filtragem\n\n# Unindo as tabelas\nqc_summary &lt;- rbind(\n  cbind(Etapa = \"Antes do QC\", pre_qc_stats),\n  cbind(Etapa = \"Depois do QC\", post_qc_stats)\n)"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html",
+    "href": "material/semana2/04_dimensionality_and_clustering.html",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "",
+    "text": "Em experimentos de transcriptômica de célula única (scRNA-seq), a alta dimensionalidade dos dados — frequentemente composta por milhares de genes — dificulta a análise direta e a interpretação biológica. Para identificar populações celulares de forma robusta, é necessário reduzir essa dimensionalidade preservando as principais variações biológicas. Posteriormente, técnicas de clusterização são empregadas para agrupar células com perfis transcriptômicos semelhantes, revelando estruturas ocultas nos dados, como tipos celulares ou estados funcionais distintos.\nEste tutorial descreve as etapas fundamentais de união de amostras, redução de dimensionalidade, clusterização e subclusterização de células, utilizando o pacote Seurat."
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#motivação",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#motivação",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "",
+    "text": "Em experimentos de transcriptômica de célula única (scRNA-seq), a alta dimensionalidade dos dados — frequentemente composta por milhares de genes — dificulta a análise direta e a interpretação biológica. Para identificar populações celulares de forma robusta, é necessário reduzir essa dimensionalidade preservando as principais variações biológicas. Posteriormente, técnicas de clusterização são empregadas para agrupar células com perfis transcriptômicos semelhantes, revelando estruturas ocultas nos dados, como tipos celulares ou estados funcionais distintos.\nEste tutorial descreve as etapas fundamentais de união de amostras, redução de dimensionalidade, clusterização e subclusterização de células, utilizando o pacote Seurat."
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#contextualização",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#contextualização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Contextualização",
+    "text": "Contextualização\nNeste tutorial, trabalharemos com objetos do Seurat e utilizaremos as seguintes funções principais:\n\nmerge() — para unir objetos de diferentes amostras.\nSCTransform() ou NormalizeData() — para normalização e modelagem da variação técnica.\nRunPCA() — para a redução inicial de dimensionalidade via Análise de Componentes Principais (PCA).\nFindNeighbors() e FindClusters() — para identificar agrupamentos celulares.\nRunUMAP() ou RunTSNE() — para projeção em duas dimensões, facilitando a visualização.\nSubset() — para subclusterizar grupos de interesse.\n\n\nlibrary(Seurat)\nlibrary(ROGUE)\nlibrary(presto)\nlibrary(dplyr)\nlibrary(here)\nlibrary(ggplot2)\n\nknitr::opts_knit$set(\n  root.dir = \"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1\",\n  verbose = FALSE\n)\n\n# Aumentar o limite de uso de memoria\noptions(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#unindo-amostras",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#unindo-amostras",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Unindo amostras",
+    "text": "Unindo amostras\nAntes de qualquer redução de dimensionalidade, é necessário unir diferentes amostras em um único objeto Seurat. Para isso, usamos a função merge(). Abaixo um exemplo de codigo de realizar a juncao.\n\n# Listar os arquivos RDS\nfiles &lt;- list.files(\n  path = \"path/to/your/objects\", pattern = \"\\\\.rds$\", full.names = TRUE)\n\n# Carregar todos os objetos em uma lista\nseurat_list &lt;- lapply(files, readRDS)\n\n# Criar identificadores a partir dos nomes dos arquivos\nsample_ids &lt;- gsub(\"\\\\.rds$\", \"\", basename(files))\n\n# Fazer o merge\nseurat_merged &lt;- merge(\n  x = seurat_list[[1]],\n  y = seurat_list[-1],\n  add.cell.ids = sample_ids,\n  project = \"ProjectName\"\n)\n\n\nSalvando o objeto do Seurat\n\nif(!file.exists(\"./data/seurat_object.RDS\")) {\n  \n  saveRDS(file = \"./data/seurat_object.RDS\", object = seurat_merged)\n  \n}\n\n\n# Objeto contendo todas as amostras\nseurat_object &lt;- readRDS(file = here::here(\"./data/seurat_object.RDS\"))"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#normalização",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#normalização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Normalização",
+    "text": "Normalização\n\nseurat_object &lt;- NormalizeData(\n  seurat_object, normalization.method = \"LogNormalize\", scale.factor = 10000)\n\nNormalizing layer: counts\n\nseurat_object &lt;- FindVariableFeatures(\n  seurat_object, selection.method = \"vst\", nfeatures = 2000)\n\nFinding variable features for layer counts\n\nseurat_object &lt;- ScaleData(\n  seurat_object, features = VariableFeatures(seurat_object))\n\nCentering and scaling data matrix\n\n\nWarning: Different features in new layer data than already exists for\nscale.data"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#redução-de-dimensionalidade-pca",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#redução-de-dimensionalidade-pca",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Redução de dimensionalidade (PCA)",
+    "text": "Redução de dimensionalidade (PCA)\n\nseurat_object &lt;- RunPCA(seurat_object, npcs = 50, verbose = FALSE)\n\nElbowPlot(seurat_object, reduction = \"pca\")\n\n\n\n\n\n\n\n\n\nFigure 1\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nO ElbowPlot(seurat_object) é utilizado para identificar o número apropriado de componentes principais (PCs) a serem considerados nas análises downstream, como clusterização e redução de dimensionalidade. O gráfico exibe a variação explicada por cada PC; o ponto onde há uma inflexão (“cotovelo”) indica que PCs adicionais contribuem pouco para a variabilidade dos dados. Selecionar o número correto de PCs é essencial para capturar a estrutura biológica relevante, minimizando ruído técnico.\n\n\n\n\nVisualizando dimensões\n\n# Examine and visualize PCA results a few different ways\nVizDimLoadings(seurat_object, dims = 1:2, reduction = \"pca\")\n\n\n\n\n\n\n\nFigure 2\n\n\n\n\n\n\n\nExtraindo informacões do PCA\n\n# Get cell embeddings and feature loadings stored on pbmc[['pca']]@cell.embeddings\nEmbeddings(seurat_object, reduction = \"pca\")\n\n# stored in pbmc[['pca]]@feature.loadings\nLoadings(seurat_object, reduction = \"pca\")"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#construção-da-matriz-de-vizinhança",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#construção-da-matriz-de-vizinhança",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Construção da matriz de vizinhança",
+    "text": "Construção da matriz de vizinhança\n\nseurat_object &lt;- FindNeighbors(seurat_object, dims = 1:20)\n\nComputing nearest neighbor graph\n\n\nComputing SNN\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nA função FindNeighbors constrói uma matriz de vizinhança baseada nos embeddings de redução de dimensionalidade (tipicamente PCA). Cada célula é conectada às suas células mais próximas no espaço de baixa dimensão, formando um grafo de similaridade.\nEsse grafo é o alicerce para a clusterização subsequente (FindClusters()), permitindo identificar comunidades de células com perfis transcriptômicos semelhantes. O parâmetro dims especifica quais componentes principais serão usados para calcular as distâncias entre as células."
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#clusterização",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#clusterização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Clusterização",
+    "text": "Clusterização\n\nseurat_object &lt;- FindClusters(\n  seurat_object, algorithm = 4, resolution = c(0.25, 0.5, 1.0))\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nA função FindClusters realiza a clusterização das células com base na matriz de vizinhança previamente calculada.\nEla aplica algoritmos de otimização de comunidades (como o algoritmo Louvain ou Leiden) para agrupar células com perfis transcriptômicos semelhantes.\nO parâmetro resolution controla a granularidade da clusterização, por exemplo: - Valores mais baixos (&lt; 0.5) resultam em menos clusters (agrupamentos maiores). - Valores mais altos (&gt; 0.5) resultam em mais clusters (agrupamentos menores e mais específicos).\nA escolha do resolution deve ser guiada tanto por critérios biológicos quanto por inspeção visual dos agrupamentos gerados.\n\n\n\n\n# Explore as resolutions\nDT::datatable(seurat_object@meta.data)\n\nWarning in instance$preRenderHook(instance): It seems your data is too big for\nclient-side DataTables. You may consider server-side processing:\nhttps://rstudio.github.io/DT/server.html"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#projeção-com-umap",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#projeção-com-umap",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Projeção com UMAP",
+    "text": "Projeção com UMAP\n\nseurat_object &lt;- RunUMAP(seurat_object, dims = 1:20)\n\nWarning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric\nTo use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'\nThis message will be shown once per session\n\n\n15:58:06 UMAP embedding parameters a = 0.9922 b = 1.112\n\n\n15:58:06 Read 67633 rows and found 20 numeric columns\n\n\n15:58:06 Using Annoy for neighbor search, n_neighbors = 30\n\n\n15:58:06 Building Annoy index with metric = cosine, n_trees = 50\n\n\n0%   10   20   30   40   50   60   70   80   90   100%\n\n\n[----|----|----|----|----|----|----|----|----|----|\n\n\n**************************************************|\n15:58:12 Writing NN index file to temp file /tmp/RtmpyLSvkj/file13ae276635317\n15:58:12 Searching Annoy index using 1 thread, search_k = 3000\n15:58:35 Annoy recall = 100%\n15:58:36 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30\n15:58:37 Initializing from normalized Laplacian + noise (using RSpectra)\n15:58:54 Commencing optimization for 200 epochs, with 3039738 positive edges\n15:59:23 Optimization finished\n\n\n# Por padrao\nDimPlot(seurat_object, reduction = \"umap\", label = TRUE)\n\n\n\n\n\n\n\n\n\nFigure 3\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nImportante: A clusterização de scRNA-seq não é um processo exato. Ela deve ser encarada como uma ferramenta de geração de hipóteses. Sempre valide biologicamente seus agrupamentos antes de tirar conclusões definitivas."
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#expressão-diferencial",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#expressão-diferencial",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Expressão diferencial",
+    "text": "Expressão diferencial\n\ncluster_markers &lt;- FindAllMarkers(seurat_object)\n\nCalculating cluster 1\n\n\nCalculating cluster 2\n\n\nCalculating cluster 3\n\n\nCalculating cluster 4\n\n\nCalculating cluster 5\n\n\nCalculating cluster 6\n\n\nCalculating cluster 7\n\n\nCalculating cluster 8\n\n\nCalculating cluster 9\n\n\nCalculating cluster 10\n\n\nCalculating cluster 11\n\n\nCalculating cluster 12\n\n\nCalculating cluster 13\n\n\nCalculating cluster 14\n\n\nCalculating cluster 15\n\n\nCalculating cluster 16\n\n\nCalculating cluster 17\n\n\nCalculating cluster 18\n\n\nCalculating cluster 19\n\n\nCalculating cluster 20\n\n\nCalculating cluster 21\n\n\nCalculating cluster 22\n\n\nCalculating cluster 23\n\n\nCalculating cluster 24\n\n\nCalculating cluster 25\n\n\nCalculating cluster 26\n\n\nCalculating cluster 27\n\n\n\nInspecionando DEGs\n\nDT::datatable(cluster_markers)\n\nWarning in instance$preRenderHook(instance): It seems your data is too big for\nclient-side DataTables. You may consider server-side processing:\nhttps://rstudio.github.io/DT/server.html\n\n\n\n\n\n\n\n\nSalvando tabela dos DEGs\n\nsaveRDS(cluster_markers, file = \"./data/project_differential.RDS\")"
+  },
+  {
+    "objectID": "material/semana2/04_dimensionality_and_clustering.html#analise-de-pureza-dos-clusters",
+    "href": "material/semana2/04_dimensionality_and_clustering.html#analise-de-pureza-dos-clusters",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Analise de pureza dos clusters",
+    "text": "Analise de pureza dos clusters\n\ndownsampled_object &lt;- subset(x = seurat_object, downsample = 1000)\ncounts_matrix &lt;- LayerData(\n  downsampled_object, assay = \"RNA\", layer = \"counts\")\n\n\nCalculando entropia\n\nentropy_calculation &lt;- SE_fun(counts_matrix)\n\n\nrogue_value &lt;- CalculateRogue(\n  entropy_calculation, \n  platform = \"UMI\")\n\nrogue_value\n\n[1] 0.2160008\n\n\n\nrogue_result &lt;- rogue(\n  counts_matrix, \n  labels = downsampled_object@meta.data$seurat_clusters, \n  samples = downsampled_object@meta.data$orig.ident, \n  platform = \"UMI\", \n  span = 0.6\n  )\n\nrogue.boxplot(rogue_result)\n\n\n\n\n\n\n\n\n\nFigure 4"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html",
+    "href": "material/semana2/04_clustering.html",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "",
+    "text": "Em experimentos de transcriptômica de célula única (scRNA-seq), a alta dimensionalidade dos dados — frequentemente composta por milhares de genes — dificulta a análise direta e a interpretação biológica. Para identificar populações celulares de forma robusta, é necessário reduzir essa dimensionalidade preservando as principais variações biológicas. Posteriormente, técnicas de clusterização são empregadas para agrupar células com perfis transcriptômicos semelhantes, revelando estruturas ocultas nos dados, como tipos celulares ou estados funcionais distintos.\nEste tutorial descreve as etapas fundamentais de união de amostras, redução de dimensionalidade, clusterização e subclusterização de células, utilizando o pacote Seurat."
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#motivação",
+    "href": "material/semana2/04_clustering.html#motivação",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "",
+    "text": "Em experimentos de transcriptômica de célula única (scRNA-seq), a alta dimensionalidade dos dados — frequentemente composta por milhares de genes — dificulta a análise direta e a interpretação biológica. Para identificar populações celulares de forma robusta, é necessário reduzir essa dimensionalidade preservando as principais variações biológicas. Posteriormente, técnicas de clusterização são empregadas para agrupar células com perfis transcriptômicos semelhantes, revelando estruturas ocultas nos dados, como tipos celulares ou estados funcionais distintos.\nEste tutorial descreve as etapas fundamentais de união de amostras, redução de dimensionalidade, clusterização e subclusterização de células, utilizando o pacote Seurat."
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#contextualização",
+    "href": "material/semana2/04_clustering.html#contextualização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Contextualização",
+    "text": "Contextualização\nNeste tutorial, trabalharemos com objetos do Seurat e utilizaremos as seguintes funções principais:\n\nmerge() — para unir objetos de diferentes amostras.\nSCTransform() ou NormalizeData() — para normalização e modelagem da variação técnica.\nRunPCA() — para a redução inicial de dimensionalidade via Análise de Componentes Principais (PCA).\nFindNeighbors() e FindClusters() — para identificar agrupamentos celulares.\nRunUMAP() ou RunTSNE() — para projeção em duas dimensões, facilitando a visualização.\nSubset() — para subclusterizar grupos de interesse.\n\n\nlibrary(Seurat)\nlibrary(ROGUE)\nlibrary(presto)\nlibrary(dplyr)\nlibrary(here)\nlibrary(ggplot2)\n\nknitr::opts_knit$set(\n  root.dir = \"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1\",\n  verbose = FALSE\n)\n\n# Aumentar o limite de uso de memoria\noptions(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#unindo-amostras",
+    "href": "material/semana2/04_clustering.html#unindo-amostras",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Unindo amostras",
+    "text": "Unindo amostras\nAntes de qualquer redução de dimensionalidade, é necessário unir diferentes amostras em um único objeto Seurat. Para isso, usamos a função merge(). Abaixo um exemplo de codigo de realizar a juncao.\n\n# Listar os arquivos RDS\nfiles &lt;- list.files(\n  path = \"path/to/your/objects\", pattern = \"\\\\.rds$\", full.names = TRUE)\n\n# Carregar todos os objetos em uma lista\nseurat_list &lt;- lapply(files, readRDS)\n\n# Criar identificadores a partir dos nomes dos arquivos\nsample_ids &lt;- gsub(\"\\\\.rds$\", \"\", basename(files))\n\n# Fazer o merge\nseurat_merged &lt;- merge(\n  x = seurat_list[[1]],\n  y = seurat_list[-1],\n  add.cell.ids = sample_ids,\n  project = \"ProjectName\"\n)\n\n\nSalvando o objeto do Seurat\n\nif(!file.exists(\"./data/seurat_object.RDS\")) {\n  \n  saveRDS(file = \"./data/seurat_object.RDS\", object = seurat_merged)\n  \n}\n\n\n# Objeto contendo todas as amostras\nseurat_object &lt;- readRDS(file = here::here(\"./data/seurat_object.RDS\"))"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#normalização",
+    "href": "material/semana2/04_clustering.html#normalização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Normalização",
+    "text": "Normalização\n\nseurat_object &lt;- NormalizeData(\n  seurat_object, normalization.method = \"LogNormalize\", scale.factor = 10000)\n\nNormalizing layer: counts\n\nseurat_object &lt;- FindVariableFeatures(\n  seurat_object, selection.method = \"vst\", nfeatures = 2000)\n\nFinding variable features for layer counts\n\nseurat_object &lt;- ScaleData(\n  seurat_object, features = VariableFeatures(seurat_object))\n\nCentering and scaling data matrix\n\n\nWarning: Different features in new layer data than already exists for\nscale.data"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#redução-de-dimensionalidade-pca",
+    "href": "material/semana2/04_clustering.html#redução-de-dimensionalidade-pca",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Redução de dimensionalidade (PCA)",
+    "text": "Redução de dimensionalidade (PCA)\n\nseurat_object &lt;- RunPCA(seurat_object, npcs = 50, verbose = FALSE)\n\nElbowPlot(seurat_object, reduction = \"pca\")\n\n\n\n\n\n\n\n\n\nFigure 1\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nO ElbowPlot(seurat_object) é utilizado para identificar o número apropriado de componentes principais (PCs) a serem considerados nas análises downstream, como clusterização e redução de dimensionalidade. O gráfico exibe a variação explicada por cada PC; o ponto onde há uma inflexão (“cotovelo”) indica que PCs adicionais contribuem pouco para a variabilidade dos dados. Selecionar o número correto de PCs é essencial para capturar a estrutura biológica relevante, minimizando ruído técnico.\n\n\n\n\nVisualizando dimensões\n\n# Examine and visualize PCA results a few different ways\nVizDimLoadings(seurat_object, dims = 1:2, reduction = \"pca\")\n\n\n\n\n\n\n\nFigure 2\n\n\n\n\n\n\n\nExtraindo informacões do PCA\n\n# Get cell embeddings and feature loadings stored on pbmc[['pca']]@cell.embeddings\nEmbeddings(seurat_object, reduction = \"pca\")\n\n# stored in pbmc[['pca]]@feature.loadings\nLoadings(seurat_object, reduction = \"pca\")"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#construção-da-matriz-de-vizinhança",
+    "href": "material/semana2/04_clustering.html#construção-da-matriz-de-vizinhança",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Construção da matriz de vizinhança",
+    "text": "Construção da matriz de vizinhança\n\nseurat_object &lt;- FindNeighbors(seurat_object, dims = 1:20)\n\nComputing nearest neighbor graph\n\n\nComputing SNN\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nA função FindNeighbors constrói uma matriz de vizinhança baseada nos embeddings de redução de dimensionalidade (tipicamente PCA). Cada célula é conectada às suas células mais próximas no espaço de baixa dimensão, formando um grafo de similaridade.\nEsse grafo é o alicerce para a clusterização subsequente (FindClusters()), permitindo identificar comunidades de células com perfis transcriptômicos semelhantes. O parâmetro dims especifica quais componentes principais serão usados para calcular as distâncias entre as células."
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#clusterização",
+    "href": "material/semana2/04_clustering.html#clusterização",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Clusterização",
+    "text": "Clusterização\n\nseurat_object &lt;- FindClusters(\n  seurat_object, algorithm = 4, resolution = c(0.25, 0.5, 1.0))\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nA função FindClusters realiza a clusterização das células com base na matriz de vizinhança previamente calculada.\nEla aplica algoritmos de otimização de comunidades (como o algoritmo Louvain ou Leiden) para agrupar células com perfis transcriptômicos semelhantes.\nO parâmetro resolution controla a granularidade da clusterização, por exemplo: - Valores mais baixos (&lt; 0.5) resultam em menos clusters (agrupamentos maiores). - Valores mais altos (&gt; 0.5) resultam em mais clusters (agrupamentos menores e mais específicos).\nA escolha do resolution deve ser guiada tanto por critérios biológicos quanto por inspeção visual dos agrupamentos gerados.\n\n\n\n\n# Explore as resolutions\nDT::datatable(seurat_object@meta.data)\n\nWarning in instance$preRenderHook(instance): It seems your data is too big for\nclient-side DataTables. You may consider server-side processing:\nhttps://rstudio.github.io/DT/server.html"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#projeção-com-umap",
+    "href": "material/semana2/04_clustering.html#projeção-com-umap",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Projeção com UMAP",
+    "text": "Projeção com UMAP\n\nseurat_object &lt;- RunUMAP(seurat_object, dims = 1:20)\n\nWarning: The default method for RunUMAP has changed from calling Python UMAP via reticulate to the R-native UWOT using the cosine metric\nTo use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to 'correlation'\nThis message will be shown once per session\n\n\n16:32:08 UMAP embedding parameters a = 0.9922 b = 1.112\n\n\n16:32:08 Read 67633 rows and found 20 numeric columns\n\n\n16:32:08 Using Annoy for neighbor search, n_neighbors = 30\n\n\n16:32:08 Building Annoy index with metric = cosine, n_trees = 50\n\n\n0%   10   20   30   40   50   60   70   80   90   100%\n\n\n[----|----|----|----|----|----|----|----|----|----|\n\n\n**************************************************|\n16:32:15 Writing NN index file to temp file /tmp/RtmpUllUdK/file1461076e4e02d\n16:32:15 Searching Annoy index using 1 thread, search_k = 3000\n16:32:38 Annoy recall = 100%\n16:32:38 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30\n16:32:40 Initializing from normalized Laplacian + noise (using RSpectra)\n16:32:54 Commencing optimization for 200 epochs, with 3039738 positive edges\n16:33:25 Optimization finished\n\n\n# Por padrao\nDimPlot(seurat_object, reduction = \"umap\", label = TRUE)\n\n\n\n\n\n\n\n\n\nFigure 3\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\n\n\nImportante: A clusterização de scRNA-seq não é um processo exato. Ela deve ser encarada como uma ferramenta de geração de hipóteses. Sempre valide biologicamente seus agrupamentos antes de tirar conclusões definitivas."
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#expressão-diferencial",
+    "href": "material/semana2/04_clustering.html#expressão-diferencial",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Expressão diferencial",
+    "text": "Expressão diferencial\n\ncluster_markers &lt;- FindAllMarkers(seurat_object)\n\nCalculating cluster 1\n\n\nCalculating cluster 2\n\n\nCalculating cluster 3\n\n\nCalculating cluster 4\n\n\nCalculating cluster 5\n\n\nCalculating cluster 6\n\n\nCalculating cluster 7\n\n\nCalculating cluster 8\n\n\nCalculating cluster 9\n\n\nCalculating cluster 10\n\n\nCalculating cluster 11\n\n\nCalculating cluster 12\n\n\nCalculating cluster 13\n\n\nCalculating cluster 14\n\n\nCalculating cluster 15\n\n\nCalculating cluster 16\n\n\nCalculating cluster 17\n\n\nCalculating cluster 18\n\n\nCalculating cluster 19\n\n\nCalculating cluster 20\n\n\nCalculating cluster 21\n\n\nCalculating cluster 22\n\n\nCalculating cluster 23\n\n\nCalculating cluster 24\n\n\nCalculating cluster 25\n\n\nCalculating cluster 26\n\n\nCalculating cluster 27\n\n\n\nInspecionando DEGs\n\nDT::datatable(cluster_markers)\n\nWarning in instance$preRenderHook(instance): It seems your data is too big for\nclient-side DataTables. You may consider server-side processing:\nhttps://rstudio.github.io/DT/server.html\n\n\n\n\n\n\n\n\nSalvando tabela dos DEGs\n\nsaveRDS(cluster_markers, file = \"./data/project_differential.RDS\")"
+  },
+  {
+    "objectID": "material/semana2/04_clustering.html#analise-de-pureza-dos-clusters",
+    "href": "material/semana2/04_clustering.html#analise-de-pureza-dos-clusters",
+    "title": "04 - Redução de dimensionalidade e clusterização",
+    "section": "Analise de pureza dos clusters",
+    "text": "Analise de pureza dos clusters\n\ndownsampled_object &lt;- subset(x = seurat_object, downsample = 1000)\ncounts_matrix &lt;- LayerData(\n  downsampled_object, assay = \"RNA\", layer = \"counts\")\n\n\nCalculando entropia\n\nentropy_calculation &lt;- SE_fun(counts_matrix)\n\n\nrogue_value &lt;- CalculateRogue(\n  entropy_calculation, \n  platform = \"UMI\")\n\nrogue_value\n\n[1] 0.2160008\n\n\n\nrogue_result &lt;- rogue(\n  counts_matrix, \n  labels = downsampled_object@meta.data$seurat_clusters, \n  samples = downsampled_object@meta.data$orig.ident, \n  platform = \"UMI\", \n  span = 0.6\n  )\n\nrogue.boxplot(rogue_result)\n\n\n\n\n\n\n\n\n\nFigure 4"
   }
 ]

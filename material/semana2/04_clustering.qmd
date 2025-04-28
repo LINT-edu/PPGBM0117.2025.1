@@ -1,0 +1,301 @@
+---
+title: "04 - Redução de dimensionalidade e clusterização"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute: 
+  cache: false
+---
+
+## Motivação
+
+Em experimentos de transcriptômica de célula única (scRNA-seq), a alta dimensionalidade dos dados — frequentemente composta por milhares de genes — dificulta a análise direta e a interpretação biológica. Para identificar populações celulares de forma robusta, é necessário reduzir essa dimensionalidade preservando as principais variações biológicas. Posteriormente, técnicas de clusterização são empregadas para agrupar células com perfis transcriptômicos semelhantes, revelando estruturas ocultas nos dados, como tipos celulares ou estados funcionais distintos.
+
+Este tutorial descreve as etapas fundamentais de **união de amostras**, **redução de dimensionalidade**, **clusterização** e **subclusterização** de células, utilizando o pacote **Seurat**.
+
+## Contextualização
+
+Neste tutorial, trabalharemos com objetos do Seurat e utilizaremos as seguintes funções principais:
+
+-   `merge()` — para unir objetos de diferentes amostras.
+-   `SCTransform()` ou `NormalizeData()` — para normalização e modelagem da variação técnica.
+-   `RunPCA()` — para a redução inicial de dimensionalidade via Análise de Componentes Principais (PCA).
+-   `FindNeighbors()` e `FindClusters()` — para identificar agrupamentos celulares.
+-   `RunUMAP()` ou `RunTSNE()` — para projeção em duas dimensões, facilitando a visualização.
+-   `Subset()` — para subclusterizar grupos de interesse.
+
+```{r}
+#| warning: false
+
+library(Seurat)
+library(ROGUE)
+library(presto)
+library(dplyr)
+library(here)
+library(ggplot2)
+
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+# Aumentar o limite de uso de memoria
+options(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo
+
+```
+
+## Unindo amostras
+
+Antes de qualquer redução de dimensionalidade, é necessário unir diferentes amostras em um único objeto Seurat. Para isso, usamos a função `merge()`. Abaixo um exemplo de codigo de realizar a juncao.
+
+```{r}
+#| eval: false
+
+# Listar os arquivos RDS
+files <- list.files(
+  path = "path/to/your/objects", pattern = "\\.rds$", full.names = TRUE)
+
+# Carregar todos os objetos em uma lista
+seurat_list <- lapply(files, readRDS)
+
+# Criar identificadores a partir dos nomes dos arquivos
+sample_ids <- gsub("\\.rds$", "", basename(files))
+
+# Fazer o merge
+seurat_merged <- merge(
+  x = seurat_list[[1]],
+  y = seurat_list[-1],
+  add.cell.ids = sample_ids,
+  project = "ProjectName"
+)
+
+```
+
+### Salvando o objeto do Seurat
+
+```{r}
+#| eval: false
+
+if(!file.exists("./data/seurat_object.RDS")) {
+  
+  saveRDS(file = "./data/seurat_object.RDS", object = seurat_merged)
+  
+}
+
+```
+
+```{r}
+
+# Objeto contendo todas as amostras
+seurat_object <- readRDS(file = here::here("./data/seurat_object.RDS"))
+
+```
+
+## Normalização
+
+```{r}
+
+seurat_object <- NormalizeData(
+  seurat_object, normalization.method = "LogNormalize", scale.factor = 10000)
+
+seurat_object <- FindVariableFeatures(
+  seurat_object, selection.method = "vst", nfeatures = 2000)
+
+seurat_object <- ScaleData(
+  seurat_object, features = VariableFeatures(seurat_object))
+
+```
+
+## Redução de dimensionalidade (PCA)
+
+```{r}
+
+seurat_object <- RunPCA(seurat_object, npcs = 50, verbose = FALSE)
+
+```
+
+```{r}
+#| label: fig-elbow
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+ElbowPlot(seurat_object, reduction = "pca")
+
+```
+
+::: {.callout-note collapse="false"}
+O `ElbowPlot(seurat_object)` é utilizado para identificar o número apropriado de componentes principais (PCs) a serem considerados nas análises downstream, como clusterização e redução de dimensionalidade. O gráfico exibe a variação explicada por cada PC; o ponto onde há uma inflexão ("cotovelo") indica que PCs adicionais contribuem pouco para a variabilidade dos dados. Selecionar o número correto de PCs é essencial para capturar a estrutura biológica relevante, minimizando ruído técnico.
+:::
+
+### Visualizando dimensões
+
+```{r}
+#| label: fig-pc-loadings
+#| column: screen-inset-shaded
+#| fig-align: center
+
+# Examine and visualize PCA results a few different ways
+VizDimLoadings(seurat_object, dims = 1:2, reduction = "pca")
+
+```
+
+### Extraindo informacões do PCA
+
+```{r}
+#| eval: false
+
+# Get cell embeddings and feature loadings stored on pbmc[['pca']]@cell.embeddings
+Embeddings(seurat_object, reduction = "pca")
+
+# stored in pbmc[['pca]]@feature.loadings
+Loadings(seurat_object, reduction = "pca")
+
+```
+
+## Construção da matriz de vizinhança
+
+```{r}
+
+seurat_object <- FindNeighbors(seurat_object, dims = 1:20)
+
+```
+
+::: {.callout-note collapse="false"}
+A função `FindNeighbors` constrói uma matriz de vizinhança baseada nos embeddings de redução de dimensionalidade (tipicamente PCA).  Cada célula é conectada às suas células mais próximas no espaço de baixa dimensão, formando um **grafo de similaridade**.  
+
+Esse grafo é o alicerce para a clusterização subsequente (`FindClusters()`), permitindo identificar comunidades de células com perfis transcriptômicos semelhantes. O parâmetro `dims` especifica quais componentes principais serão usados para calcular as distâncias entre as células.
+:::
+
+## Clusterização
+
+```{r}
+#| warning: false
+
+seurat_object <- FindClusters(
+  seurat_object, algorithm = 4, resolution = c(0.25, 0.5, 1.0))
+
+```
+
+::: {.callout-note collapse="false"}
+A função `FindClusters` realiza a clusterização das células com base na matriz de vizinhança previamente calculada.  
+Ela aplica algoritmos de otimização de comunidades (como o algoritmo Louvain ou Leiden) para agrupar células com perfis transcriptômicos semelhantes.
+
+O parâmetro `resolution` controla a **granularidade** da clusterização, por exemplo:
+- **Valores mais baixos** (`< 0.5`) resultam em **menos clusters** (agrupamentos maiores).
+- **Valores mais altos** (`> 0.5`) resultam em **mais clusters** (agrupamentos menores e mais específicos).
+
+A escolha do `resolution` deve ser guiada tanto por critérios biológicos quanto por inspeção visual dos agrupamentos gerados.
+:::
+
+```{r}
+
+# Explore as resolutions
+DT::datatable(seurat_object@meta.data)
+
+```
+
+
+## Projeção com UMAP
+
+```{r}
+
+seurat_object <- RunUMAP(seurat_object, dims = 1:20)
+
+```
+
+```{r}
+#| label: fig-umap
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Por padrao
+DimPlot(seurat_object, reduction = "umap", label = TRUE)
+
+```
+
+::: {.callout-note collapse="false"}
+**Importante:** A clusterização de scRNA-seq **não é um processo exato**. Ela deve ser encarada como uma **ferramenta de geração de hipóteses**. Sempre valide biologicamente seus agrupamentos antes de tirar conclusões definitivas.
+:::
+
+## Expressão diferencial
+
+```{r}
+
+cluster_markers <- FindAllMarkers(seurat_object)
+
+```
+### Inspecionando DEGs
+
+```{r}
+
+DT::datatable(cluster_markers)
+
+```
+
+
+### Salvando tabela dos DEGs
+
+```{r}
+
+saveRDS(cluster_markers, file = "./data/project_differential.RDS")
+
+```
+
+
+## Analise de pureza dos clusters
+
+```{r}
+
+downsampled_object <- subset(x = seurat_object, downsample = 1000)
+counts_matrix <- LayerData(
+  downsampled_object, assay = "RNA", layer = "counts")
+
+```
+
+### Calculando entropia
+
+```{r}
+#| warning: false
+
+entropy_calculation <- SE_fun(counts_matrix)
+
+```
+
+```{r}
+
+rogue_value <- CalculateRogue(
+  entropy_calculation, 
+  platform = "UMI")
+
+rogue_value
+
+```
+
+```{r}
+#| warning: false
+
+rogue_result <- rogue(
+  counts_matrix, 
+  labels = downsampled_object@meta.data$seurat_clusters, 
+  samples = downsampled_object@meta.data$orig.ident, 
+  platform = "UMI", 
+  span = 0.6
+  )
+
+```
+
+```{r}
+#| label: fig-rogue
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+rogue.boxplot(rogue_result)
+
+```
