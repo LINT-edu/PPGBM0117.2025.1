@@ -28,6 +28,9 @@ website:
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"
 
+execute:
+  freeze: auto  # re-render only when source changes
+
 format:
   html:
     lightbox: true

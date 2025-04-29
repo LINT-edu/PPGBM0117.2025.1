@@ -193,7 +193,7 @@ A escolha do `resolution` deve ser guiada tanto por critérios biológicos quant
 ```{r}
 
 # Explore as resolutions
-DT::datatable(seurat_object@meta.data)
+DT::datatable(head(seurat_object@meta.data, n = 100))
 
 ```
 
@@ -240,7 +240,7 @@ cluster_markers_top <- cluster_markers %>%
   group_by(cluster) %>%
   top_n(20, avg_log2FC)
 
-DT::datatable(cluster_markers_topx)
+DT::datatable(cluster_markers_top)
 
 ```
 
