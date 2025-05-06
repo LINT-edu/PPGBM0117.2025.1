@@ -90,18 +90,22 @@ Após a clusterização, cada agrupamento de células é apenas um número (por 
 
 ```{r}
 
+# Vamos fazer uma anotacao mais generica usando a resolucao de 0.25
+Idents(seurat_object) <- "RNA_snn_res.0.25"
+
+```
+
+```{r}
+
 if(!file.exists(here::here("data/cluster_markers.RDS"))) {
-  
-  # Vamos fazer uma anotacao mais generica usando a resolucao de 0.25
-  Idents(seurat_object) <- "RNA_snn_res.0.25"
   
   # Identificar genes marcadores para clusters
   cluster_markers <- FindAllMarkers(seurat_object, only.pos = TRUE)
-  saveRDS(file = "data/cluster_markers.RDS", object = cluster_markers)
+  saveRDS(file = here::here("data/cluster_markers.RDS"), object = cluster_markers)
   
 } 
 
-cluster_markers <- readRDS(file = "data/cluster_markers.RDS")
+cluster_markers <- readRDS(file = here::here("data/cluster_markers.RDS"))
 
 ```
 
