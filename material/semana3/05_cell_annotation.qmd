@@ -231,7 +231,7 @@ seurat_object$manual_annotation <- as.vector(
   unlist(cluster_annotations[cluster_ids]))
 
 # Visualizar para conferir
-table(seurat_object$manual_annotation)http://127.0.0.1:26503/graphics/plot_zoom_png?width=628&height=625
+table(seurat_object$manual_annotation)
 
 ```
 
@@ -352,10 +352,10 @@ plotMarkerHeatmap(pred, sce, label = "NK_cell")
 #| warning: false
 
 p1 <- DimPlot(seurat_object, group.by = "manual_annotation", label = FALSE) + 
-  ggplot2::ggtitle("Anotação manual (clusters)") +
+  ggplot2::ggtitle("Anotação manual (clusters)")
 
 p2 <- DimPlot(seurat_object, group.by = "SingleR", label = FALSE) + 
-  ggplot2::ggtitle("Anotação automática (SingleR)") +
+  ggplot2::ggtitle("Anotação automática (SingleR)")
 
 p1
 p2
