@@ -33,6 +33,7 @@ library(dplyr)
 library(here)
 library(patchwork)
 
+# Definindo diretorio padrao
 knitr::opts_knit$set(
   root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
   verbose = FALSE

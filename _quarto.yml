@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Treinamento em single-cell"
+  title: "Treinamento em analise de celula unica"
   site-url: https://lint-edu.github.io/PPGBM0117.2025.1
   navbar:
     search: true
@@ -24,6 +24,10 @@ website:
             file: material/semana2/03_quality_control.qmd
           - text: "Clusterização"
             file: material/semana2/04_clustering.qmd
+      - text: "Semana 3"
+        menu:
+          - text: "Anotação de células"
+            file: material/semana3/05_cell_annotation.qmd
 
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"
@@ -41,4 +45,7 @@ format:
     toc-depth: 3
     code-fold: false
     code-tools: false
-  
+
+knitr:
+  opts_knit:
+    root.dir: "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1"  

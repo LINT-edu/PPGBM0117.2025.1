@@ -1,0 +1,493 @@
+---
+title: "05 - Anotação de células"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute: 
+  cache: false
+---
+
+
+
+
+## Motivação
+
+A anotação de células é uma etapa crítica na análise de dados de transcriptômica de célula única (scRNA-seq). Ela permite transformar clusters não rotulados em informações biológicas significativas, descrevendo tipos celulares e seus estados funcionais. A anotação adequada é essencial para interpretações corretas e para garantir reprodutibilidade e comparabilidade entre estudos.
+
+## Contextualização
+
+Após etapas de pré-processamento e clusterização, cada célula ou agrupamento (cluster) carece de uma identidade biológica. A anotação pode ser realizada de maneira:
+
+-   **Manual**: com base na expressão de genes marcadores conhecidos.
+-   **Automatizada**: utilizando ferramentas que comparam perfis de expressão com bancos de dados de referência.
+
+Neste tutorial, mostraremos ambas as abordagens usando o pacote `Seurat` e ferramentas como `SingleR` para anotação automática.
+
+## Carregar dados e pacotes necessários
+
+
+
+
+```{r}
+#| warning: false
+
+# Instalar pacotes necessários caso não estejam instalados
+if (!requireNamespace("SingleR")) BiocManager::install("SingleR")
+if (!requireNamespace("celldex")) BiocManager::install("celldex")
+
+# Carregar pacotes
+library(Seurat)
+library(presto)
+library(SingleR)
+library(celldex)
+library(SingleCellExperiment)
+library(dplyr)
+
+# Definindo diretorio padrao
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+# Aumentar o limite de uso de memoria
+options(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo
+
+```
+
+
+
+
+## Carregando dados do projeto
+
+
+
+
+```{r}
+#| label: fig-umap
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Carregando um objeto Seurat já processado (pré-clusterizado)
+seurat_object <- readRDS(file = here::here("data/seurat_clustered.RDS"))
+
+# Verificar os clusters
+DimPlot(seurat_object, group.by = "seurat_clusters")
+
+```
+
+
+
+
+## Anotação Manual
+
+A anotação manual é uma abordagem fundamental, especialmente em experimentos onde o conhecimento biológico é indispensável para interpretar os dados.
+
+**O que é feito nesta etapa?**
+
+Após a clusterização, cada agrupamento de células é apenas um número (por exemplo, Cluster 0, Cluster 1, Cluster N...). O objetivo é atribuir esses agrupamentos identidade biológica (celular) com base na expressão de **genes marcadores bem conhecidos**.
+
+**Como fazemos isso?**
+
+-   Usamos funções como `FindAllMarkers` para identificar genes mais expressos em cada cluster.
+-   Verificamos a expressão desses genes em visualizações como `FeaturePlot` ou `VlnPlot`.
+-   Com base no padrão de expressão, atribuímos rótulos apropriados. Por exemplo:
+    -   **CD3D+** → Provavelmente células T
+    -   **MS4A1+** → Provavelmente células B
+    -   **LYZ+** → Provavelmente monócitos/macrófagos
+    -   **PPBP+** → Plaquetas
+
+::: {.callout-note collapse="false"}
+**Importante**: A anotação manual exige conhecimento prévio da literatura para garantir a precisão das atribuições. É recomendável validar com bancos de dados públicos e reavaliar periodicamente.
+:::
+
+
+
+
+```{r}
+
+if(!file.exists(here::here("data/cluster_markers.RDS"))) {
+  
+  # Vamos fazer uma anotacao mais generica usando a resolucao de 0.25
+  Idents(seurat_object) <- "RNA_snn_res.0.25"
+  
+  # Identificar genes marcadores para clusters
+  cluster_markers <- FindAllMarkers(seurat_object, only.pos = TRUE)
+  saveRDS(file = "data/cluster_markers.RDS", object = cluster_markers)
+  
+} 
+
+cluster_markers <- readRDS(file = "data/cluster_markers.RDS")
+
+```
+
+
+
+
+### Inspecionando DEGs
+
+
+
+
+```{r}
+#| column: screen-inset-shaded
+#| warning: false
+
+# Removendo resultados nao significativos
+cluster_markers_top <- cluster_markers %>%
+    filter(
+      p_val_adj <= 0.05,
+      avg_log2FC >= 0.25,
+      pct.1 >= 0.20,
+      pct.1 > pct.2
+    )
+
+cluster_markers_top <- cluster_markers_top %>%
+  group_by(cluster) %>%
+  top_n(20, avg_log2FC)
+
+DT::datatable(cluster_markers_top)
+
+```
+
+
+
+
+::: {.callout-note collapse="false"}
+-   **Filtragem adicional**: remove genes com pouca relevância ou significância estatística, mantendo apenas aqueles que:
+    -   Têm valor ajustado de p significativo (`p_val_adj <= 0.05`);
+    -   Apresentam diferença de expressão relevante (`avg_log2FC >= 0.25`);
+    -   São detectados em pelo menos 20% das células do cluster (`pct.1 >= 0.20`);
+    -   São mais expressos no cluster alvo do que nos demais (`pct.1 > pct.2`).
+-   **Seleção dos principais marcadores**: para cada cluster, retém apenas os **20 genes com maior log2FC médio**, facilitando a visualização e a escolha de genes para anotação.
+
+Este conjunto de marcadores é particularmente útil para guiar a **anotação manual**, pois foca nos genes mais distintivos de cada população celular.
+:::
+
+### Visualizando marcadores no UMAP
+
+
+
+
+```{r}
+#| label: fig-feature
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Plotar expressão de genes marcadores conhecidos para atribuição manual
+FeaturePlot(
+  seurat_object, 
+  features = c("CD3D", "MS4A1", "LYZ", "PPBP", "CD8A")
+  )
+
+```
+
+
+
+
+### Visualizando atraves do `Bubbleplot`
+
+
+
+
+```{r}
+#| label: fig-bubbleplot
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Definir genes marcadores para visualização (exemplo)
+genes_to_inspect <- c("CD3D", "MS4A1", "LYZ", "PPBP", "CD8A")
+
+# Gerar o Bubbleplot (DotPlot no Seurat)
+DotPlot(seurat_object, features = genes_to_inspect)
+
+```
+
+
+
+
+::: {.callout-note collapse="false"}
+O Bubbleplot (DotPlot) resume a expressão gênica em cada cluster:
+
+-   **Tamanho do ponto** → indica a fração de células do cluster que expressam o gene (quanto maior, mais células expressam).
+-   **Cor do ponto** → representa a expressão média do gene entre as células expressoras (mais escuro = maior expressão).
+
+Isso permite identificar rapidamente quais genes são marcadores de quais clusters e orientar a anotação manual.
+:::
+
+### Avaliação manual dos marcadores
+
+| Cluster | Cell Type | Gene Markers |
+|--------------|-------------------------------|---------------------------|
+| 1 | **CD8+ Cytotoxic T cells** | CD8A, CD8B, GZMK, GZMH, PRF1, IFNG, XCL1, NKG7 |
+| 2 | **CD4+ T cells / TCM-like** | IL7R, TCF7, CAMK4, PDE3B, AOAH |
+| 3 | **Regulatory T cells (Tregs)** | FOXP3, CTLA4, IL2RA, TNFRSF18 (GITR), LAYN |
+| 4 | **B cells** | MS4A1 (CD20), BANK1, CD19, CD22, IGHV5-78 |
+| 5 | **Monocytes (Inflammatory)** | LYZ, FCN1, AIF1, IL1B, S100A12, SERPINA1 |
+| 6 | **Tumor-Associated Cells (Cancer cells, PRAME+)** | PRAME, CHGA, MAGEA4, IRS4, SORCS3 |
+| 7 | **Plasma Cells** | IGHG1, IGHG4, IGHG3, IGLL5, IGKV/IGLV genes |
+| 8 | **Keratinocytes / Tumor-associated Epithelium** | DSG3, KRT6A, KRT16, LY6D, SLPI, CLDN4 |
+| 9 | **Fibroblasts (CAF-like)** | COL1A1, COL3A1, LUM, DCN, PDGFRB, SFRP2 |
+| 10 | **Proliferating Cells (likely cycling tumor cells)** | MKI67, UBE2C, RRM2, CCNA2, BIRC5 |
+| 11 | **Plasmacytoid Dendritic Cells / pDC-like** | CLEC4C, LILRA4, GLT1D1, P2RY6 |
+| 12 | **Endothelial Cells** | CLDN5, ACKR1, PLVAP, RAMP2, EMCN, CDH5 |
+| 13 | **Mast Cells** | TPSAB1, TPSB2, CPA3, HDC, MS4A2 (FCER1) |
+| 14 | **Melanoma Cells (Tumor Melanocytic Cells)** | PMEL, TYRP1, MLANA, TYR, SOX10, TRPM1 |
+
+### Renomeando clusters
+
+
+
+
+```{r}
+
+# Definir a lista de renomeação
+cluster_annotations <- list(
+  "1" = "CD8+ Cytotoxic T cells",
+  "2" = "CD4+ T cells / TCM-like",
+  "3" = "Tregs",
+  "4" = "B cells",
+  "5" = "Monocytes",
+  "6" = "PRAME+ Tumor",
+  "7" = "Plasma Cells",
+  "8" = "Keratinocytes/Epithelial", # Maybe tumor
+  "9" = "Fibroblasts",
+  "10" = "Proliferating Tumor Cells",
+  "11" = "Plasmacytoid Dendritic Cells",
+  "12" = "Endothelial Cells",
+  "13" = "Mast Cells",
+  "14" = "Melanoma Cells"
+)
+
+# Renomear os clusters
+cluster_ids <- as.character(Idents(seurat_object))
+
+# Criando coluna com anotacao manual
+seurat_object$manual_annotation <- as.vector(
+  unlist(cluster_annotations[cluster_ids]))
+
+# Visualizar para conferir
+table(seurat_object$manual_annotation)
+
+```
+
+```{r}
+#| label: fig-manual-annotation
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Visualizar anotacao
+DimPlot(seurat_object, group.by = "manual_annotation", label = FALSE, pt.size = 0.5) +
+  ggplot2::theme(
+    legend.position = "bottom"
+  )
+
+```
+
+
+
+
+## Anotação Automática com SingleR
+
+Embora a anotação manual seja fundamental para garantir a qualidade e o contexto biológico da análise, ela pode ser trabalhosa e depender do conhecimento prévio sobre os tipos celulares presentes. Para facilitar e agilizar esse processo, especialmente em conjuntos de dados grandes ou menos caracterizados, é comum utilizar abordagens automáticas.
+
+O **SingleR** é uma ferramenta projetada para esse fim. Ele anota células individualmente ao comparar seus perfis de expressão com conjuntos de dados de referência já anotados. A atribuição é baseada na similaridade do transcriptoma de cada célula com os perfis médios das populações do banco de referência, o que torna o método eficiente e relativamente robusto para diversas aplicações.
+
+
+
+
+```{r}
+
+# Converter para SingleCellExperiment
+sce <- as.SingleCellExperiment(seurat_object)
+
+# Carregar uma base de referencia
+ref <- celldex::HumanPrimaryCellAtlasData()
+
+# Rodar SingleR
+pred <- SingleR(
+  test = sce, ref = ref, labels = ref$label.main)
+
+# Adicionar anotação ao objeto Seurat
+seurat_object$SingleR <- pred$labels
+
+```
+
+
+
+
+::: {.callout-note collapse="false"}
+Este trecho realiza a **anotação automática das células usando o SingleR** com uma base de referência.
+
+-   `as.SingleCellExperiment(seurat_object)`: converte o objeto Seurat para o formato `SingleCellExperiment`, necessário para rodar o SingleR.
+
+-   `celldex::HumanPrimaryCellAtlasData()`: carrega uma base de referência com perfis de expressão de células humanas bem caracterizadas.
+
+-   `SingleR(test = sce, ref = ref, labels = ref$label.main)`: compara cada célula do dataset com as referências e atribui o tipo celular mais provável.
+
+-   `seurat_object$SingleR <- pred$labels`: adiciona a anotação automática como metadado no objeto Seurat para facilitar a visualização e análise.
+:::
+
+
+
+
+```{r}
+#| label: fig-automated-annotation
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Visualizar anotacao automatica
+DimPlot(seurat_object, 
+        group.by = "SingleR", label = FALSE, pt.size = 0.5)
+
+```
+
+
+
+
+## Diagnóstico da Anotação com SingleR
+
+Este gráfico mostra os scores de similaridade entre cada célula do conjunto de teste e os tipos celulares da referência. Ele ajuda a identificar células com atribuições ambíguas ou múltiplas similaridades.
+
+
+
+
+```{r}
+#| label: fig-singler-heatmap
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+#| eval: false
+
+# Gerar heatmap dos scores de atribuicao
+plotScoreHeatmap(pred)
+
+```
+
+
+
+
+Outro diagnóstico é baseado nos "deltas" por célula, ou seja, a diferença entre a pontuação do rótulo atribuído e a mediana em todos os rótulos para cada célula. Deltas baixos indicam que a atribuição é incerta, o que é especialmente relevante se o rótulo verdadeiro da célula não existir na referência. Podemos inspecionar esses deltas entre as células para cada rótulo usando a função `plotDeltaDistribution()`.
+
+
+
+
+```{r}
+#| label: fig-singler-delta
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+#| eval: false
+
+# Gerar distribuicao dos deltas
+plotDeltaDistribution(pred)
+
+```
+
+```{r}
+#| label: fig-singler-marker
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+#| eval: false
+
+plotMarkerHeatmap(pred, sce, label = "NK_cell")
+
+```
+
+
+
+
+
+## Comparando e refinando anotações
+
+### Comparando as anotações com UMAP
+
+
+
+
+```{r}
+#| label: fig-umap-annotation
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+p1 <- DimPlot(seurat_object, group.by = "manual_annotation", label = TRUE) + 
+  ggplot2::ggtitle("Anotação manual (clusters)") +
+  ggplot2::theme(
+    legend.position = "bottom"
+  )
+
+p2 <- DimPlot(seurat_object, group.by = "SingleR", label = TRUE) + 
+  ggplot2::ggtitle("Anotação automática (SingleR)") +
+  ggplot2::theme(
+    legend.position = "bottom"
+  )
+
+p1
+p2
+
+```
+
+```{r}
+
+# Comparar manual vs automática
+confusion_matrix <- table(
+  Manual = seurat_object$manual_annotation, 
+  Automatic = seurat_object$SingleR
+  )
+
+# Normalizar por linha (proporção dentro de cada anotação manual)
+confusion_prop <- prop.table(confusion_matrix, margin = 1)
+
+```
+
+```{r}
+#| label: fig-confusion-matrix
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Visualização da matriz de confusão
+pheatmap::pheatmap(
+  confusion_prop,
+  fontsize = 6,
+  display_numbers = TRUE,            # mostra as proporções
+  number_format = "%.1f",            # duas casas decimais
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  color = colorRampPalette(c("white", "steelblue"))(100)
+)
+
+
+```
+
+
+
+
+## Salvando o objeto anotado
+
+
+
+
+```{r}
+
+saveRDS(seurat_object, file = "data/seurat_annotated.RDS")
+
+```
+

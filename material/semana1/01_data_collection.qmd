@@ -74,7 +74,6 @@ Você pode utilizar o campo de busca ou aplicar filtros laterais:
 
 Antes de baixar os dados, vale a pena usar os recursos de **exploração interativa** da plataforma para decidir se aquele conjunto é útil para seus objetivos. Abaixo estão perguntas chave para cada uma das ferramentas disponíveis:
 
-
 ### 3.1. **Explore**
 
 *(Proximo ao botão de Download → “Explore”)*
@@ -191,7 +190,7 @@ library(reticulate)
 
 # Converta o arquivo .h5ad para um objeto SingleCellExperiment (.rds)
 sceasy::convertFormat(
-  input = "dataset.h5ad",
+  "dataset.h5ad",
   from = "anndata",
   to = "seurat",
   outFile = "dataset.rds"

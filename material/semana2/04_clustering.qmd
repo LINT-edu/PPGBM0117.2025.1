@@ -35,6 +35,7 @@ library(dplyr)
 library(here)
 library(ggplot2)
 
+# Definindo diretorio padrao
 knitr::opts_knit$set(
   root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
   verbose = FALSE
@@ -225,6 +226,7 @@ DimPlot(seurat_object, reduction = "umap", label = TRUE)
 ## Expressão diferencial
 
 ```{r}
+#| eval: false
 
 # O parametro `max.cells.per.ident` foi acrescentado para otimizar o tempo computacional. Remove-o para analises reais.
 cluster_markers <- FindAllMarkers(seurat_object, max.cells.per.ident = 1000)
@@ -233,6 +235,7 @@ cluster_markers <- FindAllMarkers(seurat_object, max.cells.per.ident = 1000)
 ### Inspecionando DEGs
 
 ```{r}
+#| eval: false
 
 # Removendo resultados nao significativos
 cluster_markers_top <- cluster_markers %>%
@@ -244,15 +247,14 @@ DT::datatable(cluster_markers_top)
 
 ```
 
-
-### Salvando tabela dos DEGs
+## Salvando o objeto anotado
 
 ```{r}
 
-saveRDS(cluster_markers, file = "./data/project_differential.RDS")
+saveRDS(seurat_object, file = "data/seurat_clustered.RDS")
+
 
 ```
-
 
 ## Analise de pureza dos clusters
 
