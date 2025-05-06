@@ -230,6 +230,11 @@ cluster_ids <- as.character(Idents(seurat_object))
 seurat_object$manual_annotation <- as.vector(
   unlist(cluster_annotations[cluster_ids]))
 
+```
+
+```{r}
+#| eval: false
+
 # Visualizar para conferir
 table(seurat_object$manual_annotation)
 
