@@ -26,8 +26,10 @@ website:
             file: material/semana2/04_clustering.qmd
       - text: "Semana 3"
         menu:
-          - text: "Anotação de células"
+          - text: "Anotação de células I"
             file: material/semana3/05_cell_annotation.qmd
+          - text: "Anotação de células II"
+            file: material/semana3/06_cell_annotation.qmd
 
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"

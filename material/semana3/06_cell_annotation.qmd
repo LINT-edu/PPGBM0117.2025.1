@@ -1,0 +1,305 @@
+---
+title: "06 - Anotação de células II"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  cache: false
+jupyter: python3
+---
+
+## Motivação
+
+A anotação de células é uma etapa crítica na análise de dados de transcriptômica de célula única (scRNA-seq). Ela permite transformar clusters não rotulados em informações biológicas significativas, descrevendo tipos celulares e seus estados funcionais. A anotação adequada é essencial para interpretações corretas e para garantir reprodutibilidade e comparabilidade entre estudos.
+
+## Contextualização
+
+O Celltypist é uma ferramenta de aprendizado de máquina para anotação automática de células em dados de transcriptômica de célula única. Ela possui modelos pré-treinados para uma variedade de tecidos e tipos celulares e é especialmente útil para acelerar e padronizar a anotação em estudos grandes ou integrados.
+
+-   [Website](https://www.celltypist.org) 
+-   [Documentação](https://celltypist.readthedocs.io) 
+
+## Convertendo para AnnData
+
+**O código abaixo deve ser executado no R. Note que, ao longo deste tutorial, transitaremos entre linguagens de programação.**
+
+```{python}
+#| eval: false
+
+# Carregar pacotes
+library(Seurat)
+library(sceasy)
+
+# Definindo diretorio padrao
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+# Aumentar o limite de uso de memoria
+options(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo
+
+```
+
+```{python}
+#| eval: false
+  
+# Carregue seu objeto Seurat
+seurat_object <- readRDS(file = here::here("data/seurat_clustered.RDS"))
+seurat_object@assays$RNA5 <- seurat_object@assays$RNA
+
+seurat_object[["RNA"]] <- as(
+  object = seurat_object[["RNA5"]], Class = "Assay")
+
+# Converta para AnnData
+sceasy::convertFormat(
+  seurat_object, 
+  from = "seurat", 
+  to = "anndata",
+  outFile = here::here("data/seurat_clustered.h5ad")
+  )
+
+```
+
+::: {.callout-note collapse="false"}
+Neste bloco, o objeto Seurat é carregado e preparado para conversão. A função sceasy::convertFormat transforma o objeto em formato AnnData (.h5ad), compatível com análises em Python.
+:::
+
+## Preparando ambiente Python
+
+Antes de iniciarmos a anotação automática com o Celltypist, é necessário preparar o ambiente Python com os pacotes apropriados para análise de dados de célula única. Nesta etapa, carregaremos:
+
+-   **scanpy**: biblioteca central para manipulação de dados no formato AnnData e realização de análises comuns em scRNA-seq.
+-   **celltypist**: ferramenta especializada para anotação automática de células baseada em modelos pré-treinados.
+-   **celltypist.models**: submódulo utilizado para carregar modelos específicos para diferentes tipos celulares.
+
+Esses pacotes garantirão que tenhamos todas as funcionalidades necessárias para ler o arquivo `.h5ad`, realizar a anotação e explorar os resultados.
+
+```{python}
+
+# A partir desse ponto o Quarto ira migrar para o kernel do Python
+import scanpy as sc
+import celltypist
+from celltypist import models
+
+```
+
+## Carregando objeto recém-convertido
+
+```{python}
+
+adata = sc.read_h5ad("/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/seurat_clustered.h5ad")
+
+```
+
+## Baixando modelos
+
+```{python}
+#| eval: false
+
+# Instala os modelos disponiveis pelo Celltypist
+models.download_models(force_update = True)
+
+```
+
+::: {.callout-note collapse="false"}
+A função `models.download_models` permite baixar modelos pré-treinados diretamente do repositório oficial do Celltypist. Estes modelos contêm informações sobre assinaturas de expressão gênica associadas a diferentes tipos celulares. É importante escolher o modelo apropriado para o seu tecido ou organismo de interesse, pois isso impactará a precisão da anotação.
+:::
+
+A seguir vamos utilizar a função `models.models_description`, a qual lista todos os modelos disponíveis no Celltypist, permitindo ao usuário explorar e selecionar o mais adequado para o seu estudo.
+
+```{python}
+
+models.models_description()
+
+```
+
+```{python}
+
+model = models.Model.load(model = 'Immune_All_High.pkl')
+
+```
+
+::: {.callout-note collapse="false"}
+A função `models.Model.load` carrega o modelo pré-treinado escolhido (neste caso, "Immune_All_High.pkl") para ser utilizado na anotação. Este modelo contém as assinaturas de expressão gênica necessárias para classificar as células em tipos celulares específicos com base no seu perfil de expressão. O modelo **Immune_All_High** foi treinado com dados de populações imunes combinadas de **20 tecidos de 18 estudos distintos**, o que o torna adequado para anotações em datasets diversos relacionados ao sistema imune.
+
+Mais informações sobre os modelos disponíveis podem ser encontradas em [Celltypist Models](https://www.celltypist.org/models).
+:::
+
+```{python}
+
+model.cell_types
+
+```
+
+## Executando predição
+
+```{python}
+
+predictions = celltypist.annotate(adata, model = 'Immune_All_High.pkl', majority_voting = True)
+
+```
+
+::: {.callout-note collapse="false"}
+A função `celltypist.annotate` executa a predição automática dos tipos celulares com base no modelo carregado. Neste caso, o modelo `"Immune_All_High.pkl"` será utilizado para classificar as células do objeto `adata`.\
+O argumento `majority_voting=True` assegura que as previsões sejam refinadas por meio de um método de votação majoritária, tornando a anotação por célula mais robusta e reduzindo possíveis classificações ambíguas.
+
+Após a anotação, o resultado é armazenado no objeto `predictions`. Para facilitar a manipulação e integração com outras análises, a função `to_adata()` é utilizada para converter essas predições em um objeto `AnnData`, armazenado na variável `predictions_data`.
+:::
+
+```{python}
+
+predictions_data = predictions.to_adata()
+
+```
+
+## Adicionando dados ao objeto original
+
+```{python}
+
+adata.obs["celltypist_cell_label"] = predictions_data.obs.loc[adata.obs.index, "majority_voting"]
+adata.obs["celltypist_conf_score"] = predictions_data.obs.loc[adata.obs.index, "conf_score"]
+
+```
+
+## Visualizando UMAP
+
+```{python}
+#| label: fig-umap-high
+#| fig-cap: 'Celltypist High annotation'
+#| fig-subcap:
+#|  - Low granularity
+#|  - Prediction score
+#| fig-cap-location: top
+
+sc.pl.umap(
+    adata,
+    color = ["celltypist_cell_label"],
+    frameon = False,
+    sort_order = False,
+    wspace = 1
+)
+
+sc.pl.umap(
+    adata,
+    color = ["celltypist_conf_score"],
+    frameon = False,
+    sort_order = False,
+    wspace = 1
+)
+
+```
+
+## Similaridade entre populações
+
+```{python}
+#| label: fig-dendrogram
+#| fig-cap: 'Dendrogram'
+
+sc.pl.dendrogram(adata, groupby = "celltypist_cell_label")
+
+```
+
+::: {.callout-note collapse="false"}
+A função `sc.pl.dendrogram` é utilizada para visualizar a relação hierárquica entre os grupos de células anotados. No exemplo acima, o argumento `groupby = "celltypist_cell_label"` especifica que as células serão agrupadas com base nas anotações feitas pelo Celltypist.Este gráfico permite observar como os diferentes tipos celulares anotados se relacionam entre si com base no perfil de expressão gênica global. Células com assinaturas semelhantes tendem a se agrupar mais próximas no dendrograma, enquanto células com perfis distintos aparecem mais afastadas.
+
+Esta abordagem é útil para verificar se as anotações refletem a biologia esperada, identificando possíveis classificações inconsistentes ou agrupamentos inesperados entre os tipos celulares.
+:::
+
+## Expressão das assinaturas gênicas
+
+```{python}
+
+top_genes = dict()
+
+for cell_type in adata.obs["celltypist_cell_label"].unique():
+    markers = list(model.extract_top_markers(cell_type, 3))
+    for gene in markers:
+        if gene in list(adata.var_names):
+            top_genes.setdefault(cell_type, []).append(gene)
+
+```
+
+```{python}
+
+all_markers = [item for sublist in top_genes.values() for item in sublist]
+
+```
+
+```{python}
+#| code-fold: true
+
+for cell, genes in top_genes.items():
+    sc.tl.score_genes(adata, gene_list=genes, score_name=cell)
+
+```
+
+::: {.callout-note collapse="false"}
+A função `sc.tl.score_genes` calcula um escore que resume a expressão de uma assinatura gênica específica em cada célula. Biologicamente, isso é importante para avaliar se os marcadores coletivamente delimitam a identidade das células e/ou seus estados funcionais. Dessa forma, o escore facilita a visualização e interpretação, pois atribui um valor contínuo único que reflete a expressão da assinatura em cada célula.
+:::
+
+```{python}
+#| label: fig-violin-module
+#| fig-cap: 'Celltypist Gene Signature'
+#| fig-show: hold
+#| warning: false
+
+# Plot each gene score in a subplot
+for cell, genes in top_genes.items():
+    if cell in adata.obs.columns:
+        sc.pl.violin(adata, keys=cell, groupby="RNA_snn_res.0.25", rotation=90)
+
+```
+
+## Expressão diferencial
+
+```{python}
+
+sc.tl.rank_genes_groups(
+    adata,
+    groupby = "celltypist_cell_label",
+    method = "wilcoxon",
+    key_added = "dea_cell_label"
+    )
+
+```
+
+```{python}
+#| label: fig-dotplot
+#| fig-cap: 'DotPlot'
+#| column: screen-inset-shaded
+
+sc.pl.rank_genes_groups_dotplot(
+    adata,
+    groupby = "celltypist_cell_label",
+    standard_scale = "var",
+    n_genes = 5,
+    key = "dea_cell_label"
+    )
+
+```
+
+::: {.callout-note collapse="false"}
+O comando `sc.pl.rank_genes_groups_dotplot` gera um gráfico do tipo dotplot que visualiza os genes diferencialmente expressos entre os grupos definidos pela anotação do Celltypist (`groupby = "celltypist_cell_label"`). No eixo y do gráfico são mostrados os grupos celulares anotados e no eixo x os genes diferencialmente expressos. Para cada grupo, são exibidos até **5 genes** mais representativos (`n_genes = 5`), definidos pela análise armazenada na chave `"dea_cell_label"` do objeto AnnData. O argumento `standard_scale = "var"` padroniza os valores de expressão dos genes, garantindo que eles sejam comparáveis entre si. Isso é útil para destacar padrões relativos de expressão, independentemente das diferenças absolutas de abundância.
+
+No dotplot, cada ponto indica:
+
+-   **O tamanho**: a fração de células do grupo que expressa o gene.
+
+-   **A cor**: o nível médio de expressão do gene naquele grupo.
+
+Este tipo de visualização é essencial para validar se as anotações dos tipos celulares fazem sentido com base nos genes marcadores expressos e para identificar assinaturas gênicas características ou únicas de cada população celular.
+:::
+
+## Salvando anotação
+
+```{python}
+
+# Selecionar colunas de anotação que serão salvas
+annotations = adata.obs[["celltypist_cell_label", "celltypist_conf_score"]]
+
+# Salvar como CSV
+annotations.to_csv("/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/celltypist_annotations.csv")
+
+```

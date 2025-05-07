@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>06 - Anotação de células II – Treinamento em análise de célula única</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-859d446df91ed362524820d8142de709.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Treinamento em análise de célula única</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Início</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Sobre</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Semana 1</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-1">    
+        <li>
+    <a class="dropdown-item" href="../../material/semana1/01_data_collection.html">
+ <span class="dropdown-text">Coleta de Dados</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../material/semana1/02_alignment.html">
+ <span class="dropdown-text">Alinhamento</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-2" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Semana 2</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-2">    
+        <li>
+    <a class="dropdown-item" href="../../material/semana2/03_quality_control.html">
+ <span class="dropdown-text">Controle de qualidade</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../material/semana2/04_clustering.html">
+ <span class="dropdown-text">Clusterização</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Semana 3</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-3">    
+        <li>
+    <a class="dropdown-item" href="../../material/semana3/05_cell_annotation.html">
+ <span class="dropdown-text">Anotação de células I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../material/semana3/06_cell_annotation.html">
+ <span class="dropdown-text">Anotação de células II</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#motivação" id="toc-motivação" class="nav-link active" data-scroll-target="#motivação">Motivação</a></li>
+  <li><a href="#contextualização" id="toc-contextualização" class="nav-link" data-scroll-target="#contextualização">Contextualização</a></li>
+  <li><a href="#convertendo-para-anndata" id="toc-convertendo-para-anndata" class="nav-link" data-scroll-target="#convertendo-para-anndata">Convertendo para AnnData</a></li>
+  <li><a href="#preparando-ambiente-python" id="toc-preparando-ambiente-python" class="nav-link" data-scroll-target="#preparando-ambiente-python">Preparando ambiente Python</a></li>
+  <li><a href="#carregando-objeto-recém-convertido" id="toc-carregando-objeto-recém-convertido" class="nav-link" data-scroll-target="#carregando-objeto-recém-convertido">Carregando objeto recém-convertido</a></li>
+  <li><a href="#baixando-modelos" id="toc-baixando-modelos" class="nav-link" data-scroll-target="#baixando-modelos">Baixando modelos</a></li>
+  <li><a href="#executando-predição" id="toc-executando-predição" class="nav-link" data-scroll-target="#executando-predição">Executando predição</a></li>
+  <li><a href="#adicionando-dados-ao-objeto-original" id="toc-adicionando-dados-ao-objeto-original" class="nav-link" data-scroll-target="#adicionando-dados-ao-objeto-original">Adicionando dados ao objeto original</a></li>
+  <li><a href="#visualizando-umap" id="toc-visualizando-umap" class="nav-link" data-scroll-target="#visualizando-umap">Visualizando UMAP</a></li>
+  <li><a href="#similaridade-entre-populações" id="toc-similaridade-entre-populações" class="nav-link" data-scroll-target="#similaridade-entre-populações">Similaridade entre populações</a></li>
+  <li><a href="#expressão-das-assinaturas-gênicas" id="toc-expressão-das-assinaturas-gênicas" class="nav-link" data-scroll-target="#expressão-das-assinaturas-gênicas">Expressão das assinaturas gênicas</a></li>
+  <li><a href="#expressão-diferencial" id="toc-expressão-diferencial" class="nav-link" data-scroll-target="#expressão-diferencial">Expressão diferencial</a></li>
+  <li><a href="#salvando-anotação" id="toc-salvando-anotação" class="nav-link" data-scroll-target="#salvando-anotação">Salvando anotação</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">06 - Anotação de células II</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="motivação" class="level2">
+<h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
+<p>A anotação de células é uma etapa crítica na análise de dados de transcriptômica de célula única (scRNA-seq). Ela permite transformar clusters não rotulados em informações biológicas significativas, descrevendo tipos celulares e seus estados funcionais. A anotação adequada é essencial para interpretações corretas e para garantir reprodutibilidade e comparabilidade entre estudos.</p>
+</section>
+<section id="contextualização" class="level2">
+<h2 class="anchored" data-anchor-id="contextualização">Contextualização</h2>
+<p>O Celltypist é uma ferramenta de aprendizado de máquina para anotação automática de células em dados de transcriptômica de célula única. Ela possui modelos pré-treinados para uma variedade de tecidos e tipos celulares e é especialmente útil para acelerar e padronizar a anotação em estudos grandes ou integrados.</p>
+<ul>
+<li><a href="https://www.celltypist.org">Website</a></li>
+<li><a href="https://celltypist.readthedocs.io">Documentação</a></li>
+</ul>
+</section>
+<section id="convertendo-para-anndata" class="level2">
+<h2 class="anchored" data-anchor-id="convertendo-para-anndata">Convertendo para AnnData</h2>
+<p><strong>O código abaixo deve ser executado no R. Note que, ao longo deste tutorial, transitaremos entre linguagens de programação.</strong></p>
+<div id="6fac368f" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregar pacotes</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>library(Seurat)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>library(sceasy)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo diretorio padrao</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>knitr::opts_knit$set(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  root.<span class="bu">dir</span> <span class="op">=</span> <span class="st">"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  verbose <span class="op">=</span> FALSE</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Aumentar o limite de uso de memoria</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>options(future.<span class="bu">globals</span>.maxSize <span class="op">=</span> <span class="dv">5</span> <span class="op">*</span> <span class="dv">1024</span><span class="op">^</span><span class="dv">3</span>) <span class="co"># 5 GB, por exemplo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="662ca1c0" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregue seu objeto Seurat</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="op">&lt;-</span> readRDS(<span class="bu">file</span> <span class="op">=</span> here::here(<span class="st">"data/seurat_clustered.RDS"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>seurat_object<span class="op">@</span>assays$RNA5 <span class="op">&lt;-</span> seurat_object<span class="op">@</span>assays$RNA</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>seurat_object[[<span class="st">"RNA"</span>]] <span class="op">&lt;-</span> <span class="im">as</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="bu">object</span> <span class="op">=</span> seurat_object[[<span class="st">"RNA5"</span>]], Class <span class="op">=</span> <span class="st">"Assay"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Converta para AnnData</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>sceasy::convertFormat(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  seurat_object, </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="im">from</span> <span class="op">=</span> <span class="st">"seurat"</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  to <span class="op">=</span> <span class="st">"anndata"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  outFile <span class="op">=</span> here::here(<span class="st">"data/seurat_clustered.h5ad"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Neste bloco, o objeto Seurat é carregado e preparado para conversão. A função sceasy::convertFormat transforma o objeto em formato AnnData (.h5ad), compatível com análises em Python.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="preparando-ambiente-python" class="level2">
+<h2 class="anchored" data-anchor-id="preparando-ambiente-python">Preparando ambiente Python</h2>
+<p>Antes de iniciarmos a anotação automática com o Celltypist, é necessário preparar o ambiente Python com os pacotes apropriados para análise de dados de célula única. Nesta etapa, carregaremos:</p>
+<ul>
+<li><strong>scanpy</strong>: biblioteca central para manipulação de dados no formato AnnData e realização de análises comuns em scRNA-seq.</li>
+<li><strong>celltypist</strong>: ferramenta especializada para anotação automática de células baseada em modelos pré-treinados.</li>
+<li><strong>celltypist.models</strong>: submódulo utilizado para carregar modelos específicos para diferentes tipos celulares.</li>
+</ul>
+<p>Esses pacotes garantirão que tenhamos todas as funcionalidades necessárias para ler o arquivo <code>.h5ad</code>, realizar a anotação e explorar os resultados.</p>
+<div id="c428291f" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A partir desse ponto o Quarto ira migrar para o kernel do Python</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scanpy <span class="im">as</span> sc</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> celltypist</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> celltypist <span class="im">import</span> models</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="carregando-objeto-recém-convertido" class="level2">
+<h2 class="anchored" data-anchor-id="carregando-objeto-recém-convertido">Carregando objeto recém-convertido</h2>
+<div id="d26f8f52" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>adata <span class="op">=</span> sc.read_h5ad(<span class="st">"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/seurat_clustered.h5ad"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="baixando-modelos" class="level2">
+<h2 class="anchored" data-anchor-id="baixando-modelos">Baixando modelos</h2>
+<div id="f931be6c" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Instala os modelos disponiveis pelo Celltypist</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>models.download_models(force_update <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A função <code>models.download_models</code> permite baixar modelos pré-treinados diretamente do repositório oficial do Celltypist. Estes modelos contêm informações sobre assinaturas de expressão gênica associadas a diferentes tipos celulares. É importante escolher o modelo apropriado para o seu tecido ou organismo de interesse, pois isso impactará a precisão da anotação.</p>
+</div>
+</div>
+</div>
+<p>A seguir vamos utilizar a função <code>models.models_description</code>, a qual lista todos os modelos disponíveis no Celltypist, permitindo ao usuário explorar e selecionar o mais adequado para o seu estudo.</p>
+<div id="93fa635d" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>models.models_description()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>👉 Detailed model information can be found at `https://www.celltypist.org/models`</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="71">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">model</th>
+<th data-quarto-table-cell-role="th">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Immune_All_Low.pkl</td>
+<td>immune sub-populations combined from 20 tissue...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Immune_All_High.pkl</td>
+<td>immune populations combined from 20 tissues of...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Adult_COVID19_PBMC.pkl</td>
+<td>peripheral blood mononuclear cell types from C...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Adult_CynomolgusMacaque_Hippocampus.pkl</td>
+<td>cell types from the hippocampus of adult cynom...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Adult_Human_MTG.pkl</td>
+<td>cell types and subtypes (10x-based) from the a...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Adult_Human_PancreaticIslet.pkl</td>
+<td>cell types from pancreatic islets of healthy a...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Adult_Human_PrefrontalCortex.pkl</td>
+<td>cell types and subtypes from the adult human d...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Adult_Human_Skin.pkl</td>
+<td>cell types from human healthy adult skin</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Adult_Human_Vascular.pkl</td>
+<td>vascular populations combined from multiple ad...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>Adult_Mouse_Gut.pkl</td>
+<td>cell types in the adult mouse gut combined fro...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Adult_Mouse_OlfactoryBulb.pkl</td>
+<td>cell types from the olfactory bulb of adult mice</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Adult_Pig_Hippocampus.pkl</td>
+<td>cell types from the adult pig hippocampus</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Adult_RhesusMacaque_Hippocampus.pkl</td>
+<td>cell types from the hippocampus of adult rhesu...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">13</td>
+<td>Autopsy_COVID19_Lung.pkl</td>
+<td>cell types from the lungs of 16 SARS-CoV-2 inf...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">14</td>
+<td>COVID19_HumanChallenge_Blood.pkl</td>
+<td>detailed blood cell states from 16 individuals...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">15</td>
+<td>COVID19_Immune_Landscape.pkl</td>
+<td>immune subtypes from lung and blood of COVID-1...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16</td>
+<td>Cells_Adult_Breast.pkl</td>
+<td>cell types from the adult human breast</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17</td>
+<td>Cells_Fetal_Lung.pkl</td>
+<td>cell types from human embryonic and fetal lungs</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">18</td>
+<td>Cells_Human_Tonsil.pkl</td>
+<td>tonsillar cell types from humans (3-65 years)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">19</td>
+<td>Cells_Intestinal_Tract.pkl</td>
+<td>intestinal cells from fetal, pediatric (health...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20</td>
+<td>Cells_Lung_Airway.pkl</td>
+<td>cell populations from scRNA-seq of five locati...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">21</td>
+<td>Developing_Human_Brain.pkl</td>
+<td>cell types from the first-trimester developing...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">22</td>
+<td>Developing_Human_Gonads.pkl</td>
+<td>cell types of human gonadal and adjacent extra...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>Developing_Human_Hippocampus.pkl</td>
+<td>cell types from the developing human hippocampus</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">24</td>
+<td>Developing_Human_Organs.pkl</td>
+<td>cell types of five endoderm-derived organs in ...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">25</td>
+<td>Developing_Human_Thymus.pkl</td>
+<td>cell populations in embryonic, fetal, pediatri...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">26</td>
+<td>Developing_Mouse_Brain.pkl</td>
+<td>cell types from the embryonic mouse brain betw...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">27</td>
+<td>Developing_Mouse_Hippocampus.pkl</td>
+<td>cell types from the mouse hippocampus at postn...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">28</td>
+<td>Fetal_Human_AdrenalGlands.pkl</td>
+<td>cell types of human fetal adrenal glands from ...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">29</td>
+<td>Fetal_Human_Pancreas.pkl</td>
+<td>pancreatic cell types from human embryos at 9-...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">30</td>
+<td>Fetal_Human_Pituitary.pkl</td>
+<td>cell types of human fetal pituitaries from 7 t...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">31</td>
+<td>Fetal_Human_Retina.pkl</td>
+<td>cell types from human fetal neural retina and ...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">32</td>
+<td>Fetal_Human_Skin.pkl</td>
+<td>cell types from developing human fetal skin</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">33</td>
+<td>Healthy_Adult_Heart.pkl</td>
+<td>cell types from eight anatomical regions of th...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">34</td>
+<td>Healthy_COVID19_PBMC.pkl</td>
+<td>peripheral blood mononuclear cell types from h...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">35</td>
+<td>Healthy_Human_Liver.pkl</td>
+<td>cell types from scRNA-seq and snRNA-seq of the...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">36</td>
+<td>Healthy_Mouse_Liver.pkl</td>
+<td>cell types from scRNA-seq and snRNA-seq of the...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">37</td>
+<td>Human_AdultAged_Hippocampus.pkl</td>
+<td>cell types from the hippocampus of adult and a...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">38</td>
+<td>Human_Colorectal_Cancer.pkl</td>
+<td>cell types of colon tissues from patients with...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">39</td>
+<td>Human_Developmental_Retina.pkl</td>
+<td>cell types from human fetal retina</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">40</td>
+<td>Human_Embryonic_YolkSac.pkl</td>
+<td>cell types of the human yolk sac from 4-8 post...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">41</td>
+<td>Human_Endometrium_Atlas.pkl</td>
+<td>endometrial cell types integrated from seven d...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">42</td>
+<td>Human_IPF_Lung.pkl</td>
+<td>cell types from idiopathic pulmonary fibrosis,...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">43</td>
+<td>Human_Longitudinal_Hippocampus.pkl</td>
+<td>cell types from the adult human anterior and p...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">44</td>
+<td>Human_Lung_Atlas.pkl</td>
+<td>integrated Human Lung Cell Atlas (HLCA) combin...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">45</td>
+<td>Human_PF_Lung.pkl</td>
+<td>cell types from different forms of pulmonary f...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">46</td>
+<td>Human_Placenta_Decidua.pkl</td>
+<td>cell types from first-trimester human placenta...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">47</td>
+<td>Lethal_COVID19_Lung.pkl</td>
+<td>cell types from the lungs of individuals who d...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">48</td>
+<td>Mouse_Dentate_Gyrus.pkl</td>
+<td>cell types from the dentate gyrus in perinatal...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">49</td>
+<td>Mouse_Isocortex_Hippocampus.pkl</td>
+<td>cell types from the adult mouse isocortex (neo...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">50</td>
+<td>Mouse_Postnatal_DentateGyrus.pkl</td>
+<td>cell types from the mouse dentate gyrus in pos...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">51</td>
+<td>Mouse_Whole_Brain.pkl</td>
+<td>cell types from the whole adult mouse brain</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">52</td>
+<td>Nuclei_Lung_Airway.pkl</td>
+<td>cell populations from snRNA-seq of five locati...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">53</td>
+<td>Pan_Fetal_Human.pkl</td>
+<td>stromal and immune populations from the human ...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="5dd7694c" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> models.Model.load(model <span class="op">=</span> <span class="st">'Immune_All_High.pkl'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A função <code>models.Model.load</code> carrega o modelo pré-treinado escolhido (neste caso, “Immune_All_High.pkl”) para ser utilizado na anotação. Este modelo contém as assinaturas de expressão gênica necessárias para classificar as células em tipos celulares específicos com base no seu perfil de expressão. O modelo <strong>Immune_All_High</strong> foi treinado com dados de populações imunes combinadas de <strong>20 tecidos de 18 estudos distintos</strong>, o que o torna adequado para anotações em datasets diversos relacionados ao sistema imune.</p>
+<p>Mais informações sobre os modelos disponíveis podem ser encontradas em <a href="https://www.celltypist.org/models">Celltypist Models</a>.</p>
+</div>
+</div>
+</div>
+<div id="f02ab982" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model.cell_types</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="73">
+<pre><code>array(['B cells', 'B-cell lineage', 'Cycling cells', 'DC', 'DC precursor',
+       'Double-negative thymocytes', 'Double-positive thymocytes', 'ETP',
+       'Early MK', 'Endothelial cells', 'Epithelial cells',
+       'Erythrocytes', 'Erythroid', 'Fibroblasts', 'Granulocytes',
+       'HSC/MPP', 'ILC', 'ILC precursor', 'MNP', 'Macrophages',
+       'Mast cells', 'Megakaryocyte precursor',
+       'Megakaryocytes/platelets', 'Mono-mac', 'Monocyte precursor',
+       'Monocytes', 'Myelocytes', 'Plasma cells', 'Promyelocytes',
+       'T cells', 'pDC', 'pDC precursor'], dtype=object)</code></pre>
+</div>
+</div>
+</section>
+<section id="executando-predição" class="level2">
+<h2 class="anchored" data-anchor-id="executando-predição">Executando predição</h2>
+<div id="6ba850dc" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> celltypist.annotate(adata, model <span class="op">=</span> <span class="st">'Immune_All_High.pkl'</span>, majority_voting <span class="op">=</span> <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>🔬 Input data has 67633 cells and 38606 genes
+🔗 Matching reference genes in the model
+🧬 5824 features used for prediction
+⚖️ Scaling input data
+🖋️ Predicting labels
+✅ Prediction done!
+👀 Can not detect a neighborhood graph, will construct one before the over-clustering
+⛓️ Over-clustering input data with resolution set to 20
+🗳️ Majority voting the predictions
+✅ Majority voting done!</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A função <code>celltypist.annotate</code> executa a predição automática dos tipos celulares com base no modelo carregado. Neste caso, o modelo <code>"Immune_All_High.pkl"</code> será utilizado para classificar as células do objeto <code>adata</code>.<br>
+O argumento <code>majority_voting=True</code> assegura que as previsões sejam refinadas por meio de um método de votação majoritária, tornando a anotação por célula mais robusta e reduzindo possíveis classificações ambíguas.</p>
+<p>Após a anotação, o resultado é armazenado no objeto <code>predictions</code>. Para facilitar a manipulação e integração com outras análises, a função <code>to_adata()</code> é utilizada para converter essas predições em um objeto <code>AnnData</code>, armazenado na variável <code>predictions_data</code>.</p>
+</div>
+</div>
+</div>
+<div id="adc365f8" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>predictions_data <span class="op">=</span> predictions.to_adata()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="adicionando-dados-ao-objeto-original" class="level2">
+<h2 class="anchored" data-anchor-id="adicionando-dados-ao-objeto-original">Adicionando dados ao objeto original</h2>
+<div id="c6b2a51c" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>adata.obs[<span class="st">"celltypist_cell_label"</span>] <span class="op">=</span> predictions_data.obs.loc[adata.obs.index, <span class="st">"majority_voting"</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>adata.obs[<span class="st">"celltypist_conf_score"</span>] <span class="op">=</span> predictions_data.obs.loc[adata.obs.index, <span class="st">"conf_score"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizando-umap" class="level2">
+<h2 class="anchored" data-anchor-id="visualizando-umap">Visualizando UMAP</h2>
+<div class="cell" data-execution_count="12" data-fig-cap-location="top">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sc.pl.umap(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    adata,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> [<span class="st">"celltypist_cell_label"</span>],</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    frameon <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    sort_order <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    wspace <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>sc.pl.umap(</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    adata,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    color <span class="op">=</span> [<span class="st">"celltypist_conf_score"</span>],</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    frameon <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    sort_order <span class="op">=</span> <span class="va">False</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    wspace <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-umap-high" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="12" data-fig-cap-location="top">
+<figure class="quarto-float quarto-float-fig figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-umap-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Celltypist High annotation
+</figcaption>
+<div aria-describedby="fig-umap-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<div id="fig-umap-high-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-umap-high-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-umap-high-output-1.png" class="lightbox" data-gallery="fig-umap-high" title="Figure&nbsp;1&nbsp;(a): Low granularity"><img src="06_cell_annotation_files/figure-html/fig-umap-high-output-1.png" data-ref-parent="fig-umap-high" width="703" height="409" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-umap-high-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Low granularity
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-umap-high-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-umap-high-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-umap-high-output-2.png" class="lightbox" data-gallery="fig-umap-high" title="Figure&nbsp;1&nbsp;(b): Prediction score"><img src="06_cell_annotation_files/figure-html/fig-umap-high-output-2.png" data-ref-parent="fig-umap-high" width="541" height="409" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-umap-high-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Prediction score
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="similaridade-entre-populações" class="level2">
+<h2 class="anchored" data-anchor-id="similaridade-entre-populações">Similaridade entre populações</h2>
+<div id="cell-fig-dendrogram" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sc.pl.dendrogram(adata, groupby <span class="op">=</span> <span class="st">"celltypist_cell_label"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING: dendrogram data not found (using key=dendrogram_celltypist_cell_label). Running `sc.tl.dendrogram` with default parameters. For fine tuning it is recommended to run `sc.tl.dendrogram` independently.</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-dendrogram" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dendrogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-dendrogram-output-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;2: Dendrogram"><img src="06_cell_annotation_files/figure-html/fig-dendrogram-output-2.png" width="540" height="489" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dendrogram-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Dendrogram
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A função <code>sc.pl.dendrogram</code> é utilizada para visualizar a relação hierárquica entre os grupos de células anotados. No exemplo acima, o argumento <code>groupby = "celltypist_cell_label"</code> especifica que as células serão agrupadas com base nas anotações feitas pelo Celltypist.Este gráfico permite observar como os diferentes tipos celulares anotados se relacionam entre si com base no perfil de expressão gênica global. Células com assinaturas semelhantes tendem a se agrupar mais próximas no dendrograma, enquanto células com perfis distintos aparecem mais afastadas.</p>
+<p>Esta abordagem é útil para verificar se as anotações refletem a biologia esperada, identificando possíveis classificações inconsistentes ou agrupamentos inesperados entre os tipos celulares.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="expressão-das-assinaturas-gênicas" class="level2">
+<h2 class="anchored" data-anchor-id="expressão-das-assinaturas-gênicas">Expressão das assinaturas gênicas</h2>
+<div id="dc5ce651" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>top_genes <span class="op">=</span> <span class="bu">dict</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cell_type <span class="kw">in</span> adata.obs[<span class="st">"celltypist_cell_label"</span>].unique():</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    markers <span class="op">=</span> <span class="bu">list</span>(model.extract_top_markers(cell_type, <span class="dv">3</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> gene <span class="kw">in</span> markers:</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> gene <span class="kw">in</span> <span class="bu">list</span>(adata.var_names):</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            top_genes.setdefault(cell_type, []).append(gene)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="94582646" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>all_markers <span class="op">=</span> [item <span class="cf">for</span> sublist <span class="kw">in</span> top_genes.values() <span class="cf">for</span> item <span class="kw">in</span> sublist]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="a8f4fb87" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cell, genes <span class="kw">in</span> top_genes.items():</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    sc.tl.score_genes(adata, gene_list<span class="op">=</span>genes, score_name<span class="op">=</span>cell)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A função <code>sc.tl.score_genes</code> calcula um escore que resume a expressão de uma assinatura gênica específica em cada célula. Biologicamente, isso é importante para avaliar se os marcadores coletivamente delimitam a identidade das células e/ou seus estados funcionais. Dessa forma, o escore facilita a visualização e interpretação, pois atribui um valor contínuo único que reflete a expressão da assinatura em cada célula.</p>
+</div>
+</div>
+</div>
+<div class="cell" data-fig-show="hold" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each gene score in a subplot</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cell, genes <span class="kw">in</span> top_genes.items():</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cell <span class="kw">in</span> adata.obs.columns:</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        sc.pl.violin(adata, keys<span class="op">=</span>cell, groupby<span class="op">=</span><span class="st">"RNA_snn_res.0.25"</span>, rotation<span class="op">=</span><span class="dv">90</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="fig-violin-module" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-show="hold" data-execution_count="17">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-violin-module-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-1.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(a): Celltypist Gene Signature"><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-1.png" data-ref-parent="fig-violin-module" width="663" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Celltypist Gene Signature
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-2" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="663">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-2.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(b): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-2.png" id="fig-violin-module-2" data-ref-parent="fig-violin-module" width="663" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-3" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="663">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-3.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(c): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-3.png" id="fig-violin-module-3" data-ref-parent="fig-violin-module" width="663" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-4" class="quarto-float quarto-figure quarto-figure-center anchored" height="397" width="650">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-4.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(d): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-4.png" id="fig-violin-module-4" data-ref-parent="fig-violin-module" width="650" height="397" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(d)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-5" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="650">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-5.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(e): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-5.png" id="fig-violin-module-5" data-ref-parent="fig-violin-module" width="650" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(e)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-6" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-6.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(f): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-6.png" id="fig-violin-module-6" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(f)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-7" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-7.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(g): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-7.png" id="fig-violin-module-7" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(g)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-8" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="639">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-8.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(h): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-8.png" id="fig-violin-module-8" data-ref-parent="fig-violin-module" width="639" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(h)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-9" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-9.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(i): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-9.png" id="fig-violin-module-9" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(i)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-10" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-10.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(j): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-10.png" id="fig-violin-module-10" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(j)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-11" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-11-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-11.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(k): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-11.png" id="fig-violin-module-11" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-11-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(k)
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-violin-module-12" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="639">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-violin-module-12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="06_cell_annotation_files/figure-html/fig-violin-module-output-12.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(l): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-12.png" id="fig-violin-module-12" data-ref-parent="fig-violin-module" width="639" height="396" class="figure-img"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-violin-module-12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(l)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-violin-module-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="expressão-diferencial" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="expressão-diferencial">Expressão diferencial</h2>
+<div id="e8593493" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sc.tl.rank_genes_groups(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    adata,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    groupby <span class="op">=</span> <span class="st">"celltypist_cell_label"</span>,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    method <span class="op">=</span> <span class="st">"wilcoxon"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    key_added <span class="op">=</span> <span class="st">"dea_cell_label"</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-fig-dotplot" class="cell page-columns page-full" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sc.pl.rank_genes_groups_dotplot(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    adata,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    groupby <span class="op">=</span> <span class="st">"celltypist_cell_label"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    standard_scale <span class="op">=</span> <span class="st">"var"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    n_genes <span class="op">=</span> <span class="dv">5</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    key <span class="op">=</span> <span class="st">"dea_cell_label"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display page-columns page-full">
+<div id="fig-dotplot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full">
+<figure class="quarto-float quarto-float-fig figure page-columns page-full">
+<div aria-describedby="fig-dotplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
+<a href="06_cell_annotation_files/figure-html/fig-dotplot-output-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-16" title="Figure&nbsp;4: DotPlot"><img src="06_cell_annotation_files/figure-html/fig-dotplot-output-1.png" width="1951" height="520" class="figure-img column-screen-inset-shaded"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-dotplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: DotPlot
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>O comando <code>sc.pl.rank_genes_groups_dotplot</code> gera um gráfico do tipo dotplot que visualiza os genes diferencialmente expressos entre os grupos definidos pela anotação do Celltypist (<code>groupby = "celltypist_cell_label"</code>). No eixo y do gráfico são mostrados os grupos celulares anotados e no eixo x os genes diferencialmente expressos. Para cada grupo, são exibidos até <strong>5 genes</strong> mais representativos (<code>n_genes = 5</code>), definidos pela análise armazenada na chave <code>"dea_cell_label"</code> do objeto AnnData. O argumento <code>standard_scale = "var"</code> padroniza os valores de expressão dos genes, garantindo que eles sejam comparáveis entre si. Isso é útil para destacar padrões relativos de expressão, independentemente das diferenças absolutas de abundância.</p>
+<p>No dotplot, cada ponto indica:</p>
+<ul>
+<li><p><strong>O tamanho</strong>: a fração de células do grupo que expressa o gene.</p></li>
+<li><p><strong>A cor</strong>: o nível médio de expressão do gene naquele grupo.</p></li>
+</ul>
+<p>Este tipo de visualização é essencial para validar se as anotações dos tipos celulares fazem sentido com base nos genes marcadores expressos e para identificar assinaturas gênicas características ou únicas de cada população celular.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="salvando-anotação" class="level2">
+<h2 class="anchored" data-anchor-id="salvando-anotação">Salvando anotação</h2>
+<div id="7db035a5" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecionar colunas de anotação que serão salvas</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>annotations <span class="op">=</span> adata.obs[[<span class="st">"celltypist_cell_label"</span>, <span class="st">"celltypist_conf_score"</span>]]</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Salvar como CSV</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>annotations.to_csv(<span class="st">"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/celltypist_annotations.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/lint-edu\.github\.io\/PPGBM0117\.2025\.1");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Feito com ❤️ usando <a href="https://quarto.org">Quarto</a></p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
