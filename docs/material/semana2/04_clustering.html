@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>04 - Redução de dimensionalidade e clusterização – Treinamento em analise de celula unica</title>
+<title>04 - Redução de dimensionalidade e clusterização – Treinamento em análise de célula única</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Treinamento em analise de celula unica</span>
+    <span class="navbar-title">Treinamento em análise de célula única</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -180,7 +180,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-3">    
         <li>
     <a class="dropdown-item" href="../../material/semana3/05_cell_annotation.html">
- <span class="dropdown-text">Anotação de células</span></a>
+ <span class="dropdown-text">Anotação de células I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../material/semana3/06_cell_annotation.html">
+ <span class="dropdown-text">Anotação de células II</span></a>
   </li>  
     </ul>
   </li>
@@ -485,16 +489,16 @@ To use Python UMAP via reticulate, set umap.method to 'umap-learn' and metric to
 This message will be shown once per session</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>21:53:45 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
+<pre><code>10:22:10 UMAP embedding parameters a = 0.9922 b = 1.112</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>21:53:45 Read 67633 rows and found 20 numeric columns</code></pre>
+<pre><code>10:22:10 Read 67633 rows and found 20 numeric columns</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>21:53:45 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
+<pre><code>10:22:10 Using Annoy for neighbor search, n_neighbors = 30</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>21:53:45 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
+<pre><code>10:22:10 Building Annoy index with metric = cosine, n_trees = 50</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>0%   10   20   30   40   50   60   70   80   90   100%</code></pre>
@@ -504,13 +508,13 @@ This message will be shown once per session</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>**************************************************|
-21:53:52 Writing NN index file to temp file /tmp/RtmpENKhNh/file78cc73ce46b0
-21:53:52 Searching Annoy index using 1 thread, search_k = 3000
-21:54:15 Annoy recall = 100%
-21:54:16 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
-21:54:17 Initializing from normalized Laplacian + noise (using RSpectra)
-21:54:35 Commencing optimization for 200 epochs, with 3039738 positive edges
-21:55:05 Optimization finished</code></pre>
+10:22:16 Writing NN index file to temp file /tmp/Rtmp4AJWOy/file117418fdd87b
+10:22:16 Searching Annoy index using 1 thread, search_k = 3000
+10:22:40 Annoy recall = 100%
+10:22:40 Commencing smooth kNN distance calibration using 1 thread with target n_neighbors = 30
+10:22:42 Initializing from normalized Laplacian + noise (using RSpectra)
+10:23:00 Commencing optimization for 200 epochs, with 3039738 positive edges
+10:23:29 Optimization finished</code></pre>
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Por padrao apenas os clusters da ultima resolucao sao apresentados</span></span>
