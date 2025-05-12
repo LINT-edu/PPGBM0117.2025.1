@@ -277,8 +277,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ajustar-ambientar-e-carregar-pacotes" class="level2">
 <h2 class="anchored" data-anchor-id="ajustar-ambientar-e-carregar-pacotes">Ajustar ambientar e carregar pacotes</h2>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregar pacotes</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -298,30 +296,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Aumentar o limite de uso de memoria</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">3</span>) <span class="co"># 10 GB, por exemplo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="carregando-dados-do-projeto" class="level2">
 <h2 class="anchored" data-anchor-id="carregando-dados-do-projeto">Carregando dados do projeto</h2>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregue seu objeto Seurat</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/seurat_multi_technology.RDS"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="pré-processamento" class="level2">
 <h2 class="anchored" data-anchor-id="pré-processamento">Pré-processamento</h2>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>seurat_object[[<span class="st">"RNA"</span>]] <span class="ot">&lt;-</span> <span class="fu">split</span>(seurat_object[[<span class="st">"RNA"</span>]], <span class="at">f =</span> seurat_object<span class="sc">$</span>kit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">NormalizeData</span>(</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  seurat_object, <span class="at">normalization.method =</span> <span class="st">"LogNormalize"</span>, <span class="at">scale.factor =</span> <span class="dv">10000</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -332,11 +321,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  seurat_object, <span class="at">features =</span> <span class="fu">VariableFeatures</span>(seurat_object))</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(seurat_object, <span class="at">npcs =</span> <span class="dv">50</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">FindNeighbors</span>(seurat_object, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">FindClusters</span>(</span>
@@ -344,7 +330,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster.name =</span> <span class="st">"unintegrated_clusters"</span>,</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">resolution =</span> <span class="fl">0.25</span></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 
@@ -358,28 +343,22 @@ Elapsed time: 3 seconds</code></pre>
 </div>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">RunUMAP</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  seurat_object, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">reduction =</span> <span class="st">"pca"</span>, </span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">reduction.name =</span> <span class="st">"umap.unintegrated"</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="visualizando-umap" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="visualizando-umap">Visualizando UMAP</h2>
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar os clusters</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">group.by =</span> <span class="st">"kit"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap-unintegrated" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="768" data-fig-align="center">
+<div id="fig-umap-unintegrated" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="768">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-unintegrated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="07_data_integration_files/figure-html/fig-umap-unintegrated-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="07_data_integration_files/figure-html/fig-umap-unintegrated-1.png" id="fig-umap-unintegrated" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="768"></a>
@@ -399,8 +378,6 @@ Figure&nbsp;1
 <section id="cca" class="level3">
 <h3 class="anchored" data-anchor-id="cca">CCA</h3>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">IntegrateLayers</span>(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> seurat_object, </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> CCAIntegration,</span>
@@ -408,7 +385,6 @@ Figure&nbsp;1
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.reduction =</span> <span class="st">"integrated.cca"</span>,</span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
@@ -430,8 +406,6 @@ Note
 <section id="rpca" class="level3">
 <h3 class="anchored" data-anchor-id="rpca">RPCA</h3>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">IntegrateLayers</span>(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> seurat_object, </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> RPCAIntegration,</span>
@@ -439,14 +413,11 @@ Note
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.reduction =</span> <span class="st">"integrated.rpca"</span>,</span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="harmony" class="level3">
 <h3 class="anchored" data-anchor-id="harmony">Harmony</h3>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">IntegrateLayers</span>(</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> seurat_object, </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> HarmonyIntegration,</span>
@@ -454,14 +425,11 @@ Note
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.reduction =</span> <span class="st">"harmony"</span>,</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="fastmnn" class="level3">
 <h3 class="anchored" data-anchor-id="fastmnn">FastMNN</h3>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">IntegrateLayers</span>(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">object =</span> seurat_object, </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> FastMNNIntegration,</span>
@@ -469,7 +437,6 @@ Note
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">new.reduction =</span> <span class="st">"integrated.mnn"</span>,</span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 </section>
@@ -477,8 +444,6 @@ Note
 <h2 class="anchored" data-anchor-id="pós-processamento-e-clustering">Pós-processamento e clustering</h2>
 <p>Após a integração, aplicamos uma etapa padronizada de pós-processamento para cada método. Isso inclui a construção da matriz de vizinhança, detecção de comunidades (clustering) e projeção UMAP para visualização. Essa abordagem permite comparar diretamente como cada método de integração influencia a estrutura dos dados e a separação entre populações celulares.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vetor com os nomes das reduções geradas por cada método de integração</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>integration_method_vector <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'integrated.cca'</span>, <span class="st">'integrated.rpca'</span>, <span class="st">'harmony'</span>, <span class="st">'integrated.mnn'</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -511,7 +476,6 @@ Note
 <span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
 
@@ -561,8 +525,6 @@ Elapsed time: 1 seconds</code></pre>
 <section id="visualizações-comparativas" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="visualizações-comparativas">Visualizações comparativas</h2>
 <p>Após a aplicação dos diferentes métodos de integração e suas respectivas projeções UMAP, é importante comparar visualmente como cada abordagem organizou as células no espaço latente. A seguir, utilizamos DimPlot para gerar um gráfico UMAP para cada técnica, destacando a distribuição das amostras por batch. Isso permite avaliar qualitativamente o grau de correção do efeito de batch e a preservação da estrutura biológica.</p>
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Lista para armanezar as imagens geradas para cada integração</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>integration_umap <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,11 +550,10 @@ Elapsed time: 1 seconds</code></pre>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>integrated.rpca</span>
 <span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>harmony</span>
 <span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>integrated.mnn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
+<div id="fig-integrated-umap-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-1.png" id="fig-integrated-umap-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -604,7 +565,7 @@ Figure&nbsp;2
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
+<div id="fig-integrated-umap-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-2.png" id="fig-integrated-umap-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -616,7 +577,7 @@ Figure&nbsp;3
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-3" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
+<div id="fig-integrated-umap-3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-3.png" id="fig-integrated-umap-3" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -628,7 +589,7 @@ Figure&nbsp;4
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-4" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
+<div id="fig-integrated-umap-4" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-4.png" id="fig-integrated-umap-4" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -658,14 +619,12 @@ Warning
 </div>
 </div>
 </section>
-<section id="avaliação-com-métricas" class="level2">
+<section id="avaliação-com-métricas" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="avaliação-com-métricas">Avaliação com métricas</h2>
 <p>A inspeção visual por UMAP é uma ferramenta útil, mas insuficiente para avaliar com rigor a qualidade da integração. Para isso, é recomendável aplicar métricas quantitativas que estimem de forma objetiva o balanceamento entre batches e a preservação da estrutura biológica.</p>
 <p>No trecho abaixo, utilizamos a função <code>run_all_metrics()</code>, que executa um conjunto de métricas baseadas nos embeddings gerados por cada método de integração. Essas métricas consideram tanto a capacidade de mistura entre batches (batch mixing) quanto a manutenção de agrupamentos biológicos definidos por anotações celulares e clusters.</p>
 <p>Como complemento opcional, pode-se empregar o teste kBET, que avalia a homogeneidade local de vizinhança entre batches. Apesar de útil, seu uso depende de ajustes específicos e pode ser computacionalmente mais custoso.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data.frame vazio para armazenas as metricas</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>metrics_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -695,11 +654,8 @@ Warning
 <span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>scpop_zscore <span class="ot">&lt;-</span> <span class="fu">calc_sumZscore</span>(</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(integration_method_vector, <span class="cf">function</span>(batch_method) {</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    metrics_df[metrics_df<span class="sc">$</span>run <span class="sc">==</span> batch_method, <span class="dv">2</span><span class="sc">:</span><span class="dv">9</span>]</span>
@@ -708,15 +664,11 @@ Warning
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>metrics_df<span class="sc">$</span>zscore <span class="ot">&lt;-</span> scpop_zscore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
+<div class="cell page-columns page-full">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Explore as metricas</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(metrics_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
+<div class="cell-output-display column-screen-inset-shaded">
 <div class="datatables html-widget html-fill-item" id="htmlwidget-51bbca33135113b055d0" style="width:100%;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-51bbca33135113b055d0">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4"],["integrated.mnn","harmony","integrated.rpca","integrated.cca"],[0.7247691931302062,0.6970376987118977,0.8741011913271709,0.8664242650106361],[0.7521842778335154,0.7302016655628628,0.8208779838662594,0.8106467110791098],[1.526040896706034,1.893480481785342,2.025193594122998,2.007274489631637],[1.096848000580873,1.107119132517484,1.106134726340539,1.109981558768962],[1.048950109345057,1.053596902348044,1.031376207030882,1.031827112662981],[0.0176085550640283,-0.01104376503836495,-0.01868955473475107,-0.01863285977787174],[0.2810464919309717,0.2844268134682653,0.3178547558600563,0.3324072109041926],[0.2629230959656497,0.2511574028327897,0.3408018750163478,0.177859440574773],[-0.6411554616447307,2.091193348049168,-3.722116225047441,2.272078338643102]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>run<\/th>\n      <th>ari_label<\/th>\n      <th>nmi_label<\/th>\n      <th>lisi_batch<\/th>\n      <th>lisi_cell_type<\/th>\n      <th>lisi_clusters<\/th>\n      <th>silWidth_batch<\/th>\n      <th>silWidth_cell_type<\/th>\n      <th>silWidth_clusters<\/th>\n      <th>zscore<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8,9,10]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"run","targets":1},{"name":"ari_label","targets":2},{"name":"nmi_label","targets":3},{"name":"lisi_batch","targets":4},{"name":"lisi_cell_type","targets":5},{"name":"lisi_clusters","targets":6},{"name":"silWidth_batch","targets":7},{"name":"silWidth_cell_type","targets":8},{"name":"silWidth_clusters","targets":9},{"name":"zscore","targets":10}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -725,10 +677,7 @@ Warning
 <section id="salvando-o-objeto-anotado" class="level2">
 <h2 class="anchored" data-anchor-id="salvando-o-objeto-anotado">Salvando o objeto anotado</h2>
 <div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_object, <span class="at">file =</span> <span class="st">'./data/seurat_integrated.RDS'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 
 
