@@ -1,0 +1,477 @@
+---
+title: "07 - Integração de dados"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+execute:
+  cache: false
+---
+
+
+
+
+
+
+## Motivação
+
+A integração de dados de transcriptômica de célula única é crucial para mitigar efeitos de batch e possibilitar análises comparativas robustas entre diferentes amostras, tecnologias ou condições experimentais. Seurat v5 simplifica esse processo com suporte a múltiplos métodos de integração e estrutura moderna baseada em camadas.
+
+## Contextualização
+
+Neste tutorial, exploramos abordagens modernas para **integração de dados scRNA-seq**, com foco em métodos implementados ou compatíveis com o pacote `Seurat` e suas extensões. A integração é fundamental para eliminar variações técnicas (batch effects) e permitir a comparação significativa entre múltiplas amostras ou tecnologias.
+
+Os métodos empregados podem ser classificados da seguinte forma:
+
+-   **Integração baseada em âncoras canônicas (CCA)** – método nativo do Seurat para identificar correspondências entre subespaços compartilhados entre amostras;
+-   **Integração baseada em redução robusta de dimensionalidade (RPCA)** – alternativa mais rápida e conservadora ao CCA;
+-   **Métodos baseado em regressão no espaço latente (Harmony)** – utiliza regressão em espaços latentes para alinhar células de diferentes batches;
+-   **Integração por vizinhos mútuos (MNN)** – implementado via pacote `batchelor`, baseado em correspondência de vizinhos próximos entre datasets;
+-   **Avaliação de batch effect com métricas** – usada para quantificar a eficiência da remoção de efeito de batch sem perda de estrutura biológica.
+
+Este conjunto de ferramentas permite executar pipelines flexíveis, comparar métodos e validar a integração com métricas objetivas.
+
+## Ajustar ambientar e carregar pacotes
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+# Carregar pacotes
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(Seurat)
+library(SeuratWrappers)
+library(harmony)
+library(batchelor)
+library(scPOP)
+library(kBET)
+
+# Definindo diretorio padrao
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+# Aumentar o limite de uso de memoria
+options(future.globals.maxSize = 10 * 1024^3) # 10 GB, por exemplo
+
+```
+
+
+
+
+
+
+## Carregando dados do projeto
+
+
+
+
+
+
+```{r}
+
+# Carregue seu objeto Seurat
+seurat_object <- readRDS(file = here::here("data/seurat_multi_technology.RDS"))
+
+```
+
+
+
+
+
+
+## Pré-processamento
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+seurat_object[["RNA"]] <- split(seurat_object[["RNA"]], f = seurat_object$kit)
+
+```
+
+```{r}
+#| warning: false
+
+seurat_object <- NormalizeData(
+  seurat_object, normalization.method = "LogNormalize", scale.factor = 10000)
+
+seurat_object <- FindVariableFeatures(
+  seurat_object, selection.method = "vst", nfeatures = 2000)
+
+seurat_object <- ScaleData(
+  seurat_object, features = VariableFeatures(seurat_object))
+
+seurat_object <- RunPCA(seurat_object, npcs = 50, verbose = FALSE)
+
+```
+
+```{r}
+#| warning: false
+
+seurat_object <- FindNeighbors(seurat_object, dims = 1:20)
+
+seurat_object <- FindClusters(
+  seurat_object, 
+  cluster.name = "unintegrated_clusters",
+  resolution = 0.25
+  )
+
+```
+
+```{r}
+#| warning: false
+
+seurat_object <- RunUMAP(
+  seurat_object, 
+  dims = 1:20, 
+  reduction = "pca", 
+  reduction.name = "umap.unintegrated"
+  )
+
+```
+
+
+
+
+
+
+## Visualizando UMAP
+
+
+
+
+
+
+```{r}
+#| label: fig-umap-unintegrated
+#| column: screen-inset-shaded
+#| fig-align: center
+#| fig-height: 6
+#| fig-width: 8
+#| layout-nrow: 1
+#| warning: false
+
+# Verificar os clusters
+DimPlot(seurat_object, group.by = "kit")
+
+```
+
+
+
+
+
+
+## Integração com diferentes métodos
+
+Nesta etapa, aplicaremos diferentes estratégias de integração de dados scRNA-seq implementadas no Seurat v5. Serão utilizados métodos representativos de distintas abordagens: modelos lineares (CCA, RPCA), métodos baseados em regressão latente (Harmony) e correspondência de vizinhos mútuos (FastMNN). O objetivo é comparar como cada técnica corrige o efeito de batch ao alinhar células provenientes de diferentes plataformas (Platform).
+
+### CCA
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+seurat_object <- IntegrateLayers(
+  object = seurat_object, 
+  method = CCAIntegration,
+  orig.reduction = "pca", 
+  new.reduction = "integrated.cca",
+  verbose = FALSE
+)
+
+```
+
+
+
+
+
+
+::: {.callout-note collapse="false"}
+A função `IntegrateLayers` do Seurat v5 permite aplicar diferentes estratégias de integração de dados em uma única linha de código. Ela opera sobre uma redução de dimensionalidade inicial (ex: PCA) e retorna uma nova representação integrada, facilitando a comparação entre métodos como CCA, RPCA, Harmony e FastMNN. Essa abordagem é útil para
+:::
+
+### RPCA
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+seurat_object <- IntegrateLayers(
+  object = seurat_object, 
+  method = RPCAIntegration,
+  orig.reduction = "pca", 
+  new.reduction = "integrated.rpca",
+  verbose = FALSE
+)
+
+```
+
+
+
+
+
+
+### Harmony
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+seurat_object <- IntegrateLayers(
+  object = seurat_object, 
+  method = HarmonyIntegration,
+  orig.reduction = "pca", 
+  new.reduction = "harmony",
+  verbose = FALSE
+)
+
+```
+
+
+
+
+
+
+### FastMNN
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+seurat_object <- IntegrateLayers(
+  object = seurat_object, 
+  method = FastMNNIntegration,
+  orig.reduction = "pca", 
+  new.reduction = "integrated.mnn",
+  verbose = FALSE
+)
+
+```
+
+
+
+
+
+
+## Pós-processamento e clustering
+
+Após a integração, aplicamos uma etapa padronizada de pós-processamento para cada método. Isso inclui a construção da matriz de vizinhança, detecção de comunidades (clustering) e projeção UMAP para visualização. Essa abordagem permite comparar diretamente como cada método de integração influencia a estrutura dos dados e a separação entre populações celulares.
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+# Vetor com os nomes das reduções geradas por cada método de integração
+integration_method_vector <- c('integrated.cca', 'integrated.rpca', 'harmony', 'integrated.mnn')
+
+for (batch_method in integration_method_vector) {
+  
+  # Encontrar vizinhos com base na redução integrada
+  seurat_object <- FindNeighbors(
+    object = seurat_object, 
+    reduction = batch_method, 
+    dims = 1:50,
+    graph.name = 'snn_npc_0.25'
+  )
+
+  # Realizar clusterização com base no grafo construído
+  seurat_object <- FindClusters(
+    object = seurat_object,
+    graph.name = 'snn_npc_0.25',
+    cluster.name = paste0(batch_method, '_clusters'),
+    resolution = 0.25
+  )
+  
+  # Gerar redução UMAP a partir do embedding integrado
+  seurat_object <- RunUMAP(
+    object = seurat_object,
+    reduction.key = "umap_",
+    reduction = batch_method, 
+    dims = 1:50,
+    reduction.name = paste0("umap_", batch_method),
+    seed.use = 42
+  )
+  
+}
+
+```
+
+
+
+
+
+
+## Visualizações comparativas
+
+Após a aplicação dos diferentes métodos de integração e suas respectivas projeções UMAP, é importante comparar visualmente como cada abordagem organizou as células no espaço latente. A seguir, utilizamos DimPlot para gerar um gráfico UMAP para cada técnica, destacando a distribuição das amostras por batch. Isso permite avaliar qualitativamente o grau de correção do efeito de batch e a preservação da estrutura biológica.
+
+
+
+
+
+
+```{r}
+#| label: fig-integrated-umap
+#| column: screen-inset-shaded
+#| fig-align: center
+#| fig-height: 6
+#| fig-width: 6
+#| layout-nrow: 1
+#| warning: false
+
+# Lista para armanezar as imagens geradas para cada integração
+integration_umap <- list()
+
+for (batch_method in integration_method_vector) {
+
+  # Armazenar o gráfico UMAP correspondente ao método atual
+  integration_umap[[batch_method]] <- DimPlot(
+      seurat_object, 
+      reduction = paste0("umap_", batch_method),
+      group.by = 'kit',
+      raster = FALSE,
+    ) +
+    labs(title = batch_method) + 
+    theme(
+      legend.position = 'top',
+      legend.justification = 'center'
+    )
+  
+}
+
+# Exibir cada um dos gráficos UMAP integrados individualmente
+integration_umap$integrated.cca
+integration_umap$integrated.rpca
+integration_umap$harmony
+integration_umap$integrated.mnn
+
+```
+
+
+
+
+
+
+::: {.callout-warning collapse="false"}
+Embora as visualizações UMAP sejam úteis para inspeção inicial, elas representam apenas uma projeção bidimensional de dados de alta dimensão. Essa abordagem qualitativa pode induzir a interpretações equivocadas sobre a real separação entre populações celulares ou a eficácia da correção de batch. Por isso, é recomendável complementar essas análises com métricas quantitativas, como kBET, LISI ou ARI, que oferecem avaliações mais robustas da integração.
+:::
+
+## Avaliação com métricas
+
+A inspeção visual por UMAP é uma ferramenta útil, mas insuficiente para avaliar com rigor a qualidade da integração. Para isso, é recomendável aplicar métricas quantitativas que estimem de forma objetiva o balanceamento entre batches e a preservação da estrutura biológica.
+
+No trecho abaixo, utilizamos a função `run_all_metrics()`, que executa um conjunto de métricas baseadas nos embeddings gerados por cada método de integração. Essas métricas consideram tanto a capacidade de mistura entre batches (batch mixing) quanto a manutenção de agrupamentos biológicos definidos por anotações celulares e clusters.
+
+Como complemento opcional, pode-se empregar o teste kBET, que avalia a homogeneidade local de vizinhança entre batches. Apesar de útil, seu uso depende de ajustes específicos e pode ser computacionalmente mais custoso.
+
+
+
+
+
+
+```{r}
+#| warning: false
+
+# Data.frame vazio para armazenas as metricas
+metrics_df <- data.frame()
+
+for (batch_method in integration_method_vector) {
+  
+  # Extrair as coordenadas de embedding do método de integração
+  batch_method_embeddings <- Embeddings(
+    object = seurat_object, 
+    reduction = batch_method
+  )
+  
+  # Calculando métricas a partir do pacote scPOP
+  metrics <- run_all_metrics(
+    reduction = batch_method_embeddings, 
+    metadata = seurat_object@meta.data,
+    batch_key = 'kit',
+    label1_key = 'cell_type',
+    label2_key = paste0(batch_method, '_clusters'),
+    run_name = batch_method
+    )
+  
+  colnames(metrics) <- c("run", "ari_label", "nmi_label", "lisi_batch", "lisi_cell_type", "lisi_clusters", "silWidth_batch", "silWidth_cell_type", "silWidth_clusters")
+    
+  metrics_df <- rbind(
+    metrics,
+    metrics_df
+  )
+
+}
+
+```
+
+```{r}
+
+scpop_zscore <- calc_sumZscore(
+  lapply(integration_method_vector, function(batch_method) {
+    metrics_df[metrics_df$run == batch_method, 2:9]
+  }),
+  'kit'
+)
+
+metrics_df$zscore <- scpop_zscore
+
+```
+
+```{r}
+
+# Explore as metricas
+DT::datatable(metrics_df)
+
+```
+
+
+
+
+
+
+## Salvando o objeto anotado
+
+
+
+
+
+
+```{r}
+
+saveRDS(seurat_object, file = './data/seurat_integrated.RDS')
+
+```
+

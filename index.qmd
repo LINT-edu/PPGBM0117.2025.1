@@ -43,7 +43,7 @@ Este site reúne tutoriais e materiais práticos do curso de análise transcript
 ### Semana 4 — Análises Diferenciais e Integração de Dados
 
 - Métodos de análise diferencial de expressão.
-- Integração de múltiplos datasets com **SCTransform, Harmony**.
+- Integração de múltiplos datasets com **Harmony**.
 - Introdução à integração multimodal: scRNA-seq, scATAC-seq, scTCR-seq.
 - Identificação de assinaturas gênicas associadas a estados celulares.
 - **Aula prática**: Análise diferencial e integração no Seurat.

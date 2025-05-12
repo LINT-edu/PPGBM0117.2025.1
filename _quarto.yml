@@ -30,6 +30,10 @@ website:
             file: material/semana3/05_cell_annotation.qmd
           - text: "Anotação de células II"
             file: material/semana3/06_cell_annotation.qmd
+      - text: "Semana 4"
+        menu:
+          - text: "Integração de dados"
+            file: material/semana4/07_data_integration.qmd
 
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"

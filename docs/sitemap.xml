@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://lint-edu.github.io/PPGBM0117.2025.1/material/semana1/01_data_collection.html</loc>
-    <lastmod>2025-05-05T18:07:28.979Z</lastmod>
+    <lastmod>2025-05-11T19:31:29.985Z</lastmod>
   </url>
   <url>
     <loc>https://lint-edu.github.io/PPGBM0117.2025.1/index.html</loc>
-    <lastmod>2025-04-20T20:09:11.567Z</lastmod>
+    <lastmod>2025-05-11T19:39:45.853Z</lastmod>
   </url>
   <url>
     <loc>https://lint-edu.github.io/PPGBM0117.2025.1/about.html</loc>
@@ -38,10 +38,14 @@
   </url>
   <url>
     <loc>https://lint-edu.github.io/PPGBM0117.2025.1/material/semana3/05_cell_annotation.html</loc>
-    <lastmod>2025-05-06T18:49:38.321Z</lastmod>
+    <lastmod>2025-05-11T18:24:27.274Z</lastmod>
   </url>
   <url>
     <loc>https://lint-edu.github.io/PPGBM0117.2025.1/material/semana3/06_cell_annotation.html</loc>
-    <lastmod>2025-05-07T23:44:05.912Z</lastmod>
+    <lastmod>2025-05-08T18:40:49.262Z</lastmod>
+  </url>
+  <url>
+    <loc>https://lint-edu.github.io/PPGBM0117.2025.1/material/semana4/07_data_integration.html</loc>
+    <lastmod>2025-05-12T02:00:57.809Z</lastmod>
   </url>
 </urlset>

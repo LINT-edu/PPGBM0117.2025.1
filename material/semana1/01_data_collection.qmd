@@ -1,13 +1,12 @@
 ---
 title: "01 - Coleta de dados"
-author: "Andre Fonseca"
 format:
-    html:
-      toc: true
-      toc-depth: 3
-      code-fold: true
-      code-tools: true
-editor: visual
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+execute:
+  cache: false
 ---
 
 ## Motivação

@@ -21,7 +21,7 @@ Após etapas de pré-processamento e clusterização, cada célula ou agrupament
 
 Neste tutorial, mostraremos ambas as abordagens usando o pacote `Seurat` e ferramentas como `SingleR` para anotação automática.
 
-## Carregar dados e pacotes necessários
+## Ajustar ambientar e carregar pacotes
 
 ```{r}
 #| warning: false

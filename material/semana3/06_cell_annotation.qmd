@@ -231,7 +231,8 @@ all_markers = [item for sublist in top_genes.values() for item in sublist]
 #| code-fold: true
 
 for cell, genes in top_genes.items():
-    sc.tl.score_genes(adata, gene_list=genes, score_name=cell)
+  #print(f"{cell} e seus marcadores: {genes}")
+  sc.tl.score_genes(adata, gene_list=genes, score_name=cell)
 
 ```
 
