@@ -60,49 +60,49 @@
     "href": "index.html",
     "title": "Introdução à análise de célula única",
     "section": "",
-    "text": "Este site reúne tutoriais e materiais práticos do curso de análise transcriptômica em célula única (scRNA-seq). Ao longo de 6 semanas, abordaremos conceitos teóricos, ferramentas computacionais e estudos de caso aplicados, com foco em boas práticas e aplicações generalizadas.\n\n\n\n\n\nEvolução da transcriptômica: de bulk RNA-seq a single-cell RNA-seq.\nAplicações e impacto da tecnologia single-cell em diversos contextos biológicos.\nTecnologias e plataformas: 10x Genomics.\nIntrodução ao desenho experimental de projetos de single-cell.\nBases de dados públicas para estudos single-cell.\nDefinição e planejamento do projeto final.\nPré-processamento de dados: do sequenciamento à matriz de contagem.\nAula prática: Uso do Cell Ranger.\n\n\n\n\n\nMétricas de qualidade: porcentagem de genes mitocondriais, número de UMI’s, etc.\nIdentificação e remoção de doublets (scDblFinder).\nNormalização e escalonamento de dados.\nIntrodução ao conceito de ambient RNA e estratégias de mitigação.\nAula prática: Uso de Seurat (R) para QC e filtragem.\nAcompanhamento dos projetos: avaliação da qualidade e primeiros filtros.\n\n\n\n\n\nRedução de dimensionalidade: PCA, t-SNE, UMAP.\nClusterização celular: KNN, Leiden, Louvain.\nAnotação de clusters com bancos públicos.\nIdentificação de subpopulações celulares.\nIntrodução à análise de CNV para detecção de células malignas.\nAula prática: Implementação no Seurat.\nAcompanhamento dos projetos: anotação e clusterização.\n\n\n\n\n\nMétodos de análise diferencial de expressão.\nIntegração de múltiplos datasets com Harmony.\nIntrodução à integração multimodal: scRNA-seq, scATAC-seq, scTCR-seq.\nIdentificação de assinaturas gênicas associadas a estados celulares.\nAula prática: Análise diferencial e integração no Seurat.\nAcompanhamento dos projetos: interpretação de diferenças entre condições.\n\n\n\n\n\nModelagem de pseudotempo com Monocle2.\nAnálise de interações célula-célula com LIANA.\nInferência de estados celulares ao longo de trajetórias.\nAula prática: Trajetórias e comunicação celular.\nAcompanhamento dos projetos: modelagem de diferenciação ou ativação celular.\n\n\n\n\n\nAplicação das análises aprendidas a dados reais.\nInterpretação de resultados e geração de figuras.\nIntegração dos resultados obtidos ao longo do curso.\nApresentação e discussão dos projetos finais.\n\n\n\n\n\n\nAulas expositivas com exemplos reais.\nPráticas semanais com análise de dados reais.\nDesenvolvimento progressivo de um projeto prático.\n\n\n\n\n\nLinguagem: R\n\nPrincipais pacotes: Seurat, scDblFinder, Monocle2, Harmony, LIANA\n\nInfraestrutura: Google Colab, HPC ou AWS (a critério do aluno/grupo)\n\n\n\n\n\n✅ Participação e exercícios práticos — 20%\n\n📄 Relatórios semanais — 30%\n\n📊 Projeto final — 50%\n\n\n\n\n\nLuecken, M.D. & Theis, F.J. (2019). Current best practices in single-cell RNA-seq analysis: a tutorial. Molecular Systems Biology\nStuart, T. et al. (2019). Comprehensive Integration of Single-Cell Data. Cell\nButler, A. et al. (2018). Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology\n\n\n\n\nProfessor: 📩 andrefonseca@ufpa.br"
+    "text": "Este site reúne tutoriais e materiais práticos do curso de análise transcriptômica em célula única (scRNA-seq). Ao longo de 6 semanas, abordaremos conceitos teóricos, ferramentas computacionais e estudos de caso aplicados, com foco em boas práticas e aplicações generalizadas."
   },
   {
     "objectID": "index.html#conteúdo-programático",
     "href": "index.html#conteúdo-programático",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "Evolução da transcriptômica: de bulk RNA-seq a single-cell RNA-seq.\nAplicações e impacto da tecnologia single-cell em diversos contextos biológicos.\nTecnologias e plataformas: 10x Genomics.\nIntrodução ao desenho experimental de projetos de single-cell.\nBases de dados públicas para estudos single-cell.\nDefinição e planejamento do projeto final.\nPré-processamento de dados: do sequenciamento à matriz de contagem.\nAula prática: Uso do Cell Ranger.\n\n\n\n\n\nMétricas de qualidade: porcentagem de genes mitocondriais, número de UMI’s, etc.\nIdentificação e remoção de doublets (scDblFinder).\nNormalização e escalonamento de dados.\nIntrodução ao conceito de ambient RNA e estratégias de mitigação.\nAula prática: Uso de Seurat (R) para QC e filtragem.\nAcompanhamento dos projetos: avaliação da qualidade e primeiros filtros.\n\n\n\n\n\nRedução de dimensionalidade: PCA, t-SNE, UMAP.\nClusterização celular: KNN, Leiden, Louvain.\nAnotação de clusters com bancos públicos.\nIdentificação de subpopulações celulares.\nIntrodução à análise de CNV para detecção de células malignas.\nAula prática: Implementação no Seurat.\nAcompanhamento dos projetos: anotação e clusterização.\n\n\n\n\n\nMétodos de análise diferencial de expressão.\nIntegração de múltiplos datasets com Harmony.\nIntrodução à integração multimodal: scRNA-seq, scATAC-seq, scTCR-seq.\nIdentificação de assinaturas gênicas associadas a estados celulares.\nAula prática: Análise diferencial e integração no Seurat.\nAcompanhamento dos projetos: interpretação de diferenças entre condições.\n\n\n\n\n\nModelagem de pseudotempo com Monocle2.\nAnálise de interações célula-célula com LIANA.\nInferência de estados celulares ao longo de trajetórias.\nAula prática: Trajetórias e comunicação celular.\nAcompanhamento dos projetos: modelagem de diferenciação ou ativação celular.\n\n\n\n\n\nAplicação das análises aprendidas a dados reais.\nInterpretação de resultados e geração de figuras.\nIntegração dos resultados obtidos ao longo do curso.\nApresentação e discussão dos projetos finais."
+    "section": "Conteúdo Programático",
+    "text": "Conteúdo Programático\n\nSemana 1 — Introdução, História, Desenho Experimental e Definição do Projeto\n\nEvolução da transcriptômica: de bulk RNA-seq a single-cell RNA-seq.\nAplicações e impacto da tecnologia single-cell em diversos contextos biológicos.\nTecnologias e plataformas: 10x Genomics.\nIntrodução ao desenho experimental de projetos de single-cell.\nBases de dados públicas para estudos single-cell.\nDefinição e planejamento do projeto final.\nPré-processamento de dados: do sequenciamento à matriz de contagem.\nAula prática: Uso do Cell Ranger.\n\n\n\nSemana 2 — Controle de Qualidade, Filtragem e Ambient RNA\n\nMétricas de qualidade: porcentagem de genes mitocondriais, número de UMI’s, etc.\nIdentificação e remoção de doublets (scDblFinder).\nNormalização e escalonamento de dados.\nIntrodução ao conceito de ambient RNA e estratégias de mitigação.\nAula prática: Uso de Seurat (R) para QC e filtragem.\nAcompanhamento dos projetos: avaliação da qualidade e primeiros filtros.\n\n\n\nSemana 3 — Análise Exploratória, Clusterização e Identificação de Células Malignas\n\nRedução de dimensionalidade: PCA, t-SNE, UMAP.\nClusterização celular: KNN, Leiden, Louvain.\nAnotação de clusters com bancos públicos.\nIdentificação de subpopulações celulares.\nIntrodução à análise de CNV para detecção de células malignas.\nAula prática: Implementação no Seurat.\nAcompanhamento dos projetos: anotação e clusterização.\n\n\n\nSemana 4 — Análises Diferenciais e Integração de Dados\n\nMétodos de análise diferencial de expressão.\nIntegração de múltiplos datasets com Harmony.\nIntrodução à integração multimodal: scRNA-seq, scATAC-seq, scTCR-seq.\nIdentificação de assinaturas gênicas associadas a estados celulares.\nAula prática: Análise diferencial e integração no Seurat.\nAcompanhamento dos projetos: interpretação de diferenças entre condições.\n\n\n\nSemana 5 — Inferência de Trajetórias e Interações Célula-Célula\n\nModelagem de pseudotempo com Monocle2.\nAnálise de interações célula-célula com LIANA.\nInferência de estados celulares ao longo de trajetórias.\nAula prática: Trajetórias e comunicação celular.\nAcompanhamento dos projetos: modelagem de diferenciação ou ativação celular.\n\n\n\nSemana 6 — Projeto Aplicado\n\nAplicação das análises aprendidas a dados reais.\nInterpretação de resultados e geração de figuras.\nIntegração dos resultados obtidos ao longo do curso.\nApresentação e discussão dos projetos finais."
   },
   {
     "objectID": "index.html#metodologia",
     "href": "index.html#metodologia",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "Aulas expositivas com exemplos reais.\nPráticas semanais com análise de dados reais.\nDesenvolvimento progressivo de um projeto prático."
+    "section": "Metodologia",
+    "text": "Metodologia\n\nAulas expositivas com exemplos reais.\nPráticas semanais com análise de dados reais.\nDesenvolvimento progressivo de um projeto prático."
   },
   {
     "objectID": "index.html#ferramentas-e-recursos",
     "href": "index.html#ferramentas-e-recursos",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "Linguagem: R\n\nPrincipais pacotes: Seurat, scDblFinder, Monocle2, Harmony, LIANA\n\nInfraestrutura: Google Colab, HPC ou AWS (a critério do aluno/grupo)"
+    "section": "Ferramentas e Recursos",
+    "text": "Ferramentas e Recursos\n\nLinguagem: R\n\nPrincipais pacotes: Seurat, scDblFinder, Monocle2, Harmony, LIANA\n\nInfraestrutura: Google Colab, HPC ou AWS (a critério do aluno/grupo)"
   },
   {
     "objectID": "index.html#avaliação",
     "href": "index.html#avaliação",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "✅ Participação e exercícios práticos — 20%\n\n📄 Relatórios semanais — 30%\n\n📊 Projeto final — 50%"
+    "section": "Avaliação",
+    "text": "Avaliação\n\n✅ Participação e exercícios práticos — 20%\n\n📄 Relatórios semanais — 30%\n\n📊 Projeto final — 50%"
   },
   {
     "objectID": "index.html#bibliografia-recomendada",
     "href": "index.html#bibliografia-recomendada",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "Luecken, M.D. & Theis, F.J. (2019). Current best practices in single-cell RNA-seq analysis: a tutorial. Molecular Systems Biology\nStuart, T. et al. (2019). Comprehensive Integration of Single-Cell Data. Cell\nButler, A. et al. (2018). Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology"
+    "section": "Bibliografia Recomendada",
+    "text": "Bibliografia Recomendada\n\nLuecken, M.D. & Theis, F.J. (2019). Current best practices in single-cell RNA-seq analysis: a tutorial. Molecular Systems Biology\nStuart, T. et al. (2019). Comprehensive Integration of Single-Cell Data. Cell\nButler, A. et al. (2018). Integrating single-cell transcriptomic data across different conditions, technologies, and species. Nature Biotechnology"
   },
   {
     "objectID": "index.html#contato",
     "href": "index.html#contato",
     "title": "Introdução à análise de célula única",
-    "section": "",
-    "text": "Professor: 📩 andrefonseca@ufpa.br"
+    "section": "Contato",
+    "text": "Contato\nProfessor: 📩 andrefonseca@ufpa.br"
   },
   {
     "objectID": "about.html",

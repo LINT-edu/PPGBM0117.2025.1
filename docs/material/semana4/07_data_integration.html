@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>07 - Integração de dados – Treinamento em análise de célula única</title>
+<title>07 - Integração de dados – SC-COURSE</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Treinamento em análise de célula única</span>
+    <span class="navbar-title">SC-COURSE</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -355,10 +355,10 @@ Elapsed time: 3 seconds</code></pre>
 <h2 class="anchored" data-anchor-id="visualizando-umap">Visualizando UMAP</h2>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar os clusters</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">group.by =</span> <span class="st">"kit"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap-unintegrated" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="768">
+<div id="fig-umap-unintegrated" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="768" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-unintegrated-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="07_data_integration_files/figure-html/fig-umap-unintegrated-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="07_data_integration_files/figure-html/fig-umap-unintegrated-1.png" id="fig-umap-unintegrated" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="768"></a>
@@ -550,10 +550,10 @@ Elapsed time: 1 seconds</code></pre>
 <span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>integrated.rpca</span>
 <span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>harmony</span>
 <span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>integration_umap<span class="sc">$</span>integrated.mnn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
+<div id="fig-integrated-umap-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-1.png" id="fig-integrated-umap-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -565,7 +565,7 @@ Figure&nbsp;2
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
+<div id="fig-integrated-umap-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-2.png" id="fig-integrated-umap-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -577,7 +577,7 @@ Figure&nbsp;3
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-3" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
+<div id="fig-integrated-umap-3" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-3.png" id="fig-integrated-umap-3" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>
@@ -589,7 +589,7 @@ Figure&nbsp;4
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<div id="fig-integrated-umap-4" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="576">
+<div id="fig-integrated-umap-4" class="quarto-float quarto-figure quarto-figure-center anchored" width="576" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-integrated-umap-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="07_data_integration_files/figure-html/fig-integrated-umap-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="07_data_integration_files/figure-html/fig-integrated-umap-4.png" id="fig-integrated-umap-4" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="576"></a>

@@ -4,8 +4,6 @@ format: html
 page-layout: full
 ---
 
-# Curso: Introdução à análise de célula única (scRNA-seq)
-
 Este site reúne tutoriais e materiais práticos do curso de análise transcriptômica em célula única (scRNA-seq). Ao longo de 6 semanas, abordaremos conceitos teóricos, ferramentas computacionais e estudos de caso aplicados, com foco em boas práticas e aplicações generalizadas.
 
 ## Conteúdo Programático
