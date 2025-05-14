@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>04 - Redução de dimensionalidade e clusterização – Treinamento em análise de célula única</title>
+<title>04 - Redução de dimensionalidade e clusterização – SC-COURSE</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -126,7 +126,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">Treinamento em análise de célula única</span>
+    <span class="navbar-title">SC-COURSE</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -185,6 +185,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../material/semana3/06_cell_annotation.html">
  <span class="dropdown-text">Anotação de células II</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-4" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Semana 4</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-4">    
+        <li>
+    <a class="dropdown-item" href="../../material/semana4/07_data_integration.html">
+ <span class="dropdown-text">Integração de dados</span></a>
   </li>  
     </ul>
   </li>
@@ -357,7 +368,7 @@ scale.data</code></pre>
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-elbow" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-elbow" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-elbow-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="04_clustering_files/figure-html/fig-elbow-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="04_clustering_files/figure-html/fig-elbow-1.png" id="fig-elbow" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -392,7 +403,7 @@ Note
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine and visualize PCA results a few different ways</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">VizDimLoadings</span>(seurat_object, <span class="at">dims =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">reduction =</span> <span class="st">"pca"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display page-columns page-full">
-<div id="fig-pc-loadings" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-pc-loadings" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-pc-loadings-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="04_clustering_files/figure-html/fig-pc-loadings-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="04_clustering_files/figure-html/fig-pc-loadings-1.png" id="fig-pc-loadings" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -522,7 +533,7 @@ This message will be shown once per session</code></pre>
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="04_clustering_files/figure-html/fig-umap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="04_clustering_files/figure-html/fig-umap-1.png" id="fig-umap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -612,7 +623,7 @@ Note
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-rogue" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-rogue" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-rogue-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="04_clustering_files/figure-html/fig-rogue-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="04_clustering_files/figure-html/fig-rogue-1.png" id="fig-rogue" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>

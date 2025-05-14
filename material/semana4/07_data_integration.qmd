@@ -1,4 +1,4 @@
----
+ ---
 title: "07 - Integração de dados"
 format:
   html:
@@ -40,7 +40,11 @@ library(SeuratWrappers)
 library(harmony)
 library(batchelor)
 library(scPOP)
-library(kBET)
+
+# remotes::install_github('satijalab/seurat-wrappers')
+# devtools::install_github("immunogenomics/harmony", build_vignettes=TRUE)
+# BiocManager::install("batchelor")
+# devtools::install_github('vinay-swamy/scPOP')
 
 # Definindo diretorio padrao
 knitr::opts_knit$set(
@@ -338,7 +342,6 @@ scpop_zscore <- calc_sumZscore(
 metrics_df$zscore <- scpop_zscore
 
 ```
-
 
 ```{r}
 #| column: screen-inset-shaded

@@ -34,6 +34,8 @@ website:
         menu:
           - text: "Integração de dados"
             file: material/semana4/07_data_integration.qmd
+          - text: "Comunicação célula-célula"
+            file: material/semana4/08_cell_communication.qmd
 
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"

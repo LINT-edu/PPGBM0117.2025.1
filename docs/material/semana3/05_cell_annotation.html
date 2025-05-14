@@ -304,10 +304,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar os clusters</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">group.by =</span> <span class="st">"seurat_clusters"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-umap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="05_cell_annotation_files/figure-html/fig-umap-1.png" id="fig-umap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -425,10 +425,10 @@ Note
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  seurat_object, </span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">features =</span> <span class="fu">c</span>(<span class="st">"CD3D"</span>, <span class="st">"MS4A1"</span>, <span class="st">"LYZ"</span>, <span class="st">"PPBP"</span>, <span class="st">"CD8A"</span>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-feature" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-feature" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-feature-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-feature-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="05_cell_annotation_files/figure-html/fig-feature-1.png" id="fig-feature" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -449,10 +449,10 @@ Figure&nbsp;2
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gerar o Bubbleplot (DotPlot no Seurat)</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">DotPlot</span>(seurat_object, <span class="at">features =</span> genes_to_inspect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-bubbleplot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-bubbleplot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-bubbleplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-bubbleplot-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="05_cell_annotation_files/figure-html/fig-bubbleplot-1.png" id="fig-bubbleplot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -610,10 +610,10 @@ Note
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar anotacao</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">group.by =</span> <span class="st">"manual_annotation"</span>, <span class="at">label =</span> <span class="cn">FALSE</span>, <span class="at">pt.size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-manual-annotation" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-manual-annotation" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-manual-annotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-manual-annotation-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;4: "><img src="05_cell_annotation_files/figure-html/fig-manual-annotation-1.png" id="fig-manual-annotation" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -671,10 +671,10 @@ Note
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizar anotacao automatica</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">group.by =</span> <span class="st">"SingleR"</span>, <span class="at">label =</span> <span class="cn">FALSE</span>, <span class="at">pt.size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-automated-annotation" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-automated-annotation" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-automated-annotation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-automated-annotation-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;5: "><img src="05_cell_annotation_files/figure-html/fig-automated-annotation-1.png" id="fig-automated-annotation" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -693,17 +693,17 @@ Figure&nbsp;5
 <p>Este gráfico mostra os scores de similaridade entre cada célula do conjunto de teste e os tipos celulares da referência. Ele ajuda a identificar células com atribuições ambíguas ou múltiplas similaridades.</p>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gerar heatmap dos scores de atribuicao</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotScoreHeatmap</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-align="center" data-layout-nrow="1">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 
 </div>
 <p>Outro diagnóstico é baseado nos “deltas” por célula, ou seja, a diferença entre a pontuação do rótulo atribuído e a mediana em todos os rótulos para cada célula. Deltas baixos indicam que a atribuição é incerta, o que é especialmente relevante se o rótulo verdadeiro da célula não existir na referência. Podemos inspecionar esses deltas entre as células para cada rótulo usando a função <code>plotDeltaDistribution()</code>.</p>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gerar distribuicao dos deltas</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plotDeltaDistribution</span>(pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-align="center" data-layout-nrow="1">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotMarkerHeatmap</span>(pred, sce, <span class="at">label =</span> <span class="st">"NK_cell"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-align="center" data-layout-nrow="1">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 
 </div>
 </section>
@@ -719,10 +719,10 @@ Figure&nbsp;5
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>p1</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-align="center" data-layout-nrow="1">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-umap-annotation-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-umap-annotation-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-umap-annotation-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="05_cell_annotation_files/figure-html/fig-umap-annotation-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="Figure&nbsp;6: "><img src="05_cell_annotation_files/figure-html/fig-umap-annotation-1.png" id="fig-umap-annotation-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672"></a>
@@ -734,7 +734,7 @@ Figure&nbsp;6
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-umap-annotation-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-umap-annotation-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-umap-annotation-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="05_cell_annotation_files/figure-html/fig-umap-annotation-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="Figure&nbsp;7: "><img src="05_cell_annotation_files/figure-html/fig-umap-annotation-2.png" id="fig-umap-annotation-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672"></a>
@@ -767,10 +767,10 @@ Figure&nbsp;7
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cluster_cols =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">colorRampPalette</span>(<span class="fu">c</span>(<span class="st">"white"</span>, <span class="st">"steelblue"</span>))(<span class="dv">100</span>)</span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-confusion-matrix" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-confusion-matrix-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="05_cell_annotation_files/figure-html/fig-confusion-matrix-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-8" title="Figure&nbsp;8: "><img src="05_cell_annotation_files/figure-html/fig-confusion-matrix-1.png" id="fig-confusion-matrix" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>

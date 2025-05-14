@@ -1,0 +1,501 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"06 - Anotação de células II\"\n",
+        "format:\n",
+        "  html:\n",
+        "    toc: true\n",
+        "    toc-depth: 3\n",
+        "execute:\n",
+        "  cache: false\n",
+        "jupyter: python3\n",
+        "---\n",
+        "\n",
+        "\n",
+        "## Motivação\n",
+        "\n",
+        "A anotação de células é uma etapa crítica na análise de dados de transcriptômica de célula única (scRNA-seq). Ela permite transformar clusters não rotulados em informações biológicas significativas, descrevendo tipos celulares e seus estados funcionais. A anotação adequada é essencial para interpretações corretas e para garantir reprodutibilidade e comparabilidade entre estudos.\n",
+        "\n",
+        "## Contextualização\n",
+        "\n",
+        "O Celltypist é uma ferramenta de aprendizado de máquina para anotação automática de células em dados de transcriptômica de célula única. Ela possui modelos pré-treinados para uma variedade de tecidos e tipos celulares e é especialmente útil para acelerar e padronizar a anotação em estudos grandes ou integrados.\n",
+        "\n",
+        "-   [Website](https://www.celltypist.org) \n",
+        "-   [Documentação](https://celltypist.readthedocs.io) \n",
+        "\n",
+        "## Convertendo para AnnData\n",
+        "\n",
+        "**O código abaixo deve ser executado no R. Note que, ao longo deste tutorial, transitaremos entre linguagens de programação.**\n"
+      ],
+      "id": "3b1f3ff7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "\n",
+        "# Carregar pacotes\n",
+        "library(Seurat)\n",
+        "library(sceasy)\n",
+        "\n",
+        "# Definindo diretorio padrao\n",
+        "knitr::opts_knit$set(\n",
+        "  root.dir = \"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1\",\n",
+        "  verbose = FALSE\n",
+        ")\n",
+        "\n",
+        "# Aumentar o limite de uso de memoria\n",
+        "options(future.globals.maxSize = 5 * 1024^3) # 5 GB, por exemplo"
+      ],
+      "id": "06bc7e1b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "  \n",
+        "# Carregue seu objeto Seurat\n",
+        "seurat_object <- readRDS(file = here::here(\"data/seurat_clustered.RDS\"))\n",
+        "seurat_object@assays$RNA5 <- seurat_object@assays$RNA\n",
+        "\n",
+        "seurat_object[[\"RNA\"]] <- as(\n",
+        "  object = seurat_object[[\"RNA5\"]], Class = \"Assay\")\n",
+        "\n",
+        "# Converta para AnnData\n",
+        "sceasy::convertFormat(\n",
+        "  seurat_object, \n",
+        "  from = \"seurat\", \n",
+        "  to = \"anndata\",\n",
+        "  outFile = here::here(\"data/seurat_clustered.h5ad\")\n",
+        "  )"
+      ],
+      "id": "c50f5663",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "Neste bloco, o objeto Seurat é carregado e preparado para conversão. A função sceasy::convertFormat transforma o objeto em formato AnnData (.h5ad), compatível com análises em Python.\n",
+        ":::\n",
+        "\n",
+        "## Preparando ambiente Python\n",
+        "\n",
+        "Antes de iniciarmos a anotação automática com o Celltypist, é necessário preparar o ambiente Python com os pacotes apropriados para análise de dados de célula única. Nesta etapa, carregaremos:\n",
+        "\n",
+        "-   **scanpy**: biblioteca central para manipulação de dados no formato AnnData e realização de análises comuns em scRNA-seq.\n",
+        "-   **celltypist**: ferramenta especializada para anotação automática de células baseada em modelos pré-treinados.\n",
+        "-   **celltypist.models**: submódulo utilizado para carregar modelos específicos para diferentes tipos celulares.\n",
+        "\n",
+        "Esses pacotes garantirão que tenhamos todas as funcionalidades necessárias para ler o arquivo `.h5ad`, realizar a anotação e explorar os resultados.\n"
+      ],
+      "id": "4c4a4788"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# A partir desse ponto o Quarto ira migrar para o kernel do Python\n",
+        "import scanpy as sc\n",
+        "import celltypist\n",
+        "from celltypist import models"
+      ],
+      "id": "bfadd457",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Carregando objeto recém-convertido\n"
+      ],
+      "id": "6b156f77"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "adata = sc.read_h5ad(\"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/seurat_clustered.h5ad\")"
+      ],
+      "id": "6bdd7e65",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Baixando modelos\n"
+      ],
+      "id": "a72c5816"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| eval: false\n",
+        "\n",
+        "# Instala os modelos disponiveis pelo Celltypist\n",
+        "models.download_models(force_update = True)"
+      ],
+      "id": "5f3e3bcd",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "A função `models.download_models` permite baixar modelos pré-treinados diretamente do repositório oficial do Celltypist. Estes modelos contêm informações sobre assinaturas de expressão gênica associadas a diferentes tipos celulares. É importante escolher o modelo apropriado para o seu tecido ou organismo de interesse, pois isso impactará a precisão da anotação.\n",
+        ":::\n",
+        "\n",
+        "A seguir vamos utilizar a função `models.models_description`, a qual lista todos os modelos disponíveis no Celltypist, permitindo ao usuário explorar e selecionar o mais adequado para o seu estudo.\n"
+      ],
+      "id": "f69b924c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "models.models_description()"
+      ],
+      "id": "ce175823",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model = models.Model.load(model = 'Immune_All_High.pkl')"
+      ],
+      "id": "4c3c0b12",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "A função `models.Model.load` carrega o modelo pré-treinado escolhido (neste caso, \"Immune_All_High.pkl\") para ser utilizado na anotação. Este modelo contém as assinaturas de expressão gênica necessárias para classificar as células em tipos celulares específicos com base no seu perfil de expressão. O modelo **Immune_All_High** foi treinado com dados de populações imunes combinadas de **20 tecidos de 18 estudos distintos**, o que o torna adequado para anotações em datasets diversos relacionados ao sistema imune.\n",
+        "\n",
+        "Mais informações sobre os modelos disponíveis podem ser encontradas em [Celltypist Models](https://www.celltypist.org/models).\n",
+        ":::\n"
+      ],
+      "id": "44bbce53"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "model.cell_types"
+      ],
+      "id": "1ec42434",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Executando predição\n"
+      ],
+      "id": "1af14ca5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "predictions = celltypist.annotate(adata, model = 'Immune_All_High.pkl', majority_voting = True)"
+      ],
+      "id": "5d32cc64",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "A função `celltypist.annotate` executa a predição automática dos tipos celulares com base no modelo carregado. Neste caso, o modelo `\"Immune_All_High.pkl\"` será utilizado para classificar as células do objeto `adata`.\\\n",
+        "O argumento `majority_voting=True` assegura que as previsões sejam refinadas por meio de um método de votação majoritária, tornando a anotação por célula mais robusta e reduzindo possíveis classificações ambíguas.\n",
+        "\n",
+        "Após a anotação, o resultado é armazenado no objeto `predictions`. Para facilitar a manipulação e integração com outras análises, a função `to_adata()` é utilizada para converter essas predições em um objeto `AnnData`, armazenado na variável `predictions_data`.\n",
+        ":::\n"
+      ],
+      "id": "ff547de7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "predictions_data = predictions.to_adata()"
+      ],
+      "id": "5ae57520",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Adicionando dados ao objeto original\n"
+      ],
+      "id": "e425289b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "adata.obs[\"celltypist_cell_label\"] = predictions_data.obs.loc[adata.obs.index, \"majority_voting\"]\n",
+        "adata.obs[\"celltypist_conf_score\"] = predictions_data.obs.loc[adata.obs.index, \"conf_score\"]"
+      ],
+      "id": "cfc2af33",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Visualizando UMAP\n"
+      ],
+      "id": "0a05405d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-umap-high\n",
+        "#| fig-cap: Celltypist High annotation\n",
+        "#| fig-subcap:\n",
+        "#|   - Low granularity\n",
+        "#|   - Prediction score\n",
+        "#| fig-cap-location: top\n",
+        "\n",
+        "sc.pl.umap(\n",
+        "    adata,\n",
+        "    color = [\"celltypist_cell_label\"],\n",
+        "    frameon = False,\n",
+        "    sort_order = False,\n",
+        "    wspace = 1\n",
+        ")\n",
+        "\n",
+        "sc.pl.umap(\n",
+        "    adata,\n",
+        "    color = [\"celltypist_conf_score\"],\n",
+        "    frameon = False,\n",
+        "    sort_order = False,\n",
+        "    wspace = 1\n",
+        ")"
+      ],
+      "id": "fig-umap-high",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Similaridade entre populações\n"
+      ],
+      "id": "5bf014cd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-dendrogram\n",
+        "#| fig-cap: Dendrogram\n",
+        "\n",
+        "sc.pl.dendrogram(adata, groupby = \"celltypist_cell_label\")"
+      ],
+      "id": "fig-dendrogram",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "A função `sc.pl.dendrogram` é utilizada para visualizar a relação hierárquica entre os grupos de células anotados. No exemplo acima, o argumento `groupby = \"celltypist_cell_label\"` especifica que as células serão agrupadas com base nas anotações feitas pelo Celltypist.Este gráfico permite observar como os diferentes tipos celulares anotados se relacionam entre si com base no perfil de expressão gênica global. Células com assinaturas semelhantes tendem a se agrupar mais próximas no dendrograma, enquanto células com perfis distintos aparecem mais afastadas.\n",
+        "\n",
+        "Esta abordagem é útil para verificar se as anotações refletem a biologia esperada, identificando possíveis classificações inconsistentes ou agrupamentos inesperados entre os tipos celulares.\n",
+        ":::\n",
+        "\n",
+        "## Expressão das assinaturas gênicas\n"
+      ],
+      "id": "eb40c0f7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "top_genes = dict()\n",
+        "\n",
+        "for cell_type in adata.obs[\"celltypist_cell_label\"].unique():\n",
+        "    markers = list(model.extract_top_markers(cell_type, 3))\n",
+        "    for gene in markers:\n",
+        "        if gene in list(adata.var_names):\n",
+        "            top_genes.setdefault(cell_type, []).append(gene)"
+      ],
+      "id": "140840f4",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "all_markers = [item for sublist in top_genes.values() for item in sublist]"
+      ],
+      "id": "088fd1ca",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| code-fold: true\n",
+        "\n",
+        "for cell, genes in top_genes.items():\n",
+        "  #print(f\"{cell} e seus marcadores: {genes}\")\n",
+        "  sc.tl.score_genes(adata, gene_list=genes, score_name=cell)"
+      ],
+      "id": "87fc56e5",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "A função `sc.tl.score_genes` calcula um escore que resume a expressão de uma assinatura gênica específica em cada célula. Biologicamente, isso é importante para avaliar se os marcadores coletivamente delimitam a identidade das células e/ou seus estados funcionais. Dessa forma, o escore facilita a visualização e interpretação, pois atribui um valor contínuo único que reflete a expressão da assinatura em cada célula.\n",
+        ":::\n"
+      ],
+      "id": "cb4febbd"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "fig-show": "hold"
+      },
+      "source": [
+        "#| label: fig-violin-module\n",
+        "#| fig-cap: Celltypist Gene Signature\n",
+        "#| warning: false\n",
+        "\n",
+        "# Plot each gene score in a subplot\n",
+        "for cell, genes in top_genes.items():\n",
+        "    if cell in adata.obs.columns:\n",
+        "        sc.pl.violin(adata, keys=cell, groupby=\"RNA_snn_res.0.25\", rotation=90)"
+      ],
+      "id": "fig-violin-module",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Expressão diferencial\n"
+      ],
+      "id": "25878b29"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "sc.tl.rank_genes_groups(\n",
+        "    adata,\n",
+        "    groupby = \"celltypist_cell_label\",\n",
+        "    method = \"wilcoxon\",\n",
+        "    key_added = \"dea_cell_label\"\n",
+        "    )"
+      ],
+      "id": "88c9cd23",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: fig-dotplot\n",
+        "#| fig-cap: DotPlot\n",
+        "#| column: screen-inset-shaded\n",
+        "\n",
+        "sc.pl.rank_genes_groups_dotplot(\n",
+        "    adata,\n",
+        "    groupby = \"celltypist_cell_label\",\n",
+        "    standard_scale = \"var\",\n",
+        "    n_genes = 5,\n",
+        "    key = \"dea_cell_label\"\n",
+        "    )"
+      ],
+      "id": "fig-dotplot",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note collapse=\"false\"}\n",
+        "O comando `sc.pl.rank_genes_groups_dotplot` gera um gráfico do tipo dotplot que visualiza os genes diferencialmente expressos entre os grupos definidos pela anotação do Celltypist (`groupby = \"celltypist_cell_label\"`). No eixo y do gráfico são mostrados os grupos celulares anotados e no eixo x os genes diferencialmente expressos. Para cada grupo, são exibidos até **5 genes** mais representativos (`n_genes = 5`), definidos pela análise armazenada na chave `\"dea_cell_label\"` do objeto AnnData. O argumento `standard_scale = \"var\"` padroniza os valores de expressão dos genes, garantindo que eles sejam comparáveis entre si. Isso é útil para destacar padrões relativos de expressão, independentemente das diferenças absolutas de abundância.\n",
+        "\n",
+        "No dotplot, cada ponto indica:\n",
+        "\n",
+        "-   **O tamanho**: a fração de células do grupo que expressa o gene.\n",
+        "\n",
+        "-   **A cor**: o nível médio de expressão do gene naquele grupo.\n",
+        "\n",
+        "Este tipo de visualização é essencial para validar se as anotações dos tipos celulares fazem sentido com base nos genes marcadores expressos e para identificar assinaturas gênicas características ou únicas de cada população celular.\n",
+        ":::\n",
+        "\n",
+        "## Salvando anotação\n"
+      ],
+      "id": "9a47689e"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Selecionar colunas de anotação que serão salvas\n",
+        "annotations = adata.obs[[\"celltypist_cell_label\", \"celltypist_conf_score\"]]\n",
+        "\n",
+        "# Salvar como CSV\n",
+        "annotations.to_csv(\"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1/data/celltypist_annotations.csv\")"
+      ],
+      "id": "48c7f850",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/home/oandrefonseca/.local/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
