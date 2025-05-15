@@ -197,6 +197,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../material/semana4/07_data_integration.html">
  <span class="dropdown-text">Integração de dados</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../material/semana4/08_cell_communication.html">
+ <span class="dropdown-text">Comunicação célula-célula</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -365,7 +369,7 @@ scale.data</code></pre>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>seurat_object <span class="ot">&lt;-</span> <span class="fu">RunPCA</span>(seurat_object, <span class="at">npcs =</span> <span class="dv">50</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ElbowPlot</span>(seurat_object, <span class="at">reduction =</span> <span class="st">"pca"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
 <div id="fig-elbow" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
@@ -530,7 +534,7 @@ This message will be shown once per session</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Por padrao apenas os clusters da ultima resolucao sao apresentados</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(seurat_object, <span class="at">reduction =</span> <span class="st">"umap"</span>, <span class="at">label =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
 <div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
@@ -620,7 +624,7 @@ Note
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rogue.boxplot</span>(rogue_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
 <div id="fig-rogue" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
