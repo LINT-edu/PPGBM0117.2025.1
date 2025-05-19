@@ -20,9 +20,9 @@ Neste tutorial, focaremos na análise de trajetória utilizando **Monocle 3**, u
 
 Os principais pacotes utilizados serão:
 
--   **Monocle 3**: permite inferir grafos de trajetórias com múltiplas bifurcações, ordenar células ao longo do pseudotempo e realizar análises diferenciais.
 -   **Seurat**: usado para normalização, redução de dimensionalidade, clusterização e anotação de tipos celulares.
--   **ggplot2** e **patchwork**: para visualizações elegantes e organização de figuras.
+-   **Monocle 3**: permite inferir grafos de trajetórias com múltiplas bifurcações, ordenar células ao longo do pseudotempo e realizar análises diferenciais.
+-   **CytoTRACE2**: permite inferir o nível de diferenciação de células com base no conteúdo transcricional.
 -   **dplyr**: para manipulação eficiente de dados tabulares.
 
 Ao longo do tutorial, utilizaremos um objeto Seurat previamente anotado, e demonstraremos como convertê-lo em um `cell_data_set`, construir trajetórias, inferir pseudotempo e identificar genes diferencialmente expressos ao longo do percurso celular.
@@ -39,13 +39,19 @@ if (!requireNamespace("monocle3")) {
   remotes::install_github('cole-trapnell-lab/monocle3')
 }
 
+if (!requireNamespace("CytoTRACE2")) {
+  remotes::install_github(
+    "digitalcytometry/cytotrace2", subdir = "cytotrace2_r")
+}
+
 # Carregar pacotes
 library(Seurat)
 library(SeuratWrappers)
 library(SummarizedExperiment)
 library(monocle3)
+library(CytoTRACE2)
+library(tidyverse)
 
-# Definindo diretório padrão
 knitr::opts_knit$set(
   root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
   verbose = FALSE
@@ -53,6 +59,7 @@ knitr::opts_knit$set(
 
 # Aumentar o limite de uso de memória
 options(future.globals.maxSize = 10 * 1024^3) # 10 GB, por exemplo
+
 ```
 
 ## Carregando dados do projeto
@@ -81,18 +88,13 @@ DimPlot(
 ## Selecionando uma subpopulacao
 
 ```{r}
-# Description
-
-fibroblast_compartiment_object <- subset(
+# Extraindo a subpopulacao de interesse
+target_compartiment_object <- subset(
   seurat_object,
   subset = manual_annotation == "Fibroblasts"
 )
 
 ```
-
-:::{.callout-note}
-DESCRIPTION
-:::
 
 ## Conversão para `cell_data_set`
 
@@ -101,7 +103,8 @@ Nesta etapa, converteremos o objeto `Seurat` para um objeto `cell_data_set`, o f
 ```{r}
 # Conversão do objeto Seurat para cell_data_set (Monocle 3)
 monocle_object <- as.cell_data_set(
-  fibroblast_compartiment_object)
+  target_compartiment_object
+  )
 
 # Verificar conteúdo do objeto convertido
 monocle_object
@@ -167,10 +170,10 @@ A função `order_cells()` calcula o pseudotempo baseado na distância do ponto 
 ```{r}
 
 # Acessar a pseudotemporalidade das células
-pt <- pseudotime(monocle_object)
+pseudotime_vector <- pseudotime(monocle_object)
 
 # Células onde o pseudotime é zero (as raízes)
-root_cells <- names(pt[pt == 0])
+root_cells <- names(pseudotime_vector[pseudotime_vector == 0])
 
 # Ver algumas delas
 head(root_cells)
@@ -182,11 +185,28 @@ head(root_cells)
 
 ```{r}
 
-plot_cells(monocle_object, color_cells_by = "pseudotime")
+plot_cells(
+  monocle_object, 
+  color_cells_by = "pseudotime",
+  label_branch_points = FALSE,            # mostra os pontos de bifurcação
+  label_roots = TRUE,                     # marca explicitamente os nós de origem
+  label_leaves = FALSE,                   # mostra os finais da trajetória
+  )
 
 ```
 
-### (Opcional) Definindo raízes com base em scores de diferenciação
+::: {.callout-note}
+**Interpretação do UMAP com elementos da trajetória**
+
+- **Linhas pretas** conectando células ou clusters, representando a estrutura inferida da trajetória (grafo aprendido com `learn_graph()`).
+- **Números em círculos cinza claro**:
+  - **Raízes** (*roots*): pontos iniciais da trajetória, definidos manualmente ou automaticamente com `order_cells()`.
+  - **Pontos de ramificação** (*branch points*): locais onde a trajetória bifurca, indicando possíveis decisões de destino celular.
+  - **Folhas** (*leaves*): terminais da trajetória, representando possíveis estados finais de diferenciação ou ativação.
+- As **células** estarão coloridas com base em uma variável definida por `color_cells_by`, como `pseudotime`, `cluster` ou qualquer outra anotação presente no metadado.
+:::
+
+## (Opcional) Definindo raízes com base em scores de diferenciação
 
 Caso você deseje utilizar uma abordagem automatizada e biologicamente informada:
 
@@ -197,19 +217,109 @@ Caso você deseje utilizar uma abordagem automatizada e biologicamente informada
 
 ```{r}
 
-# Exemplo de uso direto com células raiz definidas
-# monocle_object <- order_cells(monocle_object, root_cells = <vetor_com_ids>)
+# Extraindo dado de expressao bruto
+expression_data <- counts(monocle_object)
+expression_data <- as.data.frame(
+  as.matrix(counts(monocle_object)))
+
+# Rodar o CytoTRACE
+cytotrace_result <- cytotrace2(
+  expression_data,
+  species = "human",
+  parallelize_models = FALSE
+  )
+
+
+```
+
+:::{.callout-note}
+A função `cytotrace2` calcula a pontuação de diferenciação celular. Valores mais altos (próximos de 1) indicam menor grau de diferenciação. Além disso, adicionamos `parallelize_models = FALSE` para evitar erros relacionados ao paralelismo.
+:::
+
+```{r}
+#| column: screen-inset-shaded
+#| warning: false
+
+DT::datatable(cytotrace_result)
+
+```
+
+```{r}
+#| label: fig-umap-cytotrace
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Adicionar o escore ao metadata
+colData(monocle_object)$CytoTRACE <- 
+  cytotrace_result$CytoTRACE2_Relative
+
+p1 <- plot_cells(
+  monocle_object, 
+  color_cells_by = "CytoTRACE",
+  )
+
+p2 <- plot_cells(
+  monocle_object, 
+  group_cells_by = "cluster",
+  label_groups_by_cluster = TRUE,
+  group_label_size = 5,
+  )
+
+p1
+p2
+
+```
+
+```{r}
+
+multipotent <- colData(monocle_object) %>%
+  as.data.frame() %>%
+  rownames_to_column(var = "cell_id")
+
+multipotent$clusters <- clusters(monocle_object)
+
+multipotent <- multipotent %>%
+  select(cell_id, CytoTRACE, clusters) %>%
+  filter(CytoTRACE >= 0.9)
+
+```
+
+```{r}
+#| label: fig-umap-cytotrace-ordered
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+#| eval: false
+
+# Obter os IDs das células com menor diferenciação
+candidate_roots <- multipotent %>%
+  filter(clusters == 1, CytoTRACE == max(CytoTRACE)) %>%
+  pull(cell_id)
+
+# Ordenar as células com base nas raízes definidas
+monocle_object <- order_cells(monocle_object, root_cells = candidate_roots)
+
+plot_cells(
+  monocle_object, 
+  cell_size = 0.7,
+  label_groups_by_cluster = FALSE,
+  label_roots = TRUE,
+  label_leaves = FALSE,
+  label_branch_points = FALSE
+  )
+
+```
+
+```{r}
+# Visualizar pseudotempo com nova ordenação
+plot_cells(
+  monocle_object, 
+  color_cells_by = "pseudotime"
+  )
 
 ```
 
 Essa abordagem permite uma ordenação mais robusta, principalmente quando o início do processo biológico não é diretamente observável.
-
-Com o objeto `monocle_object` devidamente configurado, podemos agora aprender a estrutura do grafo e ordenar as células ao longo da trajetória inferida. Estas etapas são essenciais para a análise de pseudotempo com Monocle 3.
-
-## Salvando o objeto anotado
-
-```{r}
-
-saveRDS(seurat_object, file = "data/seurat_trajectory.RDS")
-
-```
