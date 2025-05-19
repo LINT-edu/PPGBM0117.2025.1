@@ -196,6 +196,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
     </ul>
   </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Semana 5</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-5">    
+        <li>
+    <a class="dropdown-item" href="../../material/semana4/09_cell_trajectory.qmd">
+ <span class="dropdown-text">Análise de Trajetória</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -754,7 +765,7 @@ O argumento <code>majority_voting=True</code> assegura que as previsões sejam r
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    sort_order <span class="op">=</span> <span class="va">False</span>,</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    wspace <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="fig-umap-high" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-cap-location="top" data-execution_count="12">
+<div id="fig-umap-high" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="12" data-fig-cap-location="top">
 <figure class="quarto-float quarto-float-fig figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-fig" id="fig-umap-high-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Celltypist High annotation
@@ -870,7 +881,7 @@ Note
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> cell, genes <span class="kw">in</span> top_genes.items():</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> cell <span class="kw">in</span> adata.obs.columns:</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        sc.pl.violin(adata, keys<span class="op">=</span>cell, groupby<span class="op">=</span><span class="st">"RNA_snn_res.0.25"</span>, rotation<span class="op">=</span><span class="dv">90</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div id="fig-violin-module" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="17" data-fig-show="hold">
+<div id="fig-violin-module" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-show="hold" data-execution_count="17">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-violin-module-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display">
@@ -886,7 +897,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-2" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="663">
+<div id="fig-violin-module-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="663" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-2.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(b): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-2.png" id="fig-violin-module-2" data-ref-parent="fig-violin-module" width="663" height="396" class="figure-img"></a>
@@ -898,7 +909,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-3" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="663">
+<div id="fig-violin-module-3" class="quarto-float quarto-figure quarto-figure-center anchored" width="663" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-3.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(c): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-3.png" id="fig-violin-module-3" data-ref-parent="fig-violin-module" width="663" height="396" class="figure-img"></a>
@@ -910,7 +921,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-4" class="quarto-float quarto-figure quarto-figure-center anchored" height="397" width="650">
+<div id="fig-violin-module-4" class="quarto-float quarto-figure quarto-figure-center anchored" width="650" height="397">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-4.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(d): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-4.png" id="fig-violin-module-4" data-ref-parent="fig-violin-module" width="650" height="397" class="figure-img"></a>
@@ -922,7 +933,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-5" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="650">
+<div id="fig-violin-module-5" class="quarto-float quarto-figure quarto-figure-center anchored" width="650" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-5.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(e): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-5.png" id="fig-violin-module-5" data-ref-parent="fig-violin-module" width="650" height="396" class="figure-img"></a>
@@ -934,7 +945,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-6" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<div id="fig-violin-module-6" class="quarto-float quarto-figure quarto-figure-center anchored" width="652" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-6.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(f): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-6.png" id="fig-violin-module-6" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
@@ -946,7 +957,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-7" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<div id="fig-violin-module-7" class="quarto-float quarto-figure quarto-figure-center anchored" width="652" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-7.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(g): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-7.png" id="fig-violin-module-7" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
@@ -958,7 +969,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-8" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="639">
+<div id="fig-violin-module-8" class="quarto-float quarto-figure quarto-figure-center anchored" width="639" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-8-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-8.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(h): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-8.png" id="fig-violin-module-8" data-ref-parent="fig-violin-module" width="639" height="396" class="figure-img"></a>
@@ -970,7 +981,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-9" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<div id="fig-violin-module-9" class="quarto-float quarto-figure quarto-figure-center anchored" width="652" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-9.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(i): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-9.png" id="fig-violin-module-9" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
@@ -982,7 +993,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-10" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<div id="fig-violin-module-10" class="quarto-float quarto-figure quarto-figure-center anchored" width="652" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-10-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-10.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(j): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-10.png" id="fig-violin-module-10" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
@@ -994,7 +1005,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-11" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="652">
+<div id="fig-violin-module-11" class="quarto-float quarto-figure quarto-figure-center anchored" width="652" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-11-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-11.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(k): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-11.png" id="fig-violin-module-11" data-ref-parent="fig-violin-module" width="652" height="396" class="figure-img"></a>
@@ -1006,7 +1017,7 @@ Note
 </div>
 </div>
 <div class="cell-output cell-output-display">
-<div id="fig-violin-module-12" class="quarto-float quarto-figure quarto-figure-center anchored" height="396" width="639">
+<div id="fig-violin-module-12" class="quarto-float quarto-figure quarto-figure-center anchored" width="639" height="396">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-violin-module-12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="06_cell_annotation_files/figure-html/fig-violin-module-output-12.png" class="lightbox" data-gallery="fig-violin-module" title="Figure&nbsp;3&nbsp;(l): "><img src="06_cell_annotation_files/figure-html/fig-violin-module-output-12.png" id="fig-violin-module-12" data-ref-parent="fig-violin-module" width="639" height="396" class="figure-img"></a>

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>08 - Comunicação célula-célula – SC-COURSE</title>
+<title>09 - Análise de Trajetória – SC-COURSE</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -199,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-semana-5">    
         <li>
-    <a class="dropdown-item" href="../../material/semana4/09_cell_trajectory.qmd">
+    <a class="dropdown-item" href="../../material/semana5/09_cell_trajectory.html">
  <span class="dropdown-text">Análise de Trajetória</span></a>
   </li>  
     </ul>
@@ -224,16 +224,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#contextualização" id="toc-contextualização" class="nav-link" data-scroll-target="#contextualização">Contextualização</a></li>
   <li><a href="#ajustar-ambiente-e-carregar-pacotes" id="toc-ajustar-ambiente-e-carregar-pacotes" class="nav-link" data-scroll-target="#ajustar-ambiente-e-carregar-pacotes">Ajustar ambiente e carregar pacotes</a></li>
   <li><a href="#carregando-dados-do-projeto" id="toc-carregando-dados-do-projeto" class="nav-link" data-scroll-target="#carregando-dados-do-projeto">Carregando dados do projeto</a></li>
-  <li><a href="#preparando-análise-de-comunicação" id="toc-preparando-análise-de-comunicação" class="nav-link" data-scroll-target="#preparando-análise-de-comunicação">Preparando análise de comunicação</a>
+  <li><a href="#selecionando-uma-subpopulacao" id="toc-selecionando-uma-subpopulacao" class="nav-link" data-scroll-target="#selecionando-uma-subpopulacao">Selecionando uma subpopulacao</a></li>
+  <li><a href="#conversão-para-cell_data_set" id="toc-conversão-para-cell_data_set" class="nav-link" data-scroll-target="#conversão-para-cell_data_set">Conversão para <code>cell_data_set</code></a></li>
+  <li><a href="#construção-do-grafo-e-ordenação-das-células" id="toc-construção-do-grafo-e-ordenação-das-células" class="nav-link" data-scroll-target="#construção-do-grafo-e-ordenação-das-células">Construção do grafo e ordenação das células</a></li>
+  <li><a href="#visualizar-o-grafo" id="toc-visualizar-o-grafo" class="nav-link" data-scroll-target="#visualizar-o-grafo">Visualizar o grafo</a></li>
+  <li><a href="#visualizar-pseudotempo-inferido" id="toc-visualizar-pseudotempo-inferido" class="nav-link" data-scroll-target="#visualizar-pseudotempo-inferido">Visualizar pseudotempo inferido</a>
   <ul class="collapse">
-  <li><a href="#liana-recursos" id="toc-liana-recursos" class="nav-link" data-scroll-target="#liana-recursos">LIANA: Recursos</a></li>
-  <li><a href="#liana-métodos" id="toc-liana-métodos" class="nav-link" data-scroll-target="#liana-métodos">LIANA: Métodos</a></li>
-  </ul></li>
-  <li><a href="#calculando-interações-l-r" id="toc-calculando-interações-l-r" class="nav-link" data-scroll-target="#calculando-interações-l-r">Calculando interações L-R</a></li>
-  <li><a href="#agregando-resultados" id="toc-agregando-resultados" class="nav-link" data-scroll-target="#agregando-resultados">Agregando resultados</a></li>
-  <li><a href="#visualizar-conexões" id="toc-visualizar-conexões" class="nav-link" data-scroll-target="#visualizar-conexões">Visualizar conexões</a></li>
-  <li><a href="#heatmap-com-interações-por-tipo-celular" id="toc-heatmap-com-interações-por-tipo-celular" class="nav-link" data-scroll-target="#heatmap-com-interações-por-tipo-celular">Heatmap com interações por tipo celular</a></li>
+  <li><a href="#opcional-definindo-raízes-com-base-em-scores-de-diferenciação" id="toc-opcional-definindo-raízes-com-base-em-scores-de-diferenciação" class="nav-link" data-scroll-target="#opcional-definindo-raízes-com-base-em-scores-de-diferenciação">(Opcional) Definindo raízes com base em scores de diferenciação</a></li>
   <li><a href="#salvando-o-objeto-anotado" id="toc-salvando-o-objeto-anotado" class="nav-link" data-scroll-target="#salvando-o-objeto-anotado">Salvando o objeto anotado</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -242,7 +241,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">08 - Comunicação célula-célula</h1>
+<h1 class="title">09 - Análise de Trajetória</h1>
 </div>
 
 
@@ -261,36 +260,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="motivação" class="level2">
 <h2 class="anchored" data-anchor-id="motivação">Motivação</h2>
-<p>A comunicação célula-célula (CCC) é um processo fundamental na regulação de funções biológicas em tecidos complexos. Em contextos fisiológicos e patológicos, como no desenvolvimento embrionário, resposta imune e progressão tumoral, as células trocam sinais por meio de interações entre ligantes e receptores. O avanço das tecnologias de transcriptômica de célula única possibilitou a inferência sistemática desses eventos de comunicação, utilizando a expressão gênica como proxy para abundância proteica. Neste tutorial, exploramos o uso da ferramenta LIANA para realizar uma análise robusta e comparativa de interações célula-célula com base em múltiplos métodos e recursos anotados.</p>
+<p>A análise de trajetória e pseudotempo surgiu como uma solução para uma limitação inerente aos protocolos de RNA-seq de célula única: a perda de informação temporal. Durante o sequenciamento, as células são destruídas, impedindo o rastreamento dinâmico do processo biológico ao qual pertencem. Apesar disso, os processos de diferenciação celular são essencialmente contínuos e assimétricos, e essa progressão pode ser reconstruída computacionalmente com base na semelhança entre perfis transcricionais.</p>
+<p>A reconstrução de trajetórias permite inferir o curso temporal de eventos celulares, identificar ramos de diferenciação e genes reguladores ao longo desses caminhos. O pseudotempo é uma variável latente que representa a posição relativa de cada célula nesse processo inferido. Este conceito é fundamental para estudos em desenvolvimento embrionário, resposta imune, plasticidade tumoral e outros processos biológicos com dinâmica celular.</p>
 </section>
 <section id="contextualização" class="level2">
 <h2 class="anchored" data-anchor-id="contextualização">Contextualização</h2>
-<p>O pacote <strong>LIANA</strong> (Ligand-Receptor Analysis Framework) foi desenvolvido para facilitar essa tarefa ao integrar múltiplos algoritmos e recursos de interações ligante-receptor de forma padronizada. Com suporte nativo a objetos <code>Seurat</code> e <code>SingleCellExperiment</code>, LIANA permite a execução de métodos consagrados como CellPhoneDB, NATMI, Connectome, logFC, entre outros, utilizando bases como OmniPath, CellChatDB e Consensus. Além disso, oferece funções para agregação de resultados e geração de scores de consenso, promovendo maior robustez e confiança na inferência de eventos de comunicação celular.</p>
+<p>Neste tutorial, focaremos na análise de trajetória utilizando <strong>Monocle 3</strong>, uma ferramenta poderosa e flexível baseada em grafos para inferência de trajetórias celulares. Também faremos uso de pacotes auxiliares que se integram diretamente ao Monocle, como <strong>Seurat</strong>, para o pré-processamento e anotação dos dados, e <strong>ggplot2</strong> e <strong>dplyr</strong> para visualização e manipulação dos resultados.</p>
+<p>Os principais pacotes utilizados serão:</p>
+<ul>
+<li><strong>Monocle 3</strong>: permite inferir grafos de trajetórias com múltiplas bifurcações, ordenar células ao longo do pseudotempo e realizar análises diferenciais.</li>
+<li><strong>Seurat</strong>: usado para normalização, redução de dimensionalidade, clusterização e anotação de tipos celulares.</li>
+<li><strong>ggplot2</strong> e <strong>patchwork</strong>: para visualizações elegantes e organização de figuras.</li>
+<li><strong>dplyr</strong>: para manipulação eficiente de dados tabulares.</li>
+</ul>
+<p>Ao longo do tutorial, utilizaremos um objeto Seurat previamente anotado, e demonstraremos como convertê-lo em um <code>cell_data_set</code>, construir trajetórias, inferir pseudotempo e identificar genes diferencialmente expressos ao longo do percurso celular.</p>
 </section>
 <section id="ajustar-ambiente-e-carregar-pacotes" class="level2">
 <h2 class="anchored" data-anchor-id="ajustar-ambiente-e-carregar-pacotes">Ajustar ambiente e carregar pacotes</h2>
-<p>Nesta seção, vamos configurar o ambiente de trabalho e carregar os pacotes necessários. Isso inclui verificar e instalar o pacote <code>liana</code>, além de carregar bibliotecas como <code>Seurat</code>, <code>tidyverse</code> e <code>ggplot2</code>, que serão utilizadas em todas as etapas subsequentes da análise.</p>
+<p>Nesta seção, vamos configurar o ambiente de trabalho e carregar os pacotes necessários. Isso inclui verificar e instalar o pacote <code>monocle3</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verifica pacotes</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"liana"</span>)) {</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'saezlab/liana'</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"monocle3"</span>)) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'cole-trapnell-lab/monocle3'</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Carregar pacotes</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Seurat)</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SeuratWrappers)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(liana)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo diretório padrão</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">root.dir =</span> <span class="st">"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1"</span>,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Aumentar o limite de uso de memória</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">3</span>) <span class="co"># 10 GB, por exemplo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SummarizedExperiment)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(monocle3)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Definindo diretório padrão</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_knit<span class="sc">$</span><span class="fu">set</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">root.dir =</span> <span class="st">"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Aumentar o limite de uso de memória</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">10</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">3</span>) <span class="co"># 10 GB, por exemplo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="carregando-dados-do-projeto" class="level2 page-columns page-full">
@@ -304,14 +311,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">DimPlot</span>(</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  seurat_object, </span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">group.by =</span> <span class="st">"manual_annotation"</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
+<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<a href="08_cell_communication_files/figure-html/fig-umap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="08_cell_communication_files/figure-html/fig-umap-1.png" id="fig-umap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
+<a href="09_cell_trajectory_files/figure-html/fig-umap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="09_cell_trajectory_files/figure-html/fig-umap-1.png" id="fig-umap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-umap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1
@@ -322,218 +329,87 @@ Figure&nbsp;1
 </div>
 </div>
 </section>
-<section id="preparando-análise-de-comunicação" class="level2">
-<h2 class="anchored" data-anchor-id="preparando-análise-de-comunicação">Preparando análise de comunicação</h2>
-<p>Com os dados carregados, damos início à etapa de preparação para a inferência de comunicação célula-célula. Aqui, exploramos os recursos e métodos disponíveis no pacote <code>liana</code>, que nos permitirão escolher diferentes bancos de interações e algoritmos para calcular os scores entre pares de tipos celulares.</p>
-<section id="liana-recursos" class="level3">
-<h3 class="anchored" data-anchor-id="liana-recursos">LIANA: Recursos</h3>
+<section id="selecionando-uma-subpopulacao" class="level2">
+<h2 class="anchored" data-anchor-id="selecionando-uma-subpopulacao">Selecionando uma subpopulacao</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_resources</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Description</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fibroblast_compartiment_object <span class="ot">&lt;-</span> <span class="fu">subset</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  seurat_object,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">subset =</span> manual_annotation <span class="sc">==</span> <span class="st">"Fibroblasts"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>DESCRIPTION</p>
+</div>
+</div>
+</section>
+<section id="conversão-para-cell_data_set" class="level2">
+<h2 class="anchored" data-anchor-id="conversão-para-cell_data_set">Conversão para <code>cell_data_set</code></h2>
+<p>Nesta etapa, converteremos o objeto <code>Seurat</code> para um objeto <code>cell_data_set</code>, o formato utilizado pelo Monocle 3. Essa conversão é fundamental para que possamos aplicar as funções de aprendizado de trajetória.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conversão do objeto Seurat para cell_data_set (Monocle 3)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">as.cell_data_set</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  fibroblast_compartiment_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Monocle 3 trajectories require cluster partitions, which Seurat does
+not calculate. Please run 'cluster_cells' on your cell_data_set object</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verificar conteúdo do objeto convertido</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>monocle_object</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "Default"          "Consensus"        "Baccin2019"       "CellCall"        
- [5] "CellChatDB"       "Cellinker"        "CellPhoneDB"      "CellTalkDB"      
- [9] "connectomeDB2020" "EMBRACE"          "Guide2Pharma"     "HPMR"            
-[13] "ICELLNET"         "iTALK"            "Kirouac2010"      "LRdb"            
-[17] "Ramilowski2015"   "OmniPath"         "MouseConsensus"  </code></pre>
+<pre><code>class: cell_data_set 
+dim: 38606 1921 
+metadata(0):
+assays(2): counts logcounts
+rownames(38606): DDX11L2 MIR1302-2HG ... ENSG00000278817
+  ENSG00000277196
+rowData names(0):
+colnames(1921): SRR8315737_AACGTTGAGCACCGTC-1
+  SRR8315737_AACGTTGCACCAGATT-1 ... SRR8890794_AACTCTTAGGACACCA-1
+  SRR8890794_GATTCAGTCCTAAGTG-1
+colData names(34): orig.ident nCount_RNA ... ident Size_Factor
+reducedDimNames(2): PCA UMAP
+mainExpName: RNA
+altExpNames(0):</code></pre>
 </div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Reduzindo dimensionalidade</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">reduce_dimension</span>(monocle_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>No preprocess_method specified, using preprocess_method = 'PCA'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clusterizando novamente apenas os Fibroblastos</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">cluster_cells</span>(monocle_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="liana-métodos" class="level3">
-<h3 class="anchored" data-anchor-id="liana-métodos">LIANA: Métodos</h3>
+<section id="construção-do-grafo-e-ordenação-das-células" class="level2">
+<h2 class="anchored" data-anchor-id="construção-do-grafo-e-ordenação-das-células">Construção do grafo e ordenação das células</h2>
+<p>Nesta etapa, aprenderemos a estrutura do grafo que representa as possíveis trajetórias celulares e ordenaremos as células ao longo do pseudotempo com Monocle 3. O ponto de início (“root”) é essencial para garantir que o pseudotempo reflita corretamente a progressão biológica esperada. Para uma abordagem biologicamente orientada, é possível utilizar ferramentas como <strong>CytoTRACE</strong>, que ranqueiam as células de acordo com seu grau de diferenciação, para identificar células menos diferenciadas como raízes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">show_methods</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aprender o grafo da trajetória</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">learn_graph</span>(monocle_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "connectome"      "logfc"           "natmi"           "sca"            
- [5] "cellphonedb"     "cytotalk"        "call_squidpy"    "call_cellchat"  
- [9] "call_connectome" "call_sca"        "call_italk"      "call_natmi"     </code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="calculando-interações-l-r" class="level2">
-<h2 class="anchored" data-anchor-id="calculando-interações-l-r">Calculando interações L-R</h2>
-<p>Após observar que recursos e métodos podemos utilizar, vamos aplicar a função <code>liana_wrap()</code> para realizar a inferência das interações ligante-receptor entre os tipos celulares anotados no objeto Seurat. Esta etapa é central para o pipeline, pois gera a matriz de interações com scores específicos por método.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>liana_object <span class="ot">&lt;-</span> <span class="fu">liana_wrap</span>(</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  seurat_object,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">idents_col =</span> <span class="st">"manual_annotation"</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Expression from the `RNA` assay will be used</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Running LIANA with `manual_annotation` as labels!</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`Idents` were converted to factor</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in exec(output, ...): 3031 genes and/or 0 cells were removed as they
-had no counts!</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: `invoke()` is deprecated as of rlang 0.4.0.
-Please use `exec()` or `inject()` instead.
-This warning is displayed once every 8 hours.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>LIANA: LR summary stats calculated!</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now Running: Natmi</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now Running: Connectome</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now Running: Logfc</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now Running: Sca</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now Running: Cellphonedb</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: `progress_estimated()` was deprecated in dplyr 1.0.0.
-ℹ The deprecated feature was likely used in the liana package.
-  Please report the issue at &lt;https://github.com/saezlab/liana/issues&gt;.</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>liana_object <span class="sc">%&gt;%</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 5
- $ natmi      : tibble [40,173 × 14] (S3: tbl_df/tbl/data.frame)
-  ..$ source          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ target          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ ligand.complex  : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ ligand          : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ receptor.complex: chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor        : chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor.prop   : num [1:40173] 0.826 0.125 0.229 0.186 0.5 ...
-  ..$ ligand.prop     : num [1:40173] 0.209 0.209 0.16 0.934 0.934 ...
-  ..$ ligand.expr     : num [1:40173] 0.322 0.322 0.236 3.429 3.429 ...
-  ..$ receptor.expr   : num [1:40173] 1.902 0.18 0.32 0.438 0.861 ...
-  ..$ ligand.sum      : num [1:40173] 5.05 5.05 1.6 42.87 42.87 ...
-  ..$ receptor.sum    : num [1:40173] 19.96 3.83 4.49 2.87 5.19 ...
-  ..$ prod_weight     : num [1:40173] 0.6131 0.0579 0.0756 1.5003 2.9517 ...
-  ..$ edge_specificity: num [1:40173] 0.00609 0.00299 0.01056 0.01218 0.01327 ...
- $ connectome : tibble [40,173 × 11] (S3: tbl_df/tbl/data.frame)
-  ..$ source          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ target          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ ligand.complex  : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ ligand          : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ receptor.complex: chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor        : chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor.prop   : num [1:40173] 0.826 0.125 0.229 0.186 0.5 ...
-  ..$ ligand.prop     : num [1:40173] 0.209 0.209 0.16 0.934 0.934 ...
-  ..$ ligand.scaled   : num [1:40173] -0.0184 -0.0184 0.1631 -0.0692 -0.0692 ...
-  ..$ receptor.scaled : num [1:40173] 0.2218 -0.1304 -0.0908 -0.0816 0.1269 ...
-  ..$ weight_sc       : num [1:40173] 0.1017 -0.0744 0.0362 -0.0754 0.0289 ...
- $ logfc      : tibble [40,173 × 11] (S3: tbl_df/tbl/data.frame)
-  ..$ source          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ target          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ ligand.complex  : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ ligand          : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ receptor.complex: chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor        : chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor.prop   : num [1:40173] 0.826 0.125 0.229 0.186 0.5 ...
-  ..$ ligand.prop     : num [1:40173] 0.209 0.209 0.16 0.934 0.934 ...
-  ..$ ligand.log2FC   : num [1:40173] 0.237 0.237 0.208 -0.218 -0.218 ...
-  ..$ receptor.log2FC : num [1:40173] 0.5184 -0.0712 -0.0385 -0.3203 0.0845 ...
-  ..$ logfc_comb      : num [1:40173] 0.3776 0.0828 0.0848 -0.2693 -0.0669 ...
- $ sca        : tibble [40,173 × 12] (S3: tbl_df/tbl/data.frame)
-  ..$ source          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ target          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ ligand.complex  : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ ligand          : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ receptor.complex: chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor        : chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor.prop   : num [1:40173] 0.826 0.125 0.229 0.186 0.5 ...
-  ..$ ligand.prop     : num [1:40173] 0.209 0.209 0.16 0.934 0.934 ...
-  ..$ ligand.expr     : num [1:40173] 0.322 0.322 0.236 3.429 3.429 ...
-  ..$ receptor.expr   : num [1:40173] 1.902 0.18 0.32 0.438 0.861 ...
-  ..$ global_mean     : num [1:40173] 0.0741 0.0741 0.0741 0.0741 0.0741 ...
-  ..$ LRscore         : num [1:40173] 0.914 0.764 0.788 0.943 0.959 ...
- $ cellphonedb: tibble [40,173 × 12] (S3: tbl_df/tbl/data.frame)
-  ..$ source          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ target          : chr [1:40173] "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" "CD4+ T cells / TCM-like" ...
-  .. ..- attr(*, "levels")= chr [1:14] "B cells" "CD4+ T cells / TCM-like" "CD8+ Cytotoxic T cells" "Endothelial Cells" ...
-  ..$ ligand.complex  : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ ligand          : chr [1:40173] "ADAM10" "ADAM10" "TNFSF14" "HLA-B" ...
-  ..$ receptor.complex: chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor        : chr [1:40173] "CD44" "NOTCH2" "TNFRSF14" "CD8A" ...
-  ..$ receptor.prop   : num [1:40173] 0.826 0.125 0.229 0.186 0.5 ...
-  ..$ ligand.prop     : num [1:40173] 0.209 0.209 0.16 0.934 0.934 ...
-  ..$ ligand.expr     : num [1:40173] 0.322 0.322 0.236 3.429 3.429 ...
-  ..$ receptor.expr   : num [1:40173] 1.902 0.18 0.32 0.438 0.861 ...
-  ..$ lr.mean         : num [1:40173] 1.112 0.251 0.278 1.933 2.145 ...
-  ..$ pvalue          : num [1:40173] 0 1 0 1 0 0.017 1 1 1 1 ...</code></pre>
-</div>
-</div>
-</section>
-<section id="agregando-resultados" class="level2">
-<h2 class="anchored" data-anchor-id="agregando-resultados">Agregando resultados</h2>
-<p>Os resultados de múltiplos métodos podem variar. Para obter maior robustez, agregamos os resultados por meio de um rank de <strong>consenso</strong> utilizando <code>liana_aggregate()</code>. Essa abordagem permite priorizar interações que são consistentemente bem ranqueadas entre os diferentes algoritmos aplicados.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>liana_object <span class="ot">&lt;-</span> liana_object <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">liana_aggregate</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now aggregating natmi</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now aggregating connectome</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now aggregating logfc</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now aggregating sca</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Now aggregating cellphonedb</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Aggregating Ranks</code></pre>
-</div>
-</div>
-</section>
-<section id="visualizar-conexões" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="visualizar-conexões">Visualizar conexões</h2>
-<p>Com os resultados agregados, passamos à etapa de visualização. Utilizamos a função <code>liana_dotplot()</code> para representar graficamente as interações priorizadas entre tipos celulares emissores e receptores. Esse tipo de plotagem facilita a interpretação das principais vias de sinalização inferidas no sistema biológico estudado.</p>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>liana_object <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">liana_dotplot</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">source_groups =</span> <span class="fu">c</span>(<span class="st">"PRAME+ Tumor"</span>),</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">target_groups =</span> <span class="fu">c</span>(<span class="st">"CD4+ T cells / TCM-like"</span>, <span class="st">"CD8+ Cytotoxic T cells"</span>, <span class="st">"B cells"</span>),</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">ntop =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  ggplot2<span class="sc">::</span><span class="fu">theme</span>(</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
-<div class="quarto-layout-row page-full">
-<div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-dotplot" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="768" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure page-columns page-full">
-<div aria-describedby="fig-dotplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<a href="08_cell_communication_files/figure-html/fig-dotplot-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-2" title="Figure&nbsp;2: "><img src="08_cell_communication_files/figure-html/fig-dotplot-1.png" id="fig-dotplot" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="768"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-dotplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2
-</figcaption>
-</figure>
-</div>
-</div>
+<pre><code>
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%
+
+  |                                                                            
+  |                                                                      |   0%
+  |                                                                            
+  |======================================================================| 100%</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -546,33 +422,29 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Cada ponto representa uma interação ligante-receptor priorizada. O eixo Y lista as interações (ligante → receptor) e o eixo X mostra os pares de tipos celulares. O tamanho do ponto indica a especificidade da interação, enquanto a intensidade da cor representa a magnitude do sinal (score de expressão). Interações mais relevantes tendem a ser grandes e escuras.</p>
+<p>A função <code>learn_graph()</code> modela as transições celulares com base em uma curva principal sobre o embedding reduzido (geralmente UMAP). O grafo inferido reflete as conexões entre estados celulares relacionados.</p>
 </div>
 </div>
 </section>
-<section id="heatmap-com-interações-por-tipo-celular" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="heatmap-com-interações-por-tipo-celular">Heatmap com interações por tipo celular</h2>
-<p>Para uma visão global da frequência de interações entre tipos celulares, geramos um heatmap utilizando apenas interações altamente ranqueadas (<code>aggregate_rank &lt;= 0.01</code>). Essa visualização permite identificar padrões gerais de comunicação e potenciais hubs de sinalização no microambiente celular.</p>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>liana_trunc <span class="ot">&lt;-</span> liana_object <span class="sc">%&gt;%</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(aggregate_rank <span class="sc">&lt;=</span> <span class="fl">0.01</span>)</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Gerando visualização</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">heat_freq</span>(liana_trunc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell quarto-layout-panel page-columns page-full" data-layout-align="center" data-layout-nrow="1">
-<div class="quarto-layout-row page-full">
-<div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-heatmap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="768" data-fig-align="center">
-<figure class="quarto-float quarto-float-fig figure page-columns page-full">
-<div aria-describedby="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
-<a href="08_cell_communication_files/figure-html/fig-heatmap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-3" title="Figure&nbsp;3: "><img src="08_cell_communication_files/figure-html/fig-heatmap-1.png" id="fig-heatmap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="768"></a>
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3
-</figcaption>
+<section id="visualizar-o-grafo" class="level1">
+<h1>Visualizar o grafo</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cells</span>(monocle_object,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">color_cells_by =</span> <span class="st">"cluster"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">label_groups_by_cluster =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">label_leaves =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">label_branch_points =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="09_cell_trajectory_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="09_cell_trajectory_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar células interativamente com base na estrutura do grafo</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">order_cells</span>(monocle_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -584,17 +456,62 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Neste gráfico, a intensidade da cor representa o número de interações inferidas entre os tipos celulares do eixo X (emissores) e do eixo Y (receptores). Tons mais escuros indicam maior número de interações inferidas entre os pares. Essa abordagem é útil para destacar populações celulares com papel central na rede de comunicação.</p>
+<p>A função <code>order_cells()</code> calcula o pseudotempo baseado na distância do ponto inicial (root) ao longo da trajetória inferida. A escolha da raiz afeta diretamente a interpretação biológica do pseudotempo.</p>
 </div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Acessar a pseudotemporalidade das células</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">&lt;-</span> <span class="fu">pseudotime</span>(monocle_object)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Células onde o pseudotime é zero (as raízes)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>root_cells <span class="ot">&lt;-</span> <span class="fu">names</span>(pt[pt <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Ver algumas delas</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(root_cells)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "SRR8315753_GAAACTCAGGTGCTAG-1" "SRR8315766_CAAGATCTCTGAGTGT-1"</code></pre>
+</div>
+</div>
+</section>
+<section id="visualizar-pseudotempo-inferido" class="level1">
+<h1>Visualizar pseudotempo inferido</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cells</span>(monocle_object, <span class="at">color_cells_by =</span> <span class="st">"pseudotime"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Cells aren't colored in a way that allows them to be grouped.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="09_cell_trajectory_files/figure-html/unnamed-chunk-12-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="09_cell_trajectory_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="opcional-definindo-raízes-com-base-em-scores-de-diferenciação" class="level3">
+<h3 class="anchored" data-anchor-id="opcional-definindo-raízes-com-base-em-scores-de-diferenciação">(Opcional) Definindo raízes com base em scores de diferenciação</h3>
+<p>Caso você deseje utilizar uma abordagem automatizada e biologicamente informada:</p>
+<ol type="1">
+<li>Calcule os scores de diferenciação com <strong>CytoTRACE</strong> ou outro método.</li>
+<li>Identifique as células com maior escore (menos diferenciadas).</li>
+<li>Use técnicas de agrupamento (como <code>dbscan</code>) para isolar regiões densas.</li>
+<li>Escolha representantes centrais dessas regiões como “roots” para a função <code>order_cells()</code>.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exemplo de uso direto com células raiz definidas</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># monocle_object &lt;- order_cells(monocle_object, root_cells = &lt;vetor_com_ids&gt;)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Essa abordagem permite uma ordenação mais robusta, principalmente quando o início do processo biológico não é diretamente observável.</p>
+<p>Com o objeto <code>monocle_object</code> devidamente configurado, podemos agora aprender a estrutura do grafo e ordenar as células ao longo da trajetória inferida. Estas etapas são essenciais para a análise de pseudotempo com Monocle 3.</p>
 </section>
 <section id="salvando-o-objeto-anotado" class="level2">
 <h2 class="anchored" data-anchor-id="salvando-o-objeto-anotado">Salvando o objeto anotado</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_object, <span class="at">file =</span> <span class="st">"data/seurat_annotated.RDS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(seurat_object, <span class="at">file =</span> <span class="st">"data/seurat_trajectory.RDS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

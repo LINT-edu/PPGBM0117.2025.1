@@ -36,6 +36,10 @@ website:
             file: material/semana4/07_data_integration.qmd
           - text: "Comunicação célula-célula"
             file: material/semana4/08_cell_communication.qmd
+      - text: "Semana 5"
+        menu:
+          - text: "Análise de Trajetória "
+            file: material/semana5/09_cell_trajectory.qmd
 
   page-footer:
     center: "Feito com ❤️ usando [Quarto](https://quarto.org)"

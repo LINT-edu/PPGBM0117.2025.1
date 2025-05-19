@@ -999,5 +999,68 @@
     "title": "08 - Comunicação célula-célula",
     "section": "Salvando o objeto anotado",
     "text": "Salvando o objeto anotado\n\nsaveRDS(seurat_object, file = \"data/seurat_annotated.RDS\")"
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html",
+    "href": "material/semana5/09_cell_trajectory.html",
+    "title": "09 - Análise de Trajetória",
+    "section": "",
+    "text": "A análise de trajetória e pseudotempo surgiu como uma solução para uma limitação inerente aos protocolos de RNA-seq de célula única: a perda de informação temporal. Durante o sequenciamento, as células são destruídas, impedindo o rastreamento dinâmico do processo biológico ao qual pertencem. Apesar disso, os processos de diferenciação celular são essencialmente contínuos e assimétricos, e essa progressão pode ser reconstruída computacionalmente com base na semelhança entre perfis transcricionais.\nA reconstrução de trajetórias permite inferir o curso temporal de eventos celulares, identificar ramos de diferenciação e genes reguladores ao longo desses caminhos. O pseudotempo é uma variável latente que representa a posição relativa de cada célula nesse processo inferido. Este conceito é fundamental para estudos em desenvolvimento embrionário, resposta imune, plasticidade tumoral e outros processos biológicos com dinâmica celular."
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#motivação",
+    "href": "material/semana5/09_cell_trajectory.html#motivação",
+    "title": "09 - Análise de Trajetória",
+    "section": "",
+    "text": "A análise de trajetória e pseudotempo surgiu como uma solução para uma limitação inerente aos protocolos de RNA-seq de célula única: a perda de informação temporal. Durante o sequenciamento, as células são destruídas, impedindo o rastreamento dinâmico do processo biológico ao qual pertencem. Apesar disso, os processos de diferenciação celular são essencialmente contínuos e assimétricos, e essa progressão pode ser reconstruída computacionalmente com base na semelhança entre perfis transcricionais.\nA reconstrução de trajetórias permite inferir o curso temporal de eventos celulares, identificar ramos de diferenciação e genes reguladores ao longo desses caminhos. O pseudotempo é uma variável latente que representa a posição relativa de cada célula nesse processo inferido. Este conceito é fundamental para estudos em desenvolvimento embrionário, resposta imune, plasticidade tumoral e outros processos biológicos com dinâmica celular."
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#contextualização",
+    "href": "material/semana5/09_cell_trajectory.html#contextualização",
+    "title": "09 - Análise de Trajetória",
+    "section": "Contextualização",
+    "text": "Contextualização\nNeste tutorial, focaremos na análise de trajetória utilizando Monocle 3, uma ferramenta poderosa e flexível baseada em grafos para inferência de trajetórias celulares. Também faremos uso de pacotes auxiliares que se integram diretamente ao Monocle, como Seurat, para o pré-processamento e anotação dos dados, e ggplot2 e dplyr para visualização e manipulação dos resultados.\nOs principais pacotes utilizados serão:\n\nMonocle 3: permite inferir grafos de trajetórias com múltiplas bifurcações, ordenar células ao longo do pseudotempo e realizar análises diferenciais.\nSeurat: usado para normalização, redução de dimensionalidade, clusterização e anotação de tipos celulares.\nggplot2 e patchwork: para visualizações elegantes e organização de figuras.\ndplyr: para manipulação eficiente de dados tabulares.\n\nAo longo do tutorial, utilizaremos um objeto Seurat previamente anotado, e demonstraremos como convertê-lo em um cell_data_set, construir trajetórias, inferir pseudotempo e identificar genes diferencialmente expressos ao longo do percurso celular."
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#ajustar-ambiente-e-carregar-pacotes",
+    "href": "material/semana5/09_cell_trajectory.html#ajustar-ambiente-e-carregar-pacotes",
+    "title": "09 - Análise de Trajetória",
+    "section": "Ajustar ambiente e carregar pacotes",
+    "text": "Ajustar ambiente e carregar pacotes\nNesta seção, vamos configurar o ambiente de trabalho e carregar os pacotes necessários. Isso inclui verificar e instalar o pacote monocle3.\n\n# Verifica pacotes\nif (!requireNamespace(\"monocle3\")) {\n  remotes::install_github('cole-trapnell-lab/monocle3')\n}\n\n# Carregar pacotes\nlibrary(Seurat)\nlibrary(SeuratWrappers)\nlibrary(SummarizedExperiment)\nlibrary(monocle3)\n\n# Definindo diretório padrão\nknitr::opts_knit$set(\n  root.dir = \"/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1\",\n  verbose = FALSE\n)\n\n# Aumentar o limite de uso de memória\noptions(future.globals.maxSize = 10 * 1024^3) # 10 GB, por exemplo"
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#carregando-dados-do-projeto",
+    "href": "material/semana5/09_cell_trajectory.html#carregando-dados-do-projeto",
+    "title": "09 - Análise de Trajetória",
+    "section": "Carregando dados do projeto",
+    "text": "Carregando dados do projeto\nAgora que o ambiente está configurado, carregamos o objeto Seurat que contém os dados de expressão gênica já processados e anotados. O uso de um objeto pronto permite focar diretamente na inferência de comunicação célula-célula, utilizando as anotações de tipos celulares para identificar emissores e receptores em potenciais interações.\n\n# Carregando um objeto Seurat já processado (pré-clusterizado)\nseurat_object &lt;- readRDS(file = here::here(\"data/seurat_annotated.RDS\"))\n\n# Verificar os clusters\nDimPlot(\n  seurat_object, \n  group.by = \"manual_annotation\"\n)\n\n\n\n\n\n\n\n\n\nFigure 1"
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#selecionando-uma-subpopulacao",
+    "href": "material/semana5/09_cell_trajectory.html#selecionando-uma-subpopulacao",
+    "title": "09 - Análise de Trajetória",
+    "section": "Selecionando uma subpopulacao",
+    "text": "Selecionando uma subpopulacao\n\n# Description\n\nfibroblast_compartiment_object &lt;- subset(\n  seurat_object,\n  subset = manual_annotation == \"Fibroblasts\"\n)\n\n\n\n\n\n\n\nNote\n\n\n\nDESCRIPTION"
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#conversão-para-cell_data_set",
+    "href": "material/semana5/09_cell_trajectory.html#conversão-para-cell_data_set",
+    "title": "09 - Análise de Trajetória",
+    "section": "Conversão para cell_data_set",
+    "text": "Conversão para cell_data_set\nNesta etapa, converteremos o objeto Seurat para um objeto cell_data_set, o formato utilizado pelo Monocle 3. Essa conversão é fundamental para que possamos aplicar as funções de aprendizado de trajetória.\n\n# Conversão do objeto Seurat para cell_data_set (Monocle 3)\nmonocle_object &lt;- as.cell_data_set(\n  fibroblast_compartiment_object)\n\nWarning: Monocle 3 trajectories require cluster partitions, which Seurat does\nnot calculate. Please run 'cluster_cells' on your cell_data_set object\n\n# Verificar conteúdo do objeto convertido\nmonocle_object\n\nclass: cell_data_set \ndim: 38606 1921 \nmetadata(0):\nassays(2): counts logcounts\nrownames(38606): DDX11L2 MIR1302-2HG ... ENSG00000278817\n  ENSG00000277196\nrowData names(0):\ncolnames(1921): SRR8315737_AACGTTGAGCACCGTC-1\n  SRR8315737_AACGTTGCACCAGATT-1 ... SRR8890794_AACTCTTAGGACACCA-1\n  SRR8890794_GATTCAGTCCTAAGTG-1\ncolData names(34): orig.ident nCount_RNA ... ident Size_Factor\nreducedDimNames(2): PCA UMAP\nmainExpName: RNA\naltExpNames(0):\n\n\n\n## Reduzindo dimensionalidade\nmonocle_object &lt;- reduce_dimension(monocle_object)\n\nNo preprocess_method specified, using preprocess_method = 'PCA'\n\n# Clusterizando novamente apenas os Fibroblastos\nmonocle_object &lt;- cluster_cells(monocle_object)"
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#construção-do-grafo-e-ordenação-das-células",
+    "href": "material/semana5/09_cell_trajectory.html#construção-do-grafo-e-ordenação-das-células",
+    "title": "09 - Análise de Trajetória",
+    "section": "Construção do grafo e ordenação das células",
+    "text": "Construção do grafo e ordenação das células\nNesta etapa, aprenderemos a estrutura do grafo que representa as possíveis trajetórias celulares e ordenaremos as células ao longo do pseudotempo com Monocle 3. O ponto de início (“root”) é essencial para garantir que o pseudotempo reflita corretamente a progressão biológica esperada. Para uma abordagem biologicamente orientada, é possível utilizar ferramentas como CytoTRACE, que ranqueiam as células de acordo com seu grau de diferenciação, para identificar células menos diferenciadas como raízes.\n\n# Aprender o grafo da trajetória\nmonocle_object &lt;- learn_graph(monocle_object)\n\n\n  |                                                                            \n  |                                                                      |   0%\n  |                                                                            \n  |======================================================================| 100%\n\n  |                                                                            \n  |                                                                      |   0%\n  |                                                                            \n  |======================================================================| 100%\n\n\n\n\n\n\n\n\nNote\n\n\n\nA função learn_graph() modela as transições celulares com base em uma curva principal sobre o embedding reduzido (geralmente UMAP). O grafo inferido reflete as conexões entre estados celulares relacionados."
+  },
+  {
+    "objectID": "material/semana5/09_cell_trajectory.html#salvando-o-objeto-anotado",
+    "href": "material/semana5/09_cell_trajectory.html#salvando-o-objeto-anotado",
+    "title": "09 - Análise de Trajetória",
+    "section": "Salvando o objeto anotado",
+    "text": "Salvando o objeto anotado\n\nsaveRDS(seurat_object, file = \"data/seurat_trajectory.RDS\")"
   }
 ]

@@ -1,0 +1,215 @@
+---
+title: "09 - Análise de Trajetória"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+execute:
+  cache: false
+---
+
+## Motivação
+
+A análise de trajetória e pseudotempo surgiu como uma solução para uma limitação inerente aos protocolos de RNA-seq de célula única: a perda de informação temporal. Durante o sequenciamento, as células são destruídas, impedindo o rastreamento dinâmico do processo biológico ao qual pertencem. Apesar disso, os processos de diferenciação celular são essencialmente contínuos e assimétricos, e essa progressão pode ser reconstruída computacionalmente com base na semelhança entre perfis transcricionais.
+
+A reconstrução de trajetórias permite inferir o curso temporal de eventos celulares, identificar ramos de diferenciação e genes reguladores ao longo desses caminhos. O pseudotempo é uma variável latente que representa a posição relativa de cada célula nesse processo inferido. Este conceito é fundamental para estudos em desenvolvimento embrionário, resposta imune, plasticidade tumoral e outros processos biológicos com dinâmica celular.
+
+## Contextualização
+
+Neste tutorial, focaremos na análise de trajetória utilizando **Monocle 3**, uma ferramenta poderosa e flexível baseada em grafos para inferência de trajetórias celulares. Também faremos uso de pacotes auxiliares que se integram diretamente ao Monocle, como **Seurat**, para o pré-processamento e anotação dos dados, e **ggplot2** e **dplyr** para visualização e manipulação dos resultados.
+
+Os principais pacotes utilizados serão:
+
+-   **Monocle 3**: permite inferir grafos de trajetórias com múltiplas bifurcações, ordenar células ao longo do pseudotempo e realizar análises diferenciais.
+-   **Seurat**: usado para normalização, redução de dimensionalidade, clusterização e anotação de tipos celulares.
+-   **ggplot2** e **patchwork**: para visualizações elegantes e organização de figuras.
+-   **dplyr**: para manipulação eficiente de dados tabulares.
+
+Ao longo do tutorial, utilizaremos um objeto Seurat previamente anotado, e demonstraremos como convertê-lo em um `cell_data_set`, construir trajetórias, inferir pseudotempo e identificar genes diferencialmente expressos ao longo do percurso celular.
+
+## Ajustar ambiente e carregar pacotes
+
+Nesta seção, vamos configurar o ambiente de trabalho e carregar os pacotes necessários. Isso inclui verificar e instalar o pacote `monocle3`.
+
+```{r}
+#| warning: false
+
+# Verifica pacotes
+if (!requireNamespace("monocle3")) {
+  remotes::install_github('cole-trapnell-lab/monocle3')
+}
+
+# Carregar pacotes
+library(Seurat)
+library(SeuratWrappers)
+library(SummarizedExperiment)
+library(monocle3)
+
+# Definindo diretório padrão
+knitr::opts_knit$set(
+  root.dir = "/home/oandrefonseca/Disciplinas/PPGBM0117.2025.1",
+  verbose = FALSE
+)
+
+# Aumentar o limite de uso de memória
+options(future.globals.maxSize = 10 * 1024^3) # 10 GB, por exemplo
+```
+
+## Carregando dados do projeto
+
+Agora que o ambiente está configurado, carregamos o objeto `Seurat` que contém os dados de expressão gênica já processados e anotados. O uso de um objeto pronto permite focar diretamente na inferência de comunicação célula-célula, utilizando as anotações de tipos celulares para identificar emissores e receptores em potenciais interações.
+
+```{r}
+# Carregando um objeto Seurat já processado (pré-clusterizado)
+seurat_object <- readRDS(file = here::here("data/seurat_annotated.RDS"))
+```
+
+```{r}
+#| label: fig-umap
+#| column: screen-inset-shaded
+#| fig-align: center
+#| layout-nrow: 1
+#| warning: false
+
+# Verificar os clusters
+DimPlot(
+  seurat_object, 
+  group.by = "manual_annotation"
+)
+```
+
+## Selecionando uma subpopulacao
+
+```{r}
+# Description
+
+fibroblast_compartiment_object <- subset(
+  seurat_object,
+  subset = manual_annotation == "Fibroblasts"
+)
+
+```
+
+:::{.callout-note}
+DESCRIPTION
+:::
+
+## Conversão para `cell_data_set`
+
+Nesta etapa, converteremos o objeto `Seurat` para um objeto `cell_data_set`, o formato utilizado pelo Monocle 3. Essa conversão é fundamental para que possamos aplicar as funções de aprendizado de trajetória.
+
+```{r}
+# Conversão do objeto Seurat para cell_data_set (Monocle 3)
+monocle_object <- as.cell_data_set(
+  fibroblast_compartiment_object)
+
+# Verificar conteúdo do objeto convertido
+monocle_object
+```
+
+```{r}
+
+## Reduzindo dimensionalidade
+monocle_object <- reduce_dimension(monocle_object)
+
+# Clusterizando novamente apenas os Fibroblastos
+monocle_object <- cluster_cells(monocle_object)
+
+```
+
+## Construção do grafo e ordenação das células
+
+Nesta etapa, aprenderemos a estrutura do grafo que representa as possíveis trajetórias celulares e ordenaremos as células ao longo do pseudotempo com Monocle 3. O ponto de início ("root") é essencial para garantir que o pseudotempo reflita corretamente a progressão biológica esperada. Para uma abordagem biologicamente orientada, é possível utilizar ferramentas como **CytoTRACE**, que ranqueiam as células de acordo com seu grau de diferenciação, para identificar células menos diferenciadas como raízes.
+
+```{r}
+
+# Aprender o grafo da trajetória
+monocle_object <- learn_graph(monocle_object)
+
+```
+
+::: {.callout-note}
+A função `learn_graph()` modela as transições celulares com base em uma curva principal sobre o embedding reduzido (geralmente UMAP). O grafo inferido reflete as conexões entre estados celulares relacionados.
+:::
+
+# Visualizar o grafo
+
+```{r}
+plot_cells(monocle_object,
+           color_cells_by = "cluster",
+           label_groups_by_cluster = FALSE,
+           label_leaves = FALSE,
+           label_branch_points = FALSE)
+```
+
+```{r}
+#| include: false
+
+monocle_object <- order_cells(monocle_object, root_cells = c(
+  "SRR8315753_GAAACTCAGGTGCTAG-1", "SRR8315766_CAAGATCTCTGAGTGT-1"
+))
+
+```
+
+
+```{r}
+#| eval: false
+
+# Ordenar células interativamente com base na estrutura do grafo
+monocle_object <- order_cells(monocle_object)
+
+```
+
+::: {.callout-note}
+A função `order_cells()` calcula o pseudotempo baseado na distância do ponto inicial (root) ao longo da trajetória inferida. A escolha da raiz afeta diretamente a interpretação biológica do pseudotempo.
+:::
+
+```{r}
+
+# Acessar a pseudotemporalidade das células
+pt <- pseudotime(monocle_object)
+
+# Células onde o pseudotime é zero (as raízes)
+root_cells <- names(pt[pt == 0])
+
+# Ver algumas delas
+head(root_cells)
+
+```
+
+
+# Visualizar pseudotempo inferido
+
+```{r}
+
+plot_cells(monocle_object, color_cells_by = "pseudotime")
+
+```
+
+### (Opcional) Definindo raízes com base em scores de diferenciação
+
+Caso você deseje utilizar uma abordagem automatizada e biologicamente informada:
+
+1.  Calcule os scores de diferenciação com **CytoTRACE** ou outro método.
+2.  Identifique as células com maior escore (menos diferenciadas).
+3.  Use técnicas de agrupamento (como `dbscan`) para isolar regiões densas.
+4.  Escolha representantes centrais dessas regiões como "roots" para a função `order_cells()`.
+
+```{r}
+
+# Exemplo de uso direto com células raiz definidas
+# monocle_object <- order_cells(monocle_object, root_cells = <vetor_com_ids>)
+
+```
+
+Essa abordagem permite uma ordenação mais robusta, principalmente quando o início do processo biológico não é diretamente observável.
+
+Com o objeto `monocle_object` devidamente configurado, podemos agora aprender a estrutura do grafo e ordenar as células ao longo da trajetória inferida. Estas etapas são essenciais para a análise de pseudotempo com Monocle 3.
+
+## Salvando o objeto anotado
+
+```{r}
+
+saveRDS(seurat_object, file = "data/seurat_trajectory.RDS")
+
+```
