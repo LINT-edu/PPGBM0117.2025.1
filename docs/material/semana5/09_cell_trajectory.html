@@ -143,6 +143,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">Sobre</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projeto.html"> 
+<span class="menu-text">Projeto</span></a>
+  </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-semana-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Semana 1</span>
@@ -330,7 +334,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell quarto-layout-panel page-columns page-full" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row page-full">
 <div class="cell-output-display quarto-layout-cell page-columns page-full" style="flex-basis: 100.0%;justify-content: center;">
-<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" data-fig-align="center" width="672">
+<div id="fig-umap" class="quarto-float quarto-figure quarto-figure-center anchored page-columns page-full" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure page-columns page-full">
 <div aria-describedby="fig-umap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca" class="page-columns page-full">
 <a href="09_cell_trajectory_files/figure-html/fig-umap-1.png" class="lightbox page-columns page-full" data-gallery="quarto-lightbox-gallery-1" title="Figure&nbsp;1: "><img src="09_cell_trajectory_files/figure-html/fig-umap-1.png" id="fig-umap" class="img-fluid quarto-figure quarto-figure-center anchored figure-img column-screen-inset-shaded" width="672"></a>
@@ -386,7 +390,7 @@ altExpNames(0):</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Reduzindo dimensionalidade</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reduzindo dimensionalidade</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>monocle_object <span class="ot">&lt;-</span> <span class="fu">reduce_dimension</span>(monocle_object)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>No preprocess_method specified, using preprocess_method = 'PCA'</code></pre>
@@ -481,9 +485,9 @@ Note
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cells</span>(</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  monocle_object, </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">color_cells_by =</span> <span class="st">"pseudotime"</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_branch_points =</span> <span class="cn">FALSE</span>,            <span class="co"># mostra os pontos de bifurcação</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_branch_points =</span> <span class="cn">TRUE</span>,            <span class="co"># mostra os pontos de bifurcação</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_roots =</span> <span class="cn">TRUE</span>,                     <span class="co"># marca explicitamente os nós de origem</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_leaves =</span> <span class="cn">FALSE</span>,                   <span class="co"># mostra os finais da trajetória</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_leaves =</span> <span class="cn">TRUE</span>,                   <span class="co"># mostra os finais da trajetória</span></span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Cells aren't colored in a way that allows them to be grouped.</code></pre>
@@ -622,7 +626,7 @@ Note
 <div class="cell column-screen-inset-shaded quarto-layout-panel" data-layout-nrow="1" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-umap-cytotrace-1" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-umap-cytotrace-1" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-umap-cytotrace-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="09_cell_trajectory_files/figure-html/fig-umap-cytotrace-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="Figure&nbsp;2: "><img src="09_cell_trajectory_files/figure-html/fig-umap-cytotrace-1.png" id="fig-umap-cytotrace-1" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672"></a>
@@ -634,7 +638,7 @@ Figure&nbsp;2
 </div>
 </div>
 <div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-umap-cytotrace-2" class="quarto-float quarto-figure quarto-figure-center anchored" data-fig-align="center" width="672">
+<div id="fig-umap-cytotrace-2" class="quarto-float quarto-figure quarto-figure-center anchored" width="672" data-fig-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-umap-cytotrace-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <a href="09_cell_trajectory_files/figure-html/fig-umap-cytotrace-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="Figure&nbsp;3: "><img src="09_cell_trajectory_files/figure-html/fig-umap-cytotrace-2.png" id="fig-umap-cytotrace-2" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" width="672"></a>

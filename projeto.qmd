@@ -1,0 +1,81 @@
+---
+title: "Orientações de Projeto"
+format: html
+---
+
+O relatório final deve simular um **laudo de consultoria científica** com foco em análise de dados de **transcriptômica de célula única (scRNA-seq)**. O objetivo é desenvolver um documento claro, técnico e interpretativo, capaz de orientar decisões experimentais futuras com base nos dados analisados.
+
+## Contextualização Inicial
+
+* Comece o relatório apresentando o **dataset** utilizado: origem biológica (tecido, organismo, condição experimental), método de coleta e plataforma de sequenciamento (por exemplo, 10X Genomics).
+* Explique o **objetivo geral da análise**, formulando uma questão ampla e biologicamente relevante. Exemplos:
+
+  * "Investigar a diversidade celular em tecidos inflamatórios."
+  * "Comparar a composição de subtipos imunes entre amostras controle e tratadas."
+  * "Identificar possíveis trajetórias de diferenciação em células progenitoras."
+
+## Decisões Analíticas e Justificativas Biológicas
+
+* Ao longo do relatório, **explique cada escolha analítica com base em sua interpretação biológica.** Isso inclui:
+
+  * Critérios de filtragem de células (ex: % de genes mitocondriais, número de genes detectados por célula).
+  * Estratégias de normalização e seleção de genes altamente variáveis.
+  * Motivações para exclusão de outliers, remoção de doublets ou agrupamentos suspeitos.
+
+> Exemplo: “Células com mais de 10% de genes mitocondriais foram removidas por sugerirem possível dano ou apoptose, o que comprometeria a interpretação do transcriptoma funcional.”
+
+## Figuras com Interpretação Biológica
+
+* Todas as figuras devem ser **acompanhadas de legendas interpretativas**, indicando:
+
+  * Qual hipótese ou padrão está sendo testado.
+  * O que os agrupamentos ou distribuições sugerem biologicamente.
+  * Como a figura contribui para a narrativa da análise.
+
+> Exemplo: “A projeção UMAP revela agrupamentos distintos entre células CD4+ e CD8+, sugerindo identidade funcional bem definida entre os clusters anotados.”
+
+### 4. **Anotação Celular: Marcadores e Diagnóstico**
+
+* A anotação celular deve incluir:
+
+  * Uma **tabela clara dos marcadores utilizados** por cluster.
+  * Sugestão de **fonte dos marcadores** (bancos como CellxGene, PanglaoDB, CellMarker, literatura específica).
+  * Justificativa para casos ambíguos ou sobreposição entre tipos celulares.
+
+* Além da tabela, inclua ao menos dois **gráficos de diagnóstico**. Por exemplo:
+
+  * **DotPlot** ou **Violin plot** da expressão de marcadores.
+  * **Feature plot** com distribuição espacial dos genes no UMAP.
+
+> Interprete os gráficos destacando casos em que a anotação foi robusta ou incerta, e indique possíveis refinamentos.
+
+## Explicação dos Gráficos de Diagnóstico
+
+* Discuta a **concordância entre metodos de anotação.**
+* Comente **casos de expressão difusa, baixa ou contraditória.**
+* Utilize esses diagnósticos para justificar a confiança (ou cautela) na rotulagem dos tipos celulares.
+
+## Análise Downstream
+
+O relatório deve conter pelo menos uma análise downstream aprofundada:
+
+### a) **Interação Célula-Célula (Cell-Cell Communication - CCC)**
+
+* Indique o método utilizado (CellChat, CellPhoneDB, NicheNet, etc.).
+* Explique como os clusters foram definidos e quais populações foram incluídas na análise.
+* Interprete os principais eixos de sinalização identificados, associando-os a funções biológicas plausíveis.
+
+### b) **Inferência de Trajetória/Pseudotempo**
+
+* Indique a ferramenta usada (Monocle, Slingshot, PAGA).
+* Justifique a escolha da célula raiz (**root cell**), idealmente com base em marcadores ou conhecimento prévio.
+* Interprete a progressão celular inferida: estados de diferenciação, bifurcações, e possíveis destinos finais.
+
+> Exemplo: “A raiz foi definida com base na alta expressão de CD34 e PROM1, indicativos de células progenitoras hematopoéticas. A trajetória revela dois caminhos principais de diferenciação: linfóide e mieloide.”
+
+## Conclusão e Perspectivas
+
+* Apresente um resumo dos achados principais, conectando as diferentes etapas da análise.
+* Destaque **implicações biológicas e experimentais** dos resultados.
+* Discuta **limitações** (viés de captura, profundidade de leitura, anotações incertas).
+* Aponte **próximos passos**, como validações experimentais, análises complementares ou expansão do dataset.

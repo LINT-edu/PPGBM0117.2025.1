@@ -101,6 +101,7 @@ target_compartiment_object <- subset(
 Nesta etapa, converteremos o objeto `Seurat` para um objeto `cell_data_set`, o formato utilizado pelo Monocle 3. Essa conversão é fundamental para que possamos aplicar as funções de aprendizado de trajetória.
 
 ```{r}
+
 # Conversão do objeto Seurat para cell_data_set (Monocle 3)
 monocle_object <- as.cell_data_set(
   target_compartiment_object
@@ -112,7 +113,7 @@ monocle_object
 
 ```{r}
 
-## Reduzindo dimensionalidade
+# Reduzindo dimensionalidade
 monocle_object <- reduce_dimension(monocle_object)
 
 # Clusterizando novamente apenas os Fibroblastos
@@ -188,9 +189,9 @@ head(root_cells)
 plot_cells(
   monocle_object, 
   color_cells_by = "pseudotime",
-  label_branch_points = FALSE,            # mostra os pontos de bifurcação
+  label_branch_points = TRUE,            # mostra os pontos de bifurcação
   label_roots = TRUE,                     # marca explicitamente os nós de origem
-  label_leaves = FALSE,                   # mostra os finais da trajetória
+  label_leaves = TRUE,                   # mostra os finais da trajetória
   )
 
 ```
@@ -228,7 +229,6 @@ cytotrace_result <- cytotrace2(
   species = "human",
   parallelize_models = FALSE
   )
-
 
 ```
 
